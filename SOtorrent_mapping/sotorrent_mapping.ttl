@@ -1,0 +1,1612 @@
+@prefix map: <#> .
+@prefix db: <> .
+@prefix vocab: <vocab/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix d2rq: <http://www.wiwiss.fu-berlin.de/suhl/bizer/D2RQ/0.1#> .
+@prefix jdbc: <http://d2rq.org/terms/jdbc/> .
+
+map:database a d2rq:Database;
+	d2rq:jdbcDriver "com.mysql.jdbc.Driver";
+	d2rq:jdbcDSN "jdbc:mysql:///sotorrent20_03";
+	d2rq:username "root";
+	d2rq:password "root";
+	jdbc:autoReconnect "true";
+	jdbc:zeroDateTimeBehavior "convertToNull";
+	.
+
+# Table Badges
+map:Badges a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "Badges/@@Badges.Id@@";
+	d2rq:class vocab:Badges;
+	d2rq:classDefinitionLabel "Badges";
+	.
+map:Badges__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Badges;
+	d2rq:property rdfs:label;
+	d2rq:pattern "Badges #@@Badges.Id@@";
+	.
+map:Badges_Id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Badges;
+	d2rq:property vocab:Badges_Id;
+	d2rq:propertyDefinitionLabel "Badges Id";
+	d2rq:column "Badges.Id";
+	d2rq:datatype xsd:integer;
+	.
+map:Badges_Name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Badges;
+	d2rq:property vocab:Badges_Name;
+	d2rq:propertyDefinitionLabel "Badges Name";
+	d2rq:column "Badges.Name";
+	.
+map:Badges_Date a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Badges;
+	d2rq:property vocab:Badges_Date;
+	d2rq:propertyDefinitionLabel "Badges Date";
+	d2rq:column "Badges.Date";
+	d2rq:datatype xsd:dateTime;
+	.
+map:Badges_Class a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Badges;
+	d2rq:property vocab:Badges_Class;
+	d2rq:propertyDefinitionLabel "Badges Class";
+	d2rq:column "Badges.Class";
+	d2rq:datatype xsd:integer;
+	.
+map:Badges_TagBased a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Badges;
+	d2rq:property vocab:Badges_TagBased;
+	d2rq:propertyDefinitionLabel "Badges TagBased";
+	d2rq:column "Badges.TagBased";
+	d2rq:datatype xsd:boolean;
+	.
+map:Badges_UserId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Badges;
+	d2rq:property vocab:Badges_UserId;
+	d2rq:refersToClassMap map:Users;
+	d2rq:join "Badges.UserId => Users.Id";
+	.
+
+# Table CommentUrl
+map:CommentUrl a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "CommentUrl/@@CommentUrl.Id@@";
+	d2rq:class vocab:CommentUrl;
+	d2rq:classDefinitionLabel "CommentUrl";
+	.
+map:CommentUrl__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:CommentUrl;
+	d2rq:property rdfs:label;
+	d2rq:pattern "CommentUrl #@@CommentUrl.Id@@";
+	.
+map:CommentUrl_Id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:CommentUrl;
+	d2rq:property vocab:CommentUrl_Id;
+	d2rq:propertyDefinitionLabel "CommentUrl Id";
+	d2rq:column "CommentUrl.Id";
+	d2rq:datatype xsd:integer;
+	.
+map:CommentUrl_PostId a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:CommentUrl;
+	d2rq:property vocab:CommentUrl_PostId;
+	d2rq:propertyDefinitionLabel "CommentUrl PostId";
+	d2rq:column "CommentUrl.PostId";
+	d2rq:datatype xsd:integer;
+	.
+map:CommentUrl_LinkType a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:CommentUrl;
+	d2rq:property vocab:CommentUrl_LinkType;
+	d2rq:propertyDefinitionLabel "CommentUrl LinkType";
+	d2rq:column "CommentUrl.LinkType";
+	.
+map:CommentUrl_LinkPosition a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:CommentUrl;
+	d2rq:property vocab:CommentUrl_LinkPosition;
+	d2rq:propertyDefinitionLabel "CommentUrl LinkPosition";
+	d2rq:column "CommentUrl.LinkPosition";
+	.
+map:CommentUrl_LinkAnchor a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:CommentUrl;
+	d2rq:property vocab:CommentUrl_LinkAnchor;
+	d2rq:propertyDefinitionLabel "CommentUrl LinkAnchor";
+	d2rq:column "CommentUrl.LinkAnchor";
+	.
+map:CommentUrl_Protocol a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:CommentUrl;
+	d2rq:property vocab:CommentUrl_Protocol;
+	d2rq:propertyDefinitionLabel "CommentUrl Protocol";
+	d2rq:column "CommentUrl.Protocol";
+	.
+map:CommentUrl_RootDomain a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:CommentUrl;
+	d2rq:property vocab:CommentUrl_RootDomain;
+	d2rq:propertyDefinitionLabel "CommentUrl RootDomain";
+	d2rq:column "CommentUrl.RootDomain";
+	.
+map:CommentUrl_CompleteDomain a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:CommentUrl;
+	d2rq:property vocab:CommentUrl_CompleteDomain;
+	d2rq:propertyDefinitionLabel "CommentUrl CompleteDomain";
+	d2rq:column "CommentUrl.CompleteDomain";
+	.
+map:CommentUrl_Path a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:CommentUrl;
+	d2rq:property vocab:CommentUrl_Path;
+	d2rq:propertyDefinitionLabel "CommentUrl Path";
+	d2rq:column "CommentUrl.Path";
+	.
+map:CommentUrl_Query a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:CommentUrl;
+	d2rq:property vocab:CommentUrl_Query;
+	d2rq:propertyDefinitionLabel "CommentUrl Query";
+	d2rq:column "CommentUrl.Query";
+	.
+map:CommentUrl_FragmentIdentifier a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:CommentUrl;
+	d2rq:property vocab:CommentUrl_FragmentIdentifier;
+	d2rq:propertyDefinitionLabel "CommentUrl FragmentIdentifier";
+	d2rq:column "CommentUrl.FragmentIdentifier";
+	.
+map:CommentUrl_Url a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:CommentUrl;
+	d2rq:property vocab:CommentUrl_Url;
+	d2rq:propertyDefinitionLabel "CommentUrl Url";
+	d2rq:column "CommentUrl.Url";
+	.
+map:CommentUrl_FullMatch a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:CommentUrl;
+	d2rq:property vocab:CommentUrl_FullMatch;
+	d2rq:propertyDefinitionLabel "CommentUrl FullMatch";
+	d2rq:column "CommentUrl.FullMatch";
+	.
+map:CommentUrl_CommentId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:CommentUrl;
+	d2rq:property vocab:CommentUrl_CommentId;
+	d2rq:refersToClassMap map:Comments;
+	d2rq:join "CommentUrl.CommentId => Comments.Id";
+	.
+
+# Table Comments
+map:Comments a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "Comments/@@Comments.Id@@";
+	d2rq:class vocab:Comments;
+	d2rq:classDefinitionLabel "Comments";
+	.
+map:Comments__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Comments;
+	d2rq:property rdfs:label;
+	d2rq:pattern "Comments #@@Comments.Id@@";
+	.
+map:Comments_Id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Comments;
+	d2rq:property vocab:Comments_Id;
+	d2rq:propertyDefinitionLabel "Comments Id";
+	d2rq:column "Comments.Id";
+	d2rq:datatype xsd:integer;
+	.
+map:Comments_Score a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Comments;
+	d2rq:property vocab:Comments_Score;
+	d2rq:propertyDefinitionLabel "Comments Score";
+	d2rq:column "Comments.Score";
+	d2rq:datatype xsd:integer;
+	.
+map:Comments_Text a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Comments;
+	d2rq:property vocab:Comments_Text;
+	d2rq:propertyDefinitionLabel "Comments Text";
+	d2rq:column "Comments.Text";
+	.
+map:Comments_CreationDate a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Comments;
+	d2rq:property vocab:Comments_CreationDate;
+	d2rq:propertyDefinitionLabel "Comments CreationDate";
+	d2rq:column "Comments.CreationDate";
+	d2rq:datatype xsd:dateTime;
+	.
+map:Comments_UserDisplayName a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Comments;
+	d2rq:property vocab:Comments_UserDisplayName;
+	d2rq:propertyDefinitionLabel "Comments UserDisplayName";
+	d2rq:column "Comments.UserDisplayName";
+	.
+map:Comments_UserId a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Comments;
+	d2rq:property vocab:Comments_UserId;
+	d2rq:propertyDefinitionLabel "Comments UserId";
+	d2rq:column "Comments.UserId";
+	d2rq:datatype xsd:integer;
+	.
+map:Comments_PostId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Comments;
+	d2rq:property vocab:Comments_PostId;
+	d2rq:refersToClassMap map:Posts;
+	d2rq:join "Comments.PostId => Posts.Id";
+	.
+
+# Table GHCommits
+map:GHCommits a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "GHCommits/@@GHCommits.Id@@";
+	d2rq:class vocab:GHCommits;
+	d2rq:classDefinitionLabel "GHCommits";
+	.
+map:GHCommits__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:GHCommits;
+	d2rq:property rdfs:label;
+	d2rq:pattern "GHCommits #@@GHCommits.Id@@";
+	.
+map:GHCommits_Id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:GHCommits;
+	d2rq:property vocab:GHCommits_Id;
+	d2rq:propertyDefinitionLabel "GHCommits Id";
+	d2rq:column "GHCommits.Id";
+	d2rq:datatype xsd:integer;
+	.
+map:GHCommits_CommitId a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:GHCommits;
+	d2rq:property vocab:GHCommits_CommitId;
+	d2rq:propertyDefinitionLabel "GHCommits CommitId";
+	d2rq:column "GHCommits.CommitId";
+	.
+map:GHCommits_Repo a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:GHCommits;
+	d2rq:property vocab:GHCommits_Repo;
+	d2rq:propertyDefinitionLabel "GHCommits Repo";
+	d2rq:column "GHCommits.Repo";
+	.
+map:GHCommits_RepoOwner a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:GHCommits;
+	d2rq:property vocab:GHCommits_RepoOwner;
+	d2rq:propertyDefinitionLabel "GHCommits RepoOwner";
+	d2rq:column "GHCommits.RepoOwner";
+	.
+map:GHCommits_RepoName a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:GHCommits;
+	d2rq:property vocab:GHCommits_RepoName;
+	d2rq:propertyDefinitionLabel "GHCommits RepoName";
+	d2rq:column "GHCommits.RepoName";
+	.
+map:GHCommits_SOUrl a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:GHCommits;
+	d2rq:property vocab:GHCommits_SOUrl;
+	d2rq:propertyDefinitionLabel "GHCommits SOUrl";
+	d2rq:column "GHCommits.SOUrl";
+	.
+map:GHCommits_GHUrl a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:GHCommits;
+	d2rq:property vocab:GHCommits_GHUrl;
+	d2rq:propertyDefinitionLabel "GHCommits GHUrl";
+	d2rq:column "GHCommits.GHUrl";
+	.
+map:GHCommits_PostId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:GHCommits;
+	d2rq:property vocab:GHCommits_PostId;
+	d2rq:refersToClassMap map:Posts;
+	d2rq:join "GHCommits.PostId => Posts.Id";
+	.
+map:GHCommits_CommentId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:GHCommits;
+	d2rq:property vocab:GHCommits_CommentId;
+	d2rq:refersToClassMap map:Comments;
+	d2rq:join "GHCommits.CommentId => Comments.Id";
+	.
+
+# Table GHMatches
+map:GHMatches a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "GHMatches/@@GHMatches.Id@@";
+	d2rq:class vocab:GHMatches;
+	d2rq:classDefinitionLabel "GHMatches";
+	.
+map:GHMatches__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:GHMatches;
+	d2rq:property rdfs:label;
+	d2rq:pattern "GHMatches #@@GHMatches.Id@@";
+	.
+map:GHMatches_Id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:GHMatches;
+	d2rq:property vocab:GHMatches_Id;
+	d2rq:propertyDefinitionLabel "GHMatches Id";
+	d2rq:column "GHMatches.Id";
+	d2rq:datatype xsd:integer;
+	.
+map:GHMatches_FileId a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:GHMatches;
+	d2rq:property vocab:GHMatches_FileId;
+	d2rq:propertyDefinitionLabel "GHMatches FileId";
+	d2rq:column "GHMatches.FileId";
+	.
+map:GHMatches_PostIds a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:GHMatches;
+	d2rq:property vocab:GHMatches_PostIds;
+	d2rq:propertyDefinitionLabel "GHMatches PostIds";
+	d2rq:column "GHMatches.PostIds";
+	.
+map:GHMatches_MatchedLine a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:GHMatches;
+	d2rq:property vocab:GHMatches_MatchedLine;
+	d2rq:propertyDefinitionLabel "GHMatches MatchedLine";
+	d2rq:column "GHMatches.MatchedLine";
+	.
+
+# Table PostBlockDiff
+map:PostBlockDiff a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "PostBlockDiff/@@PostBlockDiff.Id@@";
+	d2rq:class vocab:PostBlockDiff;
+	d2rq:classDefinitionLabel "PostBlockDiff";
+	.
+map:PostBlockDiff__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostBlockDiff;
+	d2rq:property rdfs:label;
+	d2rq:pattern "PostBlockDiff #@@PostBlockDiff.Id@@";
+	.
+map:PostBlockDiff_Id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostBlockDiff;
+	d2rq:property vocab:PostBlockDiff_Id;
+	d2rq:propertyDefinitionLabel "PostBlockDiff Id";
+	d2rq:column "PostBlockDiff.Id";
+	d2rq:datatype xsd:integer;
+	.
+map:PostBlockDiff_LocalId a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostBlockDiff;
+	d2rq:property vocab:PostBlockDiff_LocalId;
+	d2rq:propertyDefinitionLabel "PostBlockDiff LocalId";
+	d2rq:column "PostBlockDiff.LocalId";
+	d2rq:datatype xsd:integer;
+	.
+map:PostBlockDiff_PredLocalId a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostBlockDiff;
+	d2rq:property vocab:PostBlockDiff_PredLocalId;
+	d2rq:propertyDefinitionLabel "PostBlockDiff PredLocalId";
+	d2rq:column "PostBlockDiff.PredLocalId";
+	d2rq:datatype xsd:integer;
+	.
+map:PostBlockDiff_Text a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostBlockDiff;
+	d2rq:property vocab:PostBlockDiff_Text;
+	d2rq:propertyDefinitionLabel "PostBlockDiff Text";
+	d2rq:column "PostBlockDiff.Text";
+	.
+map:PostBlockDiff_PredPostBlockVersionId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostBlockDiff;
+	d2rq:property vocab:PostBlockDiff_PredPostBlockVersionId;
+	d2rq:refersToClassMap map:PostBlockVersion;
+	d2rq:join "PostBlockDiff.PredPostBlockVersionId => PostBlockVersion.Id";
+	.
+map:PostBlockDiff_PostBlockVersionId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostBlockDiff;
+	d2rq:property vocab:PostBlockDiff_PostBlockVersionId;
+	d2rq:refersToClassMap map:PostBlockVersion;
+	d2rq:join "PostBlockDiff.PostBlockVersionId => PostBlockVersion.Id";
+	.
+map:PostBlockDiff_PostBlockDiffOperationId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostBlockDiff;
+	d2rq:property vocab:PostBlockDiff_PostBlockDiffOperationId;
+	d2rq:refersToClassMap map:PostBlockDiffOperation;
+	d2rq:join "PostBlockDiff.PostBlockDiffOperationId => PostBlockDiffOperation.Id";
+	.
+map:PostBlockDiff_PredPostHistoryId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostBlockDiff;
+	d2rq:property vocab:PostBlockDiff_PredPostHistoryId;
+	d2rq:refersToClassMap map:PostHistory;
+	d2rq:join "PostBlockDiff.PredPostHistoryId => PostHistory.Id";
+	.
+map:PostBlockDiff_PostHistoryId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostBlockDiff;
+	d2rq:property vocab:PostBlockDiff_PostHistoryId;
+	d2rq:refersToClassMap map:PostHistory;
+	d2rq:join "PostBlockDiff.PostHistoryId => PostHistory.Id";
+	.
+map:PostBlockDiff_PostId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostBlockDiff;
+	d2rq:property vocab:PostBlockDiff_PostId;
+	d2rq:refersToClassMap map:Posts;
+	d2rq:join "PostBlockDiff.PostId => Posts.Id";
+	.
+
+# Table PostBlockDiffOperation
+map:PostBlockDiffOperation a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "PostBlockDiffOperation/@@PostBlockDiffOperation.Id@@";
+	d2rq:class vocab:PostBlockDiffOperation;
+	d2rq:classDefinitionLabel "PostBlockDiffOperation";
+	.
+map:PostBlockDiffOperation__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostBlockDiffOperation;
+	d2rq:property rdfs:label;
+	d2rq:pattern "PostBlockDiffOperation #@@PostBlockDiffOperation.Id@@";
+	.
+map:PostBlockDiffOperation_Id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostBlockDiffOperation;
+	d2rq:property vocab:PostBlockDiffOperation_Id;
+	d2rq:propertyDefinitionLabel "PostBlockDiffOperation Id";
+	d2rq:column "PostBlockDiffOperation.Id";
+	d2rq:datatype xsd:integer;
+	.
+map:PostBlockDiffOperation_Name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostBlockDiffOperation;
+	d2rq:property vocab:PostBlockDiffOperation_Name;
+	d2rq:propertyDefinitionLabel "PostBlockDiffOperation Name";
+	d2rq:column "PostBlockDiffOperation.Name";
+	.
+
+# Table PostBlockType
+map:PostBlockType a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "PostBlockType/@@PostBlockType.Id@@";
+	d2rq:class vocab:PostBlockType;
+	d2rq:classDefinitionLabel "PostBlockType";
+	.
+map:PostBlockType__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostBlockType;
+	d2rq:property rdfs:label;
+	d2rq:pattern "PostBlockType #@@PostBlockType.Id@@";
+	.
+map:PostBlockType_Id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostBlockType;
+	d2rq:property vocab:PostBlockType_Id;
+	d2rq:propertyDefinitionLabel "PostBlockType Id";
+	d2rq:column "PostBlockType.Id";
+	d2rq:datatype xsd:integer;
+	.
+map:PostBlockType_Type a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostBlockType;
+	d2rq:property vocab:PostBlockType_Type;
+	d2rq:propertyDefinitionLabel "PostBlockType Type";
+	d2rq:column "PostBlockType.Type";
+	.
+
+# Table PostBlockVersion
+map:PostBlockVersion a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "PostBlockVersion/@@PostBlockVersion.Id@@";
+	d2rq:class vocab:PostBlockVersion;
+	d2rq:classDefinitionLabel "PostBlockVersion";
+	.
+map:PostBlockVersion__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostBlockVersion;
+	d2rq:property rdfs:label;
+	d2rq:pattern "PostBlockVersion #@@PostBlockVersion.Id@@";
+	.
+map:PostBlockVersion_LocalId a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostBlockVersion;
+	d2rq:property vocab:PostBlockVersion_LocalId;
+	d2rq:propertyDefinitionLabel "PostBlockVersion LocalId";
+	d2rq:column "PostBlockVersion.LocalId";
+	d2rq:datatype xsd:integer;
+	.
+map:PostBlockVersion_PredLocalId a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostBlockVersion;
+	d2rq:property vocab:PostBlockVersion_PredLocalId;
+	d2rq:propertyDefinitionLabel "PostBlockVersion PredLocalId";
+	d2rq:column "PostBlockVersion.PredLocalId";
+	d2rq:datatype xsd:integer;
+	.
+map:PostBlockVersion_RootLocalId a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostBlockVersion;
+	d2rq:property vocab:PostBlockVersion_RootLocalId;
+	d2rq:propertyDefinitionLabel "PostBlockVersion RootLocalId";
+	d2rq:column "PostBlockVersion.RootLocalId";
+	d2rq:datatype xsd:integer;
+	.
+map:PostBlockVersion_PredEqual a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostBlockVersion;
+	d2rq:property vocab:PostBlockVersion_PredEqual;
+	d2rq:propertyDefinitionLabel "PostBlockVersion PredEqual";
+	d2rq:column "PostBlockVersion.PredEqual";
+	d2rq:datatype xsd:boolean;
+	.
+map:PostBlockVersion_PredSimilarity a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostBlockVersion;
+	d2rq:property vocab:PostBlockVersion_PredSimilarity;
+	d2rq:propertyDefinitionLabel "PostBlockVersion PredSimilarity";
+	d2rq:column "PostBlockVersion.PredSimilarity";
+	d2rq:datatype xsd:double;
+	.
+map:PostBlockVersion_PredCount a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostBlockVersion;
+	d2rq:property vocab:PostBlockVersion_PredCount;
+	d2rq:propertyDefinitionLabel "PostBlockVersion PredCount";
+	d2rq:column "PostBlockVersion.PredCount";
+	d2rq:datatype xsd:integer;
+	.
+map:PostBlockVersion_SuccCount a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostBlockVersion;
+	d2rq:property vocab:PostBlockVersion_SuccCount;
+	d2rq:propertyDefinitionLabel "PostBlockVersion SuccCount";
+	d2rq:column "PostBlockVersion.SuccCount";
+	d2rq:datatype xsd:integer;
+	.
+map:PostBlockVersion_Length a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostBlockVersion;
+	d2rq:property vocab:PostBlockVersion_Length;
+	d2rq:propertyDefinitionLabel "PostBlockVersion Length";
+	d2rq:column "PostBlockVersion.Length";
+	d2rq:datatype xsd:integer;
+	.
+map:PostBlockVersion_LineCount a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostBlockVersion;
+	d2rq:property vocab:PostBlockVersion_LineCount;
+	d2rq:propertyDefinitionLabel "PostBlockVersion LineCount";
+	d2rq:column "PostBlockVersion.LineCount";
+	d2rq:datatype xsd:integer;
+	.
+map:PostBlockVersion_Content a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostBlockVersion;
+	d2rq:property vocab:PostBlockVersion_Content;
+	d2rq:propertyDefinitionLabel "PostBlockVersion Content";
+	d2rq:column "PostBlockVersion.Content";
+	.
+map:PostBlockVersion_MostRecentVersion a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostBlockVersion;
+	d2rq:property vocab:PostBlockVersion_MostRecentVersion;
+	d2rq:propertyDefinitionLabel "PostBlockVersion MostRecentVersion";
+	d2rq:column "PostBlockVersion.MostRecentVersion";
+	d2rq:datatype xsd:boolean;
+	.
+map:PostBlockVersion_RootPostHistoryId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostBlockVersion;
+	d2rq:property vocab:PostBlockVersion_RootPostHistoryId;
+	d2rq:refersToClassMap map:PostHistory;
+	d2rq:join "PostBlockVersion.RootPostHistoryId => PostHistory.Id";
+	.
+map:PostBlockVersion_RootPostBlockVersionId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostBlockVersion;
+	d2rq:property vocab:PostBlockVersion_RootPostBlockVersionId;
+	d2rq:refersToClassMap map:PostBlockVersion;
+	d2rq:alias "PostBlockVersion AS PostBlockVersion__alias";
+	d2rq:join "PostBlockVersion.RootPostBlockVersionId => PostBlockVersion__alias.Id";
+	.
+map:PostBlockVersion_PredPostHistoryId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostBlockVersion;
+	d2rq:property vocab:PostBlockVersion_PredPostHistoryId;
+	d2rq:refersToClassMap map:PostHistory;
+	d2rq:join "PostBlockVersion.PredPostHistoryId => PostHistory.Id";
+	.
+map:PostBlockVersion_PredPostBlockVersionId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostBlockVersion;
+	d2rq:property vocab:PostBlockVersion_PredPostBlockVersionId;
+	d2rq:refersToClassMap map:PostBlockVersion;
+	d2rq:alias "PostBlockVersion AS PostBlockVersion__alias";
+	d2rq:join "PostBlockVersion.PredPostBlockVersionId => PostBlockVersion__alias.Id";
+	.
+map:PostBlockVersion_PostHistoryId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostBlockVersion;
+	d2rq:property vocab:PostBlockVersion_PostHistoryId;
+	d2rq:refersToClassMap map:PostHistory;
+	d2rq:join "PostBlockVersion.PostHistoryId => PostHistory.Id";
+	.
+map:PostBlockVersion_PostId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostBlockVersion;
+	d2rq:property vocab:PostBlockVersion_PostId;
+	d2rq:refersToClassMap map:Posts;
+	d2rq:join "PostBlockVersion.PostId => Posts.Id";
+	.
+map:PostBlockVersion_PostBlockTypeId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostBlockVersion;
+	d2rq:property vocab:PostBlockVersion_PostBlockTypeId;
+	d2rq:refersToClassMap map:PostBlockType;
+	d2rq:join "PostBlockVersion.PostBlockTypeId => PostBlockType.Id";
+	.
+
+# Table PostHistory
+map:PostHistory a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "PostHistory/@@PostHistory.Id@@";
+	d2rq:class vocab:PostHistory;
+	d2rq:classDefinitionLabel "PostHistory";
+	.
+map:PostHistory__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostHistory;
+	d2rq:property rdfs:label;
+	d2rq:pattern "PostHistory #@@PostHistory.Id@@";
+	.
+map:PostHistory_Id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostHistory;
+	d2rq:property vocab:PostHistory_Id;
+	d2rq:propertyDefinitionLabel "PostHistory Id";
+	d2rq:column "PostHistory.Id";
+	d2rq:datatype xsd:integer;
+	.
+map:PostHistory_RevisionGUID a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostHistory;
+	d2rq:property vocab:PostHistory_RevisionGUID;
+	d2rq:propertyDefinitionLabel "PostHistory RevisionGUID";
+	d2rq:column "PostHistory.RevisionGUID";
+	.
+map:PostHistory_CreationDate a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostHistory;
+	d2rq:property vocab:PostHistory_CreationDate;
+	d2rq:propertyDefinitionLabel "PostHistory CreationDate";
+	d2rq:column "PostHistory.CreationDate";
+	d2rq:datatype xsd:dateTime;
+	.
+map:PostHistory_UserId a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostHistory;
+	d2rq:property vocab:PostHistory_UserId;
+	d2rq:propertyDefinitionLabel "PostHistory UserId";
+	d2rq:column "PostHistory.UserId";
+	d2rq:datatype xsd:integer;
+	.
+map:PostHistory_UserDisplayName a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostHistory;
+	d2rq:property vocab:PostHistory_UserDisplayName;
+	d2rq:propertyDefinitionLabel "PostHistory UserDisplayName";
+	d2rq:column "PostHistory.UserDisplayName";
+	.
+map:PostHistory_Comment a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostHistory;
+	d2rq:property vocab:PostHistory_Comment;
+	d2rq:propertyDefinitionLabel "PostHistory Comment";
+	d2rq:column "PostHistory.Comment";
+	.
+map:PostHistory_Text a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostHistory;
+	d2rq:property vocab:PostHistory_Text;
+	d2rq:propertyDefinitionLabel "PostHistory Text";
+	d2rq:column "PostHistory.Text";
+	.
+map:PostHistory_PostHistoryTypeId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostHistory;
+	d2rq:property vocab:PostHistory_PostHistoryTypeId;
+	d2rq:refersToClassMap map:PostHistoryType;
+	d2rq:join "PostHistory.PostHistoryTypeId => PostHistoryType.Id";
+	.
+map:PostHistory_PostId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostHistory;
+	d2rq:property vocab:PostHistory_PostId;
+	d2rq:refersToClassMap map:Posts;
+	d2rq:join "PostHistory.PostId => Posts.Id";
+	.
+
+# Table PostHistoryType
+map:PostHistoryType a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "PostHistoryType/@@PostHistoryType.Id@@";
+	d2rq:class vocab:PostHistoryType;
+	d2rq:classDefinitionLabel "PostHistoryType";
+	.
+map:PostHistoryType__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostHistoryType;
+	d2rq:property rdfs:label;
+	d2rq:pattern "PostHistoryType #@@PostHistoryType.Id@@";
+	.
+map:PostHistoryType_Id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostHistoryType;
+	d2rq:property vocab:PostHistoryType_Id;
+	d2rq:propertyDefinitionLabel "PostHistoryType Id";
+	d2rq:column "PostHistoryType.Id";
+	d2rq:datatype xsd:integer;
+	.
+map:PostHistoryType_Type a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostHistoryType;
+	d2rq:property vocab:PostHistoryType_Type;
+	d2rq:propertyDefinitionLabel "PostHistoryType Type";
+	d2rq:column "PostHistoryType.Type";
+	.
+
+# Table PostLinks
+map:PostLinks a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "PostLinks/@@PostLinks.Id@@";
+	d2rq:class vocab:PostLinks;
+	d2rq:classDefinitionLabel "PostLinks";
+	.
+map:PostLinks__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostLinks;
+	d2rq:property rdfs:label;
+	d2rq:pattern "PostLinks #@@PostLinks.Id@@";
+	.
+map:PostLinks_Id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostLinks;
+	d2rq:property vocab:PostLinks_Id;
+	d2rq:propertyDefinitionLabel "PostLinks Id";
+	d2rq:column "PostLinks.Id";
+	d2rq:datatype xsd:integer;
+	.
+map:PostLinks_CreationDate a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostLinks;
+	d2rq:property vocab:PostLinks_CreationDate;
+	d2rq:propertyDefinitionLabel "PostLinks CreationDate";
+	d2rq:column "PostLinks.CreationDate";
+	d2rq:datatype xsd:dateTime;
+	.
+map:PostLinks_LinkTypeId a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostLinks;
+	d2rq:property vocab:PostLinks_LinkTypeId;
+	d2rq:propertyDefinitionLabel "PostLinks LinkTypeId";
+	d2rq:column "PostLinks.LinkTypeId";
+	d2rq:datatype xsd:integer;
+	.
+map:PostLinks_RelatedPostId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostLinks;
+	d2rq:property vocab:PostLinks_RelatedPostId;
+	d2rq:refersToClassMap map:Posts;
+	d2rq:join "PostLinks.RelatedPostId => Posts.Id";
+	.
+map:PostLinks_PostId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostLinks;
+	d2rq:property vocab:PostLinks_PostId;
+	d2rq:refersToClassMap map:Posts;
+	d2rq:join "PostLinks.PostId => Posts.Id";
+	.
+
+# Table PostReferenceGH
+map:PostReferenceGH a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "PostReferenceGH/@@PostReferenceGH.Id@@";
+	d2rq:class vocab:PostReferenceGH;
+	d2rq:classDefinitionLabel "PostReferenceGH";
+	.
+map:PostReferenceGH__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostReferenceGH;
+	d2rq:property rdfs:label;
+	d2rq:pattern "PostReferenceGH #@@PostReferenceGH.Id@@";
+	.
+map:PostReferenceGH_Id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostReferenceGH;
+	d2rq:property vocab:PostReferenceGH_Id;
+	d2rq:propertyDefinitionLabel "PostReferenceGH Id";
+	d2rq:column "PostReferenceGH.Id";
+	d2rq:datatype xsd:integer;
+	.
+map:PostReferenceGH_FileId a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostReferenceGH;
+	d2rq:property vocab:PostReferenceGH_FileId;
+	d2rq:propertyDefinitionLabel "PostReferenceGH FileId";
+	d2rq:column "PostReferenceGH.FileId";
+	.
+map:PostReferenceGH_Repo a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostReferenceGH;
+	d2rq:property vocab:PostReferenceGH_Repo;
+	d2rq:propertyDefinitionLabel "PostReferenceGH Repo";
+	d2rq:column "PostReferenceGH.Repo";
+	.
+map:PostReferenceGH_RepoOwner a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostReferenceGH;
+	d2rq:property vocab:PostReferenceGH_RepoOwner;
+	d2rq:propertyDefinitionLabel "PostReferenceGH RepoOwner";
+	d2rq:column "PostReferenceGH.RepoOwner";
+	.
+map:PostReferenceGH_RepoName a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostReferenceGH;
+	d2rq:property vocab:PostReferenceGH_RepoName;
+	d2rq:propertyDefinitionLabel "PostReferenceGH RepoName";
+	d2rq:column "PostReferenceGH.RepoName";
+	.
+map:PostReferenceGH_Branch a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostReferenceGH;
+	d2rq:property vocab:PostReferenceGH_Branch;
+	d2rq:propertyDefinitionLabel "PostReferenceGH Branch";
+	d2rq:column "PostReferenceGH.Branch";
+	.
+map:PostReferenceGH_Path a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostReferenceGH;
+	d2rq:property vocab:PostReferenceGH_Path;
+	d2rq:propertyDefinitionLabel "PostReferenceGH Path";
+	d2rq:column "PostReferenceGH.Path";
+	.
+map:PostReferenceGH_FileExt a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostReferenceGH;
+	d2rq:property vocab:PostReferenceGH_FileExt;
+	d2rq:propertyDefinitionLabel "PostReferenceGH FileExt";
+	d2rq:column "PostReferenceGH.FileExt";
+	.
+map:PostReferenceGH_Size a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostReferenceGH;
+	d2rq:property vocab:PostReferenceGH_Size;
+	d2rq:propertyDefinitionLabel "PostReferenceGH Size";
+	d2rq:column "PostReferenceGH.Size";
+	d2rq:datatype xsd:integer;
+	.
+map:PostReferenceGH_Copies a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostReferenceGH;
+	d2rq:property vocab:PostReferenceGH_Copies;
+	d2rq:propertyDefinitionLabel "PostReferenceGH Copies";
+	d2rq:column "PostReferenceGH.Copies";
+	d2rq:datatype xsd:integer;
+	.
+map:PostReferenceGH_SOUrl a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostReferenceGH;
+	d2rq:property vocab:PostReferenceGH_SOUrl;
+	d2rq:propertyDefinitionLabel "PostReferenceGH SOUrl";
+	d2rq:column "PostReferenceGH.SOUrl";
+	.
+map:PostReferenceGH_GHUrl a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostReferenceGH;
+	d2rq:property vocab:PostReferenceGH_GHUrl;
+	d2rq:propertyDefinitionLabel "PostReferenceGH GHUrl";
+	d2rq:column "PostReferenceGH.GHUrl";
+	.
+map:PostReferenceGH_PostId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostReferenceGH;
+	d2rq:property vocab:PostReferenceGH_PostId;
+	d2rq:refersToClassMap map:Posts;
+	d2rq:join "PostReferenceGH.PostId => Posts.Id";
+	.
+map:PostReferenceGH_CommentId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostReferenceGH;
+	d2rq:property vocab:PostReferenceGH_CommentId;
+	d2rq:refersToClassMap map:Comments;
+	d2rq:join "PostReferenceGH.CommentId => Comments.Id";
+	.
+
+# Table PostTags (n:m)
+map:PostTags__link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Posts;
+	d2rq:property vocab:PostTags;
+	d2rq:refersToClassMap map:Tags;
+	d2rq:join "PostTags.PostId => Posts.Id";
+	d2rq:join "PostTags.TagId => Tags.Id";
+	.
+
+# Table PostType
+map:PostType a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "PostType/@@PostType.Id@@";
+	d2rq:class vocab:PostType;
+	d2rq:classDefinitionLabel "PostType";
+	.
+map:PostType__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostType;
+	d2rq:property rdfs:label;
+	d2rq:pattern "PostType #@@PostType.Id@@";
+	.
+map:PostType_Id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostType;
+	d2rq:property vocab:PostType_Id;
+	d2rq:propertyDefinitionLabel "PostType Id";
+	d2rq:column "PostType.Id";
+	d2rq:datatype xsd:integer;
+	.
+map:PostType_Type a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostType;
+	d2rq:property vocab:PostType_Type;
+	d2rq:propertyDefinitionLabel "PostType Type";
+	d2rq:column "PostType.Type";
+	.
+
+# Table PostVersion
+map:PostVersion a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "PostVersion/@@PostVersion.Id@@";
+	d2rq:class vocab:PostVersion;
+	d2rq:classDefinitionLabel "PostVersion";
+	.
+map:PostVersion__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostVersion;
+	d2rq:property rdfs:label;
+	d2rq:pattern "PostVersion #@@PostVersion.Id@@";
+	.
+map:PostVersion_Id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostVersion;
+	d2rq:property vocab:PostVersion_Id;
+	d2rq:propertyDefinitionLabel "PostVersion Id";
+	d2rq:column "PostVersion.Id";
+	d2rq:datatype xsd:integer;
+	.
+map:PostVersion_CreationDate a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostVersion;
+	d2rq:property vocab:PostVersion_CreationDate;
+	d2rq:propertyDefinitionLabel "PostVersion CreationDate";
+	d2rq:column "PostVersion.CreationDate";
+	d2rq:datatype xsd:dateTime;
+	.
+map:PostVersion_MostRecentVersion a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostVersion;
+	d2rq:property vocab:PostVersion_MostRecentVersion;
+	d2rq:propertyDefinitionLabel "PostVersion MostRecentVersion";
+	d2rq:column "PostVersion.MostRecentVersion";
+	d2rq:datatype xsd:boolean;
+	.
+map:PostVersion_Comment a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostVersion;
+	d2rq:property vocab:PostVersion_Comment;
+	d2rq:propertyDefinitionLabel "PostVersion Comment";
+	d2rq:column "PostVersion.Comment";
+	.
+map:PostVersion_PostHistoryTypeId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostVersion;
+	d2rq:property vocab:PostVersion_PostHistoryTypeId;
+	d2rq:refersToClassMap map:PostHistoryType;
+	d2rq:join "PostVersion.PostHistoryTypeId => PostHistoryType.Id";
+	.
+map:PostVersion_PredPostHistoryId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostVersion;
+	d2rq:property vocab:PostVersion_PredPostHistoryId;
+	d2rq:refersToClassMap map:PostHistory;
+	d2rq:join "PostVersion.PredPostHistoryId => PostHistory.Id";
+	.
+map:PostVersion_PostHistoryId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostVersion;
+	d2rq:property vocab:PostVersion_PostHistoryId;
+	d2rq:refersToClassMap map:PostHistory;
+	d2rq:join "PostVersion.PostHistoryId => PostHistory.Id";
+	.
+map:PostVersion_PostTypeId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostVersion;
+	d2rq:property vocab:PostVersion_PostTypeId;
+	d2rq:refersToClassMap map:PostType;
+	d2rq:join "PostVersion.PostTypeId => PostType.Id";
+	.
+map:PostVersion_SuccPostHistoryId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostVersion;
+	d2rq:property vocab:PostVersion_SuccPostHistoryId;
+	d2rq:refersToClassMap map:PostHistory;
+	d2rq:join "PostVersion.SuccPostHistoryId => PostHistory.Id";
+	.
+map:PostVersion_PostId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostVersion;
+	d2rq:property vocab:PostVersion_PostId;
+	d2rq:refersToClassMap map:Posts;
+	d2rq:join "PostVersion.PostId => Posts.Id";
+	.
+
+# Table PostVersionUrl
+map:PostVersionUrl a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "PostVersionUrl/@@PostVersionUrl.Id@@";
+	d2rq:class vocab:PostVersionUrl;
+	d2rq:classDefinitionLabel "PostVersionUrl";
+	.
+map:PostVersionUrl__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostVersionUrl;
+	d2rq:property rdfs:label;
+	d2rq:pattern "PostVersionUrl #@@PostVersionUrl.Id@@";
+	.
+map:PostVersionUrl_Id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostVersionUrl;
+	d2rq:property vocab:PostVersionUrl_Id;
+	d2rq:propertyDefinitionLabel "PostVersionUrl Id";
+	d2rq:column "PostVersionUrl.Id";
+	d2rq:datatype xsd:integer;
+	.
+map:PostVersionUrl_LinkType a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostVersionUrl;
+	d2rq:property vocab:PostVersionUrl_LinkType;
+	d2rq:propertyDefinitionLabel "PostVersionUrl LinkType";
+	d2rq:column "PostVersionUrl.LinkType";
+	.
+map:PostVersionUrl_LinkPosition a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostVersionUrl;
+	d2rq:property vocab:PostVersionUrl_LinkPosition;
+	d2rq:propertyDefinitionLabel "PostVersionUrl LinkPosition";
+	d2rq:column "PostVersionUrl.LinkPosition";
+	.
+map:PostVersionUrl_LinkAnchor a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostVersionUrl;
+	d2rq:property vocab:PostVersionUrl_LinkAnchor;
+	d2rq:propertyDefinitionLabel "PostVersionUrl LinkAnchor";
+	d2rq:column "PostVersionUrl.LinkAnchor";
+	.
+map:PostVersionUrl_Protocol a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostVersionUrl;
+	d2rq:property vocab:PostVersionUrl_Protocol;
+	d2rq:propertyDefinitionLabel "PostVersionUrl Protocol";
+	d2rq:column "PostVersionUrl.Protocol";
+	.
+map:PostVersionUrl_RootDomain a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostVersionUrl;
+	d2rq:property vocab:PostVersionUrl_RootDomain;
+	d2rq:propertyDefinitionLabel "PostVersionUrl RootDomain";
+	d2rq:column "PostVersionUrl.RootDomain";
+	.
+map:PostVersionUrl_CompleteDomain a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostVersionUrl;
+	d2rq:property vocab:PostVersionUrl_CompleteDomain;
+	d2rq:propertyDefinitionLabel "PostVersionUrl CompleteDomain";
+	d2rq:column "PostVersionUrl.CompleteDomain";
+	.
+map:PostVersionUrl_Path a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostVersionUrl;
+	d2rq:property vocab:PostVersionUrl_Path;
+	d2rq:propertyDefinitionLabel "PostVersionUrl Path";
+	d2rq:column "PostVersionUrl.Path";
+	.
+map:PostVersionUrl_Query a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostVersionUrl;
+	d2rq:property vocab:PostVersionUrl_Query;
+	d2rq:propertyDefinitionLabel "PostVersionUrl Query";
+	d2rq:column "PostVersionUrl.Query";
+	.
+map:PostVersionUrl_FragmentIdentifier a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostVersionUrl;
+	d2rq:property vocab:PostVersionUrl_FragmentIdentifier;
+	d2rq:propertyDefinitionLabel "PostVersionUrl FragmentIdentifier";
+	d2rq:column "PostVersionUrl.FragmentIdentifier";
+	.
+map:PostVersionUrl_Url a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostVersionUrl;
+	d2rq:property vocab:PostVersionUrl_Url;
+	d2rq:propertyDefinitionLabel "PostVersionUrl Url";
+	d2rq:column "PostVersionUrl.Url";
+	.
+map:PostVersionUrl_FullMatch a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostVersionUrl;
+	d2rq:property vocab:PostVersionUrl_FullMatch;
+	d2rq:propertyDefinitionLabel "PostVersionUrl FullMatch";
+	d2rq:column "PostVersionUrl.FullMatch";
+	.
+map:PostVersionUrl_PostBlockVersionId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostVersionUrl;
+	d2rq:property vocab:PostVersionUrl_PostBlockVersionId;
+	d2rq:refersToClassMap map:PostBlockVersion;
+	d2rq:join "PostVersionUrl.PostBlockVersionId => PostBlockVersion.Id";
+	.
+map:PostVersionUrl_PostId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostVersionUrl;
+	d2rq:property vocab:PostVersionUrl_PostId;
+	d2rq:refersToClassMap map:Posts;
+	d2rq:join "PostVersionUrl.PostId => Posts.Id";
+	.
+map:PostVersionUrl_PostHistoryId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostVersionUrl;
+	d2rq:property vocab:PostVersionUrl_PostHistoryId;
+	d2rq:refersToClassMap map:PostHistory;
+	d2rq:join "PostVersionUrl.PostHistoryId => PostHistory.Id";
+	.
+
+# Table PostViews
+map:PostViews a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "PostViews/@@PostViews.PostId@@/@@PostViews.Version@@";
+	d2rq:class vocab:PostViews;
+	d2rq:classDefinitionLabel "PostViews";
+	.
+map:PostViews__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostViews;
+	d2rq:property rdfs:label;
+	d2rq:pattern "PostViews #@@PostViews.PostId@@/@@PostViews.Version@@";
+	.
+map:PostViews_Version a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostViews;
+	d2rq:property vocab:PostViews_Version;
+	d2rq:propertyDefinitionLabel "PostViews Version";
+	d2rq:column "PostViews.Version";
+	d2rq:datatype xsd:date;
+	.
+map:PostViews_ViewCount a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostViews;
+	d2rq:property vocab:PostViews_ViewCount;
+	d2rq:propertyDefinitionLabel "PostViews ViewCount";
+	d2rq:column "PostViews.ViewCount";
+	d2rq:datatype xsd:integer;
+	.
+map:PostViews_PostId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PostViews;
+	d2rq:property vocab:PostViews_PostId;
+	d2rq:refersToClassMap map:Posts;
+	d2rq:join "PostViews.PostId => Posts.Id";
+	.
+
+# Table Posts
+map:Posts a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "Posts/@@Posts.Id@@";
+	d2rq:class vocab:Posts;
+	d2rq:classDefinitionLabel "Posts";
+	.
+map:Posts__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Posts;
+	d2rq:property rdfs:label;
+	d2rq:pattern "Posts #@@Posts.Id@@";
+	.
+map:Posts_CreationDate a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Posts;
+	d2rq:property vocab:Posts_CreationDate;
+	d2rq:propertyDefinitionLabel "Posts CreationDate";
+	d2rq:column "Posts.CreationDate";
+	d2rq:datatype xsd:dateTime;
+	.
+map:Posts_DeletionDate a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Posts;
+	d2rq:property vocab:Posts_DeletionDate;
+	d2rq:propertyDefinitionLabel "Posts DeletionDate";
+	d2rq:column "Posts.DeletionDate";
+	d2rq:datatype xsd:dateTime;
+	.
+map:Posts_Score a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Posts;
+	d2rq:property vocab:Posts_Score;
+	d2rq:propertyDefinitionLabel "Posts Score";
+	d2rq:column "Posts.Score";
+	d2rq:datatype xsd:integer;
+	.
+map:Posts_ViewCount a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Posts;
+	d2rq:property vocab:Posts_ViewCount;
+	d2rq:propertyDefinitionLabel "Posts ViewCount";
+	d2rq:column "Posts.ViewCount";
+	d2rq:datatype xsd:integer;
+	.
+map:Posts_Body a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Posts;
+	d2rq:property vocab:Posts_Body;
+	d2rq:propertyDefinitionLabel "Posts Body";
+	d2rq:column "Posts.Body";
+	.
+map:Posts_OwnerUserId a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Posts;
+	d2rq:property vocab:Posts_OwnerUserId;
+	d2rq:propertyDefinitionLabel "Posts OwnerUserId";
+	d2rq:column "Posts.OwnerUserId";
+	d2rq:datatype xsd:integer;
+	.
+map:Posts_OwnerDisplayName a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Posts;
+	d2rq:property vocab:Posts_OwnerDisplayName;
+	d2rq:propertyDefinitionLabel "Posts OwnerDisplayName";
+	d2rq:column "Posts.OwnerDisplayName";
+	.
+map:Posts_LastEditorUserId a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Posts;
+	d2rq:property vocab:Posts_LastEditorUserId;
+	d2rq:propertyDefinitionLabel "Posts LastEditorUserId";
+	d2rq:column "Posts.LastEditorUserId";
+	d2rq:datatype xsd:integer;
+	.
+map:Posts_LastEditorDisplayName a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Posts;
+	d2rq:property vocab:Posts_LastEditorDisplayName;
+	d2rq:propertyDefinitionLabel "Posts LastEditorDisplayName";
+	d2rq:column "Posts.LastEditorDisplayName";
+	.
+map:Posts_LastEditDate a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Posts;
+	d2rq:property vocab:Posts_LastEditDate;
+	d2rq:propertyDefinitionLabel "Posts LastEditDate";
+	d2rq:column "Posts.LastEditDate";
+	d2rq:datatype xsd:dateTime;
+	.
+map:Posts_LastActivityDate a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Posts;
+	d2rq:property vocab:Posts_LastActivityDate;
+	d2rq:propertyDefinitionLabel "Posts LastActivityDate";
+	d2rq:column "Posts.LastActivityDate";
+	d2rq:datatype xsd:dateTime;
+	.
+map:Posts_Title a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Posts;
+	d2rq:property vocab:Posts_Title;
+	d2rq:propertyDefinitionLabel "Posts Title";
+	d2rq:column "Posts.Title";
+	.
+map:Posts_Tags a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Posts;
+	d2rq:property vocab:Posts_Tags;
+	d2rq:propertyDefinitionLabel "Posts Tags";
+	d2rq:column "Posts.Tags";
+	.
+map:Posts_AnswerCount a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Posts;
+	d2rq:property vocab:Posts_AnswerCount;
+	d2rq:propertyDefinitionLabel "Posts AnswerCount";
+	d2rq:column "Posts.AnswerCount";
+	d2rq:datatype xsd:integer;
+	.
+map:Posts_CommentCount a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Posts;
+	d2rq:property vocab:Posts_CommentCount;
+	d2rq:propertyDefinitionLabel "Posts CommentCount";
+	d2rq:column "Posts.CommentCount";
+	d2rq:datatype xsd:integer;
+	.
+map:Posts_FavoriteCount a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Posts;
+	d2rq:property vocab:Posts_FavoriteCount;
+	d2rq:propertyDefinitionLabel "Posts FavoriteCount";
+	d2rq:column "Posts.FavoriteCount";
+	d2rq:datatype xsd:integer;
+	.
+map:Posts_ClosedDate a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Posts;
+	d2rq:property vocab:Posts_ClosedDate;
+	d2rq:propertyDefinitionLabel "Posts ClosedDate";
+	d2rq:column "Posts.ClosedDate";
+	d2rq:datatype xsd:dateTime;
+	.
+map:Posts_CommunityOwnedDate a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Posts;
+	d2rq:property vocab:Posts_CommunityOwnedDate;
+	d2rq:propertyDefinitionLabel "Posts CommunityOwnedDate";
+	d2rq:column "Posts.CommunityOwnedDate";
+	d2rq:datatype xsd:dateTime;
+	.
+map:Posts_PostTypeId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Posts;
+	d2rq:property vocab:Posts_PostTypeId;
+	d2rq:refersToClassMap map:PostType;
+	d2rq:join "Posts.PostTypeId => PostType.Id";
+	.
+map:Posts_AcceptedAnswerId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Posts;
+	d2rq:property vocab:Posts_AcceptedAnswerId;
+	d2rq:refersToClassMap map:Posts;
+	d2rq:alias "Posts AS Posts__alias";
+	d2rq:join "Posts.AcceptedAnswerId => Posts__alias.Id";
+	.
+map:Posts_ParentId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Posts;
+	d2rq:property vocab:Posts_ParentId;
+	d2rq:refersToClassMap map:Posts;
+	d2rq:alias "Posts AS Posts__alias";
+	d2rq:join "Posts.ParentId => Posts__alias.Id";
+	.
+
+# Table StackSnippetVersion
+map:StackSnippetVersion a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "StackSnippetVersion/@@StackSnippetVersion.Id@@";
+	d2rq:class vocab:StackSnippetVersion;
+	d2rq:classDefinitionLabel "StackSnippetVersion";
+	.
+map:StackSnippetVersion__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:StackSnippetVersion;
+	d2rq:property rdfs:label;
+	d2rq:pattern "StackSnippetVersion #@@StackSnippetVersion.Id@@";
+	.
+map:StackSnippetVersion_Id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:StackSnippetVersion;
+	d2rq:property vocab:StackSnippetVersion_Id;
+	d2rq:propertyDefinitionLabel "StackSnippetVersion Id";
+	d2rq:column "StackSnippetVersion.Id";
+	d2rq:datatype xsd:integer;
+	.
+map:StackSnippetVersion_Content a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:StackSnippetVersion;
+	d2rq:property vocab:StackSnippetVersion_Content;
+	d2rq:propertyDefinitionLabel "StackSnippetVersion Content";
+	d2rq:column "StackSnippetVersion.Content";
+	.
+map:StackSnippetVersion_PostTypeId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:StackSnippetVersion;
+	d2rq:property vocab:StackSnippetVersion_PostTypeId;
+	d2rq:refersToClassMap map:PostType;
+	d2rq:join "StackSnippetVersion.PostTypeId => PostType.Id";
+	.
+map:StackSnippetVersion_PostId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:StackSnippetVersion;
+	d2rq:property vocab:StackSnippetVersion_PostId;
+	d2rq:refersToClassMap map:Posts;
+	d2rq:join "StackSnippetVersion.PostId => Posts.Id";
+	.
+map:StackSnippetVersion_PostHistoryId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:StackSnippetVersion;
+	d2rq:property vocab:StackSnippetVersion_PostHistoryId;
+	d2rq:refersToClassMap map:PostHistory;
+	d2rq:join "StackSnippetVersion.PostHistoryId => PostHistory.Id";
+	.
+
+# Table Tags
+map:Tags a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "Tags/@@Tags.Id@@";
+	d2rq:class vocab:Tags;
+	d2rq:classDefinitionLabel "Tags";
+	.
+map:Tags__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Tags;
+	d2rq:property rdfs:label;
+	d2rq:pattern "Tags #@@Tags.Id@@";
+	.
+map:Tags_Id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Tags;
+	d2rq:property vocab:Tags_Id;
+	d2rq:propertyDefinitionLabel "Tags Id";
+	d2rq:column "Tags.Id";
+	d2rq:datatype xsd:integer;
+	.
+map:Tags_TagName a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Tags;
+	d2rq:property vocab:Tags_TagName;
+	d2rq:propertyDefinitionLabel "Tags TagName";
+	d2rq:column "Tags.TagName";
+	.
+map:Tags_Count a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Tags;
+	d2rq:property vocab:Tags_Count;
+	d2rq:propertyDefinitionLabel "Tags Count";
+	d2rq:column "Tags.Count";
+	d2rq:datatype xsd:integer;
+	.
+map:Tags_ExcerptPostId a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Tags;
+	d2rq:property vocab:Tags_ExcerptPostId;
+	d2rq:propertyDefinitionLabel "Tags ExcerptPostId";
+	d2rq:column "Tags.ExcerptPostId";
+	d2rq:datatype xsd:integer;
+	.
+map:Tags_WikiPostId a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Tags;
+	d2rq:property vocab:Tags_WikiPostId;
+	d2rq:propertyDefinitionLabel "Tags WikiPostId";
+	d2rq:column "Tags.WikiPostId";
+	d2rq:datatype xsd:integer;
+	.
+
+# Table TitleVersion
+map:TitleVersion a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "TitleVersion/@@TitleVersion.Id@@";
+	d2rq:class vocab:TitleVersion;
+	d2rq:classDefinitionLabel "TitleVersion";
+	.
+map:TitleVersion__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:TitleVersion;
+	d2rq:property rdfs:label;
+	d2rq:pattern "TitleVersion #@@TitleVersion.Id@@";
+	.
+map:TitleVersion_Id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:TitleVersion;
+	d2rq:property vocab:TitleVersion_Id;
+	d2rq:propertyDefinitionLabel "TitleVersion Id";
+	d2rq:column "TitleVersion.Id";
+	d2rq:datatype xsd:integer;
+	.
+map:TitleVersion_CreationDate a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:TitleVersion;
+	d2rq:property vocab:TitleVersion_CreationDate;
+	d2rq:propertyDefinitionLabel "TitleVersion CreationDate";
+	d2rq:column "TitleVersion.CreationDate";
+	d2rq:datatype xsd:dateTime;
+	.
+map:TitleVersion_Title a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:TitleVersion;
+	d2rq:property vocab:TitleVersion_Title;
+	d2rq:propertyDefinitionLabel "TitleVersion Title";
+	d2rq:column "TitleVersion.Title";
+	.
+map:TitleVersion_PredEditDistance a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:TitleVersion;
+	d2rq:property vocab:TitleVersion_PredEditDistance;
+	d2rq:propertyDefinitionLabel "TitleVersion PredEditDistance";
+	d2rq:column "TitleVersion.PredEditDistance";
+	d2rq:datatype xsd:integer;
+	.
+map:TitleVersion_SuccEditDistance a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:TitleVersion;
+	d2rq:property vocab:TitleVersion_SuccEditDistance;
+	d2rq:propertyDefinitionLabel "TitleVersion SuccEditDistance";
+	d2rq:column "TitleVersion.SuccEditDistance";
+	d2rq:datatype xsd:integer;
+	.
+map:TitleVersion_MostRecentVersion a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:TitleVersion;
+	d2rq:property vocab:TitleVersion_MostRecentVersion;
+	d2rq:propertyDefinitionLabel "TitleVersion MostRecentVersion";
+	d2rq:column "TitleVersion.MostRecentVersion";
+	d2rq:datatype xsd:boolean;
+	.
+map:TitleVersion_PostId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:TitleVersion;
+	d2rq:property vocab:TitleVersion_PostId;
+	d2rq:refersToClassMap map:Posts;
+	d2rq:join "TitleVersion.PostId => Posts.Id";
+	.
+map:TitleVersion_PostHistoryTypeId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:TitleVersion;
+	d2rq:property vocab:TitleVersion_PostHistoryTypeId;
+	d2rq:refersToClassMap map:PostHistoryType;
+	d2rq:join "TitleVersion.PostHistoryTypeId => PostHistoryType.Id";
+	.
+map:TitleVersion_PredPostHistoryId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:TitleVersion;
+	d2rq:property vocab:TitleVersion_PredPostHistoryId;
+	d2rq:refersToClassMap map:PostHistory;
+	d2rq:join "TitleVersion.PredPostHistoryId => PostHistory.Id";
+	.
+map:TitleVersion_PostTypeId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:TitleVersion;
+	d2rq:property vocab:TitleVersion_PostTypeId;
+	d2rq:refersToClassMap map:PostType;
+	d2rq:join "TitleVersion.PostTypeId => PostType.Id";
+	.
+map:TitleVersion_PostHistoryId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:TitleVersion;
+	d2rq:property vocab:TitleVersion_PostHistoryId;
+	d2rq:refersToClassMap map:PostHistory;
+	d2rq:join "TitleVersion.PostHistoryId => PostHistory.Id";
+	.
+map:TitleVersion_SuccPostHistoryId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:TitleVersion;
+	d2rq:property vocab:TitleVersion_SuccPostHistoryId;
+	d2rq:refersToClassMap map:PostHistory;
+	d2rq:join "TitleVersion.SuccPostHistoryId => PostHistory.Id";
+	.
+
+# Table Users
+map:Users a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "Users/@@Users.Id@@";
+	d2rq:class vocab:Users;
+	d2rq:classDefinitionLabel "Users";
+	.
+map:Users__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Users;
+	d2rq:property rdfs:label;
+	d2rq:pattern "Users #@@Users.Id@@";
+	.
+map:Users_Id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Users;
+	d2rq:property vocab:Users_Id;
+	d2rq:propertyDefinitionLabel "Users Id";
+	d2rq:column "Users.Id";
+	d2rq:datatype xsd:integer;
+	.
+map:Users_Reputation a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Users;
+	d2rq:property vocab:Users_Reputation;
+	d2rq:propertyDefinitionLabel "Users Reputation";
+	d2rq:column "Users.Reputation";
+	d2rq:datatype xsd:integer;
+	.
+map:Users_CreationDate a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Users;
+	d2rq:property vocab:Users_CreationDate;
+	d2rq:propertyDefinitionLabel "Users CreationDate";
+	d2rq:column "Users.CreationDate";
+	d2rq:datatype xsd:dateTime;
+	.
+map:Users_DisplayName a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Users;
+	d2rq:property vocab:Users_DisplayName;
+	d2rq:propertyDefinitionLabel "Users DisplayName";
+	d2rq:column "Users.DisplayName";
+	.
+map:Users_LastAccessDate a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Users;
+	d2rq:property vocab:Users_LastAccessDate;
+	d2rq:propertyDefinitionLabel "Users LastAccessDate";
+	d2rq:column "Users.LastAccessDate";
+	d2rq:datatype xsd:dateTime;
+	.
+map:Users_WebsiteUrl a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Users;
+	d2rq:property vocab:Users_WebsiteUrl;
+	d2rq:propertyDefinitionLabel "Users WebsiteUrl";
+	d2rq:column "Users.WebsiteUrl";
+	.
+map:Users_Location a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Users;
+	d2rq:property vocab:Users_Location;
+	d2rq:propertyDefinitionLabel "Users Location";
+	d2rq:column "Users.Location";
+	.
+map:Users_ProfileImageUrl a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Users;
+	d2rq:property vocab:Users_ProfileImageUrl;
+	d2rq:propertyDefinitionLabel "Users ProfileImageUrl";
+	d2rq:column "Users.ProfileImageUrl";
+	.
+map:Users_AboutMe a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Users;
+	d2rq:property vocab:Users_AboutMe;
+	d2rq:propertyDefinitionLabel "Users AboutMe";
+	d2rq:column "Users.AboutMe";
+	.
+map:Users_Views a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Users;
+	d2rq:property vocab:Users_Views;
+	d2rq:propertyDefinitionLabel "Users Views";
+	d2rq:column "Users.Views";
+	d2rq:datatype xsd:integer;
+	.
+map:Users_UpVotes a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Users;
+	d2rq:property vocab:Users_UpVotes;
+	d2rq:propertyDefinitionLabel "Users UpVotes";
+	d2rq:column "Users.UpVotes";
+	d2rq:datatype xsd:integer;
+	.
+map:Users_DownVotes a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Users;
+	d2rq:property vocab:Users_DownVotes;
+	d2rq:propertyDefinitionLabel "Users DownVotes";
+	d2rq:column "Users.DownVotes";
+	d2rq:datatype xsd:integer;
+	.
+map:Users_Age a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Users;
+	d2rq:property vocab:Users_Age;
+	d2rq:propertyDefinitionLabel "Users Age";
+	d2rq:column "Users.Age";
+	d2rq:datatype xsd:integer;
+	.
+map:Users_AccountId a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Users;
+	d2rq:property vocab:Users_AccountId;
+	d2rq:propertyDefinitionLabel "Users AccountId";
+	d2rq:column "Users.AccountId";
+	d2rq:datatype xsd:integer;
+	.
+map:Users_EmailHash a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Users;
+	d2rq:property vocab:Users_EmailHash;
+	d2rq:propertyDefinitionLabel "Users EmailHash";
+	d2rq:column "Users.EmailHash";
+	.
+
+# Table VoteType
+map:VoteType a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "VoteType/@@VoteType.Id@@";
+	d2rq:class vocab:VoteType;
+	d2rq:classDefinitionLabel "VoteType";
+	.
+map:VoteType__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:VoteType;
+	d2rq:property rdfs:label;
+	d2rq:pattern "VoteType #@@VoteType.Id@@";
+	.
+map:VoteType_Id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:VoteType;
+	d2rq:property vocab:VoteType_Id;
+	d2rq:propertyDefinitionLabel "VoteType Id";
+	d2rq:column "VoteType.Id";
+	d2rq:datatype xsd:integer;
+	.
+map:VoteType_Name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:VoteType;
+	d2rq:property vocab:VoteType_Name;
+	d2rq:propertyDefinitionLabel "VoteType Name";
+	d2rq:column "VoteType.Name";
+	.
+
+# Table Votes
+map:Votes a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "Votes/@@Votes.Id@@";
+	d2rq:class vocab:Votes;
+	d2rq:classDefinitionLabel "Votes";
+	.
+map:Votes__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Votes;
+	d2rq:property rdfs:label;
+	d2rq:pattern "Votes #@@Votes.Id@@";
+	.
+map:Votes_Id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Votes;
+	d2rq:property vocab:Votes_Id;
+	d2rq:propertyDefinitionLabel "Votes Id";
+	d2rq:column "Votes.Id";
+	d2rq:datatype xsd:integer;
+	.
+map:Votes_VoteTypeId a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Votes;
+	d2rq:property vocab:Votes_VoteTypeId;
+	d2rq:propertyDefinitionLabel "Votes VoteTypeId";
+	d2rq:column "Votes.VoteTypeId";
+	d2rq:datatype xsd:integer;
+	.
+map:Votes_CreationDate a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Votes;
+	d2rq:property vocab:Votes_CreationDate;
+	d2rq:propertyDefinitionLabel "Votes CreationDate";
+	d2rq:column "Votes.CreationDate";
+	d2rq:datatype xsd:dateTime;
+	.
+map:Votes_BountyAmount a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Votes;
+	d2rq:property vocab:Votes_BountyAmount;
+	d2rq:propertyDefinitionLabel "Votes BountyAmount";
+	d2rq:column "Votes.BountyAmount";
+	d2rq:datatype xsd:integer;
+	.
+map:Votes_UserId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Votes;
+	d2rq:property vocab:Votes_UserId;
+	d2rq:refersToClassMap map:Users;
+	d2rq:join "Votes.UserId => Users.Id";
+	.
+map:Votes_PostId__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Votes;
+	d2rq:property vocab:Votes_PostId;
+	d2rq:refersToClassMap map:Posts;
+	d2rq:join "Votes.PostId => Posts.Id";
+	.
+
