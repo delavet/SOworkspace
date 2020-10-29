@@ -19,6 +19,14 @@ APIDOC_DESCRIPTION_STORE_PATH = {
     JAVADOC_GLOBAL_NAME : 'C:/workspace/SOworkspace/data/apidoc_description/javadoc_descriptions.pkl'
 }
 
+#为从侧面验证HERMES mk1的效果，将bing中对概念的描述进行了存储，可以用于后期对比
+BING_API_CONCEPT_STORE_PATH = {
+    JAVADOC_GLOBAL_NAME : {
+        'sample': 'C:/workspace/SOworkspace/data/bing_description/javadoc_bing_descriptions_sample.pkl',
+        'large': 'C:/workspace/SOworkspace/data/bing_description/javadoc_bing_descriptions.pkl'
+    }
+}
+
 #为实现HERMES mk1需要尝试在文档描述中抽取wiki中的常见concept，因此将wikipedia的内容存储路径纪录在此
 WIKIPEDIA_CONCEPT_STORE_PATH = {
     'text': 'C:/workspace/SOworkspace/data/wikipedia_concepts/text_content/'
