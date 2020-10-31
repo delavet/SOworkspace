@@ -14,5 +14,5 @@ if __name__ == "__main__":
     for node in class_nodes:
         concept_name = concept_map[node][NodeAttributes.NAME]
         community_frequency = posts_db.statistic_concept_frequency_v0(concept_name, 'javaPosts')
-        concept_map.nodes[relative_path][NodeAttributes.COMMUNITY_FREQ] = community_frequency
+        concept_map.nodes[node][NodeAttributes.COMMUNITY_FREQ] = community_frequency
     nx.write_gexf(concept_map, LATEST_CONCEPT_MAP_PATH['javadoc'])

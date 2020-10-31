@@ -32,8 +32,18 @@ WIKIPEDIA_CONCEPT_STORE_PATH = {
     'text': 'C:/workspace/SOworkspace/data/wikipedia_concepts/text_content/'
 }
 
+#为完成EUREKA，首先需要将数据库中与某个领域相关的post存储下来。为了效率将文件拆分成很多存储在一个目录下
+SO_POSTS_STORE_PATH = {
+    #java：使用<java>标签定位到的post
+    '<java>': 'C:/workspace/SOworkspace/data/so_posts/java/'
+}
+
 #MYSQL属性
 Mysql_addr = "162.105.16.32"
 Mysql_user = "root"
 Mysql_password = "root"
 Mysql_dbname_sotorrent = "sotorrent20_03"
+
+pre_generated_views_in_Mysql = {
+    '<java>' : 'JavaPosts'
+}
