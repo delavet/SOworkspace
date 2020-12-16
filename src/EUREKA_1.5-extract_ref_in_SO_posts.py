@@ -8,6 +8,11 @@ import os
 
 
 def extract_references_from_posts(so_record_file_path):
+    '''
+    # 从文档中抽取所有的他天然链接信息，附加在SO post的pkl纪录里
+    ## parameter：so_record_file_path
+    SO纪录文件的路径，pkl格式，一般应该是在`data/so_posts`目录底下
+    '''
     with open(so_record_file_path, "rb") as rbf:
         so_post_list = pickle.load(rbf)
     with open(so_record_file_path, "wb") as wbf:

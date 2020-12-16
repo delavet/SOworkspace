@@ -6,6 +6,12 @@ import os
 
 
 def collect_so_posts_related_to(tag_name):
+    '''
+    ## collect all so posts that related to a tag
+    the tag may mostly be a language, but there may be some other usage
+    ### parameter: `tag_name`:
+        the tag's name, which is a 'tag' such as '<java>' not just 'java'
+    '''
     posts_db = DBPosts()
     cnt = 0
     so_posts_to_store = []
