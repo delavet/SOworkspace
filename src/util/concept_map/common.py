@@ -6,8 +6,12 @@ from ..config import *
 
 
 def get_relative_path_from_href(href):
+    '''
+    去除超链接中的冗余内容，获取每个超链接对应的API相对链接
+    目前写死了对应的javadoc，需要后续改进
+    '''
     try:
-        match = re.search(r'(?<=javadocs/).*$', href)
+        match = re.search(f'(?<=javadocs/).*$', href)
     except Exception as e:
         logging.exception(e)
         raise NoSuchElementException()
