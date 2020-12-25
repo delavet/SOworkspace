@@ -26,16 +26,21 @@ def _generate_train_data(sentence : str, target_doc : str = JAVADOC_GLOBAL_NAME)
     返回该句话中能够分析出的训练数据列表
     '''
     ret = []
+    #随处可见的超链接会用的词，对训练可能只有坏处...
+    stop_words = ['here', 'this', 'javadoc', 'javadocs', 'docs', 'documentation', 'the documentation', 'doc', 'the javadoc', 'java docs', 'java doc', 'java documentation', 'the docs ']
     try:
         soup = BeautifulSoup(sentence, 'lxml')
         for pre in soup.find_all('pre'):
             pre.extract()
         #筛选包含目标文档链接的超链接
-        a_texts = [a.text for a in soup.find_all('a') if len(a.text) > 1 and re.search(APIDOC_API_URL_REGEX_PATTERN[JAVADOC_GLOBAL_NAME], a.get('href')) is not None]
+        #指向api的才要、太短的句子不要。。。
+        a_texts = [a.text for a in soup.find_all('a') if len(a.text) > 1 and re.search(APIDOC_API_URL_REGEX_PATTERN[JAVADOC_GLOBAL_NAME], a.get('href')) is not None and a.text.lower() not in stop_words]
         if len(a_texts) <= 0:
             return ret
-        lines = soup.text.split('\n')
-        candidate_lines = [line for line in lines if any([t for t in a_texts if t in line])]
+        #原来这里直接按行切分，现在按照句号问号冒号叹号分割，试图让分割出来的句子短一些
+        #lines = soup.text.split('\n')
+        lines = re.split(r'(\s*(\.|:|\?|!|\~)\s+|\n)+', soup.text)
+        candidate_lines = [line for line in lines if any([t for t in a_texts if t in line]) and len(line.split(' ')) > 2]
         for candidate in candidate_lines:
             train_data = {
                 "text" : candidate,

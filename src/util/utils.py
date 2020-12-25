@@ -15,6 +15,13 @@ def get_all_indexes(sub : str, s : str):
         if sub_begin_index == -1:
             break
         sub_end_index = sub_begin_index + len(sub) - 1
+        #判断识别出来的是不是个夹在一个单词里的子串而不是真的一个词
+        if sub_begin_index > 0 and s[sub_begin_index - 1].isalnum():
+            start_from_index = sub_end_index + 1
+            continue
+        if sub_end_index < len(s) - 1 and s[sub_end_index + 1].isalnum():
+            start_from_index = sub_end_index + 1
+            continue
         ret.append([sub_begin_index, sub_end_index])
         start_from_index = sub_end_index + 1
     return ret
