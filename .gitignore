@@ -109,3 +109,5 @@ backup/
 data/
 model/
 .vscode/
+
+.DS_Store

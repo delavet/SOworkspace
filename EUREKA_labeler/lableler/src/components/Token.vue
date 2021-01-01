@@ -1,20 +1,23 @@
 <!-- Token.vue -->
 <template>
-    <div class="token"
-        @mousedown="onMouseDown"
-        @mouseenter="onMouseEnter"
-        >
-        <el-tag 
-            class="tag"
-            :color="tag_types[flag]"
-            >{{text}}</el-tag>
-    </div>
+  <div
+    class="token"
+    @mousedown="onMouseDown"
+    @mouseenter="onMouseEnter"
+  >
+    <el-tag 
+      class="tag"
+      :color="tag_types[flag]"
+    >
+      {{ text }}
+    </el-tag>
+  </div>
 </template>
 <script>
 import { O, I, parseData } from '../util/Util.js'
 
 export default {
-    name: "token",
+    name: "Token",
     props: {
         index: Number,
         // 标签内容
