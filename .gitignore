@@ -112,3 +112,4 @@ model/
 .vscode/
 
 .DS_Store
+requirements.txt
