@@ -73,6 +73,19 @@ EUREKA_TRAIN_SET_FILE_NAME = 'ner_trainset.json'
 EUREKA_TEST_SET_FILE_NAME = 'ner_testset.json'
 #EUREKA_VALID_SET_FILE_NAME = 'ner_validset.json'
 
+# ANEMONE为post中的NEL任务，此任务需要训练集，该项为训练集存储目录
+ANEMONE_DATASET_STORE_PATH = {
+    JAVADOC_GLOBAL_NAME: f'{base_dir}/data/ANEMONE_dataset/java'
+}
+# ANEMENE使用的数据集文件名，之后会进一步分离成训练集和测试集，ANEMONE使用的多个方法中，数据形式可能不同，因此还根据方法不同划分不同数据集
+
+# general
+ANEMONE_GENERAL_DATASET_FILE_NAME = 'general_nel_dataset.json'
+# for xgboost
+ANEMONE_XGBOOST_DATASET_FILE_NAME = 'xgboost_nel_dataset.json'
+ANEMONE_XGBOOST_TRAIN_SET_FILE_NAME = 'xgboost_nel_trainset.json'
+ANEMONE_XGBOOST_TEST_SET_FILE_NAME = 'xgboost_nel_testset.json'
+
 # MYSQL属性
 Mysql_addr = "162.105.16.191"
 Mysql_user = "root"

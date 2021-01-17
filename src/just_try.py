@@ -1,36 +1,41 @@
-from bs4 import BeautifulSoup
-from tqdm import tqdm
-import os
-import pickle
-import json
-def extract_references_from_posts(so_record_file_path):
-    with open(so_record_file_path, "rb") as rbf:
-        so_post_list = pickle.load(rbf)
-        so_post_with_link_list = []
-        whole_links = []
-        for post in so_post_list:
-            question_body = post['Body']
-            answers = post['Answers']
-            question_soup = BeautifulSoup(question_body, 'lxml')
-            link_soups = []
-            link_soups.extend(question_soup.find_all('a'))
-            for answer in answers:
-                answer_soup = BeautifulSoup(answer['Body'], 'lxml')
-                link_soups.extend(answer_soup.find_all("a"))
-            links = [s.text for s in link_soups if 'docs.oracle.com' in str(s.get('href')) and 'api' in str(s.get('href'))]
-            whole_links.extend(links)
-    return whole_links
+import re
+import logging
+import networkx as nx
+from selenium.common.exceptions import NoSuchElementException
+from util.concept_map.common import get_latest_concept_map
+from util.constant import *
+from util.nel.common import api_url_match
 
 
-files = os.listdir('C:/workspace/SOworkspace/data/so_posts/java/')
-a_dict = { }
-for i in tqdm(range(len(files))):
-    links = extract_references_from_posts(os.path.join('C:/workspace/SOworkspace/data/so_posts/java/', f'posts_{i}.pkl'))
-    for a in links:
-        if a.lower() in a_dict.keys():
-            a_dict[a.lower()] = a_dict[a.lower()] + 1
-        else:
-            a_dict[a.lower()] = 1
+def get_relative_path_from_href(href):
+    '''
+    去除超链接中的冗余内容，获取每个超链接对应的API相对链接
+    目前写死了对应的javadoc，需要后续改进
+    '''
+    try:
+        match = re.search(f'(?<=api/).*$', href)
+    except Exception as e:
+        logging.exception(e)
+        raise NoSuchElementException()
+    if match is not None:
+        ret = match.group()
+    else:
+        ret = href
+    ret = ret.replace('%3C', '<')
+    ret = ret.replace('%3E', '>')
+    ret = ret.replace('%5B', '[')
+    ret = ret.replace('%5D', ']')
+    return ret
 
-with open(os.path.join('C:/workspace/SOworkspace/data/cache/', 'java_so_posts_a_texts.json'), 'w', encoding='utf-8') as wf:
-    json.dump(sorted([item for item in a_dict.items() if item[1] > 10], key=lambda x:x[1], reverse=True), wf)
+
+if __name__ == "__main__":
+    '''concept_map = get_latest_concept_map()
+    Ntype_attributes = nx.get_node_attributes(concept_map, 'Ntype')
+    module_nodes = [
+        node for node in concept_map.nodes if node in Ntype_attributes and (Ntype_attributes[node] == NodeType.MODULE or Ntype_attributes[node] == NodeType.PACKAGE)]
+    print(len(module_nodes))
+    print(module_nodes)'''
+    print(api_url_match(
+        "file:///F:/SOworkspace/apidocs/javadocs/api/java.net.http/java/net/http/package-summary.html",
+        "http://docs.oracle.com/javase/6/docs/api/java/net/http/package-summary.html"
+    ))

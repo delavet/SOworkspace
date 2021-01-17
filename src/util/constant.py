@@ -22,14 +22,17 @@ class EdgeType:
     REQUIRE = 'REQUIRE'
     INHERIT = 'INHERIT'
     IMPLEMENT = 'IMPLEMENT'
-    REFERENCE_IN_DESCRIPTION = 'REFERENCE_IN_DESCRIPTION' #reference when talking about the description
-    PARAMETER = 'PARAMETER' #this function use an object of this class as parameter
-    RETURN_TYPE = 'RETURN_TYPE' #this function return an object of this class
-    FIELD_IS_TYPE = 'FIELD_IS_TYPE' #the field's type is this class
-    NESTED_CLASS = 'NESTED_CLASS' #the class is a nested class of another class, can be identified with Enclosing class
-    ATTACH_ANNOTATION = 'ATTACH_ANNOTATION' #method or field or class is attached with an annotation
-    THROWS = 'THROWS' #a method throw an exception or an error
-    ALSO_SEE = 'ALSO_SEE' #two related concepts, marked as also see in the doc
+    # reference when talking about the description
+    REFERENCE_IN_DESCRIPTION = 'REFERENCE_IN_DESCRIPTION'
+    PARAMETER = 'PARAMETER'  # this function use an object of this class as parameter
+    RETURN_TYPE = 'RETURN_TYPE'  # this function return an object of this class
+    FIELD_IS_TYPE = 'FIELD_IS_TYPE'  # the field's type is this class
+    # the class is a nested class of another class, can be identified with Enclosing class
+    NESTED_CLASS = 'NESTED_CLASS'
+    # method or field or class is attached with an annotation
+    ATTACH_ANNOTATION = 'ATTACH_ANNOTATION'
+    THROWS = 'THROWS'  # a method throw an exception or an error
+    ALSO_SEE = 'ALSO_SEE'  # two related concepts, marked as also see in the doc
 
 
 class NodeAttributes:
@@ -42,10 +45,14 @@ class NodeAttributes:
 
 
 class_level_node_types = [
-    NodeType.ANNOTATION, 
-    NodeType.CLASS, 
-    NodeType.ENUM, 
+    NodeType.ANNOTATION,
+    NodeType.CLASS,
+    NodeType.ENUM,
     NodeType.ERROR,
     NodeType.EXCEPTION,
     NodeType.INTERFACE
 ]
+
+
+SO_POST_STOP_WORDS = ['here', 'this', 'javadoc', 'javadocs', 'docs', 'documentation', 'the documentation',
+                      'doc', 'the javadoc', 'java docs', 'java doc', 'java documentation', 'the docs ']
