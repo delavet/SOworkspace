@@ -6,7 +6,7 @@ JAVADOC_GLOBAL_NAME = 'javadoc'
 if os.path.exists('C:/workspace/SOworkspace'):
     base_dir = 'C:/workspace/SOworkspace'
 elif os.path.exists('/media/dell/disk/yinh/SOworkspace'):
-    base_dir = 'C:/workspace/SOworkspace'
+    base_dir = '/media/dell/disk/yinh/SOworkspace'
 elif os.path.exists('/User/yinhang/Desktop/workspace/SOworkspace'):
     base_dir = '/User/yinhang/Desktop/workspace/SOworkspace'
 else:
