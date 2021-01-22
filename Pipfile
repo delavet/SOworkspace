@@ -24,6 +24,7 @@ summa = "*"
 pandas = "*"
 beautifulsoup4 = "*"
 lxml = "*"
+xgboost = "*"
 
 [requires]
 python_version = "3.7"
