@@ -99,6 +99,7 @@ var cur_dataset_filename = undefined;
 var cur_dataset_length = 0;
 var cur_label_index = -1;
 var refined_dataset = undefined;
+var unchanged_mentions = undefined;
 
 export default {
   name: "App",
@@ -109,7 +110,7 @@ export default {
     return {
       tokens: undefined,
       value: null,
-      options: Array(62)
+      options: Array(63)
         .fill()
         .map((_, i) => ({
           label: `ner_data_${i}.json`,
@@ -144,7 +145,13 @@ export default {
       }
     },
     onClick() {
-      refined_dataset.push(generateDataBack(this.tokens));
+      debugger
+      let new_data = generateDataBack(this.tokens);
+      let new_apis = Object.keys(new_data['label']['api'])
+      let old_apis = Object.keys(cur_dataset[cur_label_index]['label']['api'])
+      let unchanged = new_apis.filter(x => old_apis.includes(x));
+      unchanged_mentions.push(...unchanged)
+      refined_dataset.push(new_data);
       cur_label_index++;
       if (cur_label_index >= cur_dataset_length) {
         this.tokens = [];
@@ -162,16 +169,17 @@ export default {
     },
     async datasetSelected() {
       this.selectDisabled = true;
-
       let res = await this.$http.get(`/static/${cur_dataset_filename}`);
       cur_dataset = res.data;
       refined_dataset = [];
+      unchanged_mentions = [];
       cur_dataset_length = cur_dataset.length;
       cur_label_index = 0;
       this.tokens = parseData(cur_dataset[cur_label_index]);
     },
     handinDatasetClick() {
       saveObject(refined_dataset, cur_dataset_filename);
+      saveObject(Array.from(new Set(unchanged_mentions)), 'nel_gt_apis.json');
       this.selectDisabled = false;
       this.$alert(`本次标了${refined_dataset.length}个，太棒！`);
     },

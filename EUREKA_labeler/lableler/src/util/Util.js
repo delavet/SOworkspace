@@ -46,7 +46,7 @@ var generateDataBack = (tokens) => {
         }
         cur_api_name += tokens[i].text
         if (i < tokens.length - 1 && tokens[i + 1].flag === O) {
-            debugger
+            
             cur_end = i
             if (cur_api_name in labels) {
                 labels[cur_api_name].push([cur_start, cur_end])
