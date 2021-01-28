@@ -85,6 +85,10 @@ ANEMONE_GENERAL_DATASET_FILE_NAME = 'general_nel_dataset.json'
 ANEMONE_XGBOOST_DATASET_FILE_NAME = 'xgboost_nel_dataset.json'
 ANEMONE_XGBOOST_TRAIN_SET_FILE_NAME = 'xgboost_nel_trainset.json'
 ANEMONE_XGBOOST_TEST_SET_FILE_NAME = 'xgboost_nel_testset.json'
+# for basic BERT MATCH
+ANEMONE_BERT_DATASET_FILE_NAME = 'bert_nel_dataset.json'
+ANEMONE_BERT_TRAIN_SET_FILE_NAME = 'bert_nel_trainset.json'
+ANEMONE_BERT_TEST_SET_FILE_NAME = 'bert_nel_testset.json'
 
 # MYSQL属性
 Mysql_addr = "162.105.16.191"
