@@ -33,7 +33,7 @@
         id="btn"
         @click="onClick"
       >
-        搞定了
+        搞定了,当前序号（从0开始）：<span v-text="cur_index"></span>
       </el-button>
       <el-divider />
       <div class="row">
@@ -97,7 +97,7 @@ var tracing = false;
 var cur_dataset = undefined;
 var cur_dataset_filename = undefined;
 var cur_dataset_length = 0;
-var cur_label_index = -1;
+var cur_label_index = 0;
 var refined_dataset = undefined;
 var unchanged_mentions = undefined;
 
@@ -118,6 +118,7 @@ export default {
         })),
       selectDisabled: false,
       start_index_input: "1",
+      cur_index: -1,
     };
   },
   created() {
@@ -145,7 +146,7 @@ export default {
       }
     },
     onClick() {
-      debugger
+      //debugger
       let new_data = generateDataBack(this.tokens);
       let new_apis = Object.keys(new_data['label']['api'])
       let old_apis = Object.keys(cur_dataset[cur_label_index]['label']['api'])
@@ -153,6 +154,7 @@ export default {
       unchanged_mentions.push(...unchanged)
       refined_dataset.push(new_data);
       cur_label_index++;
+      this.cur_index = cur_label_index;
       if (cur_label_index >= cur_dataset_length) {
         this.tokens = [];
       } else {
