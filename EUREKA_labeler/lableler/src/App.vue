@@ -100,6 +100,11 @@ var cur_dataset_length = 0;
 var cur_label_index = 0;
 var refined_dataset = undefined;
 var unchanged_mentions = undefined;
+var cur_label_stat = {
+  initPoint: -1,
+  start: -1,
+  end: -1,
+}
 
 export default {
   name: "App",
@@ -127,22 +132,67 @@ export default {
   },
   methods: {
     onAppMouseDown() {
-      console.log("appmousedown");
+      //console.log("appmousedown");
       tracing = true;
     },
     onMouseDown(token_index) {
       tracing = true;
-      console.log("mousedown");
+      //console.log("mousedown");
+      cur_label_stat.initPoint = token_index;
+      cur_label_stat.start = token_index;
+      cur_label_stat.end = token_index;
       this.tokens[token_index].flag = 1 - this.tokens[token_index].flag;
     },
     onMouseUp() {
-      console.log("mouseup");
+      //console.log("mouseup");
+      cur_label_stat.initPoint = -1;
+      cur_label_stat.start = -1;
+      cur_label_stat.end = -1;
       tracing = false;
     },
     onEnteringNewToken(token_index) {
-      console.log("entering " + token_index);
+      
+      //console.log("entering " + token_index);
       if (tracing) {
-        this.tokens[token_index].flag = 1 - this.tokens[token_index].flag;
+        if (cur_label_stat.initPoint == -1) {
+          cur_label_stat.initPoint = token_index;
+          cur_label_stat.start = token_index;
+          cur_label_stat.end = token_index;
+          this.tokens[token_index].flag = 1 - this.tokens[token_index].flag;
+          return;
+        }
+        let new_start = token_index >= cur_label_stat.initPoint ? cur_label_stat.initPoint : token_index;
+        let new_end = token_index >= cur_label_stat.initPoint ? token_index : cur_label_stat.initPoint;
+        let new_is_positive = new_end != cur_label_stat.initPoint;
+        let old_is_positive = cur_label_stat.end != cur_label_stat.initPoint;
+        if (new_is_positive && old_is_positive) {
+          for (let i = Math.max(new_end, cur_label_stat.end); i > Math.min(new_end, cur_label_stat.end); i--) {
+            this.tokens[i].flag = 1 - this.tokens[i].flag;
+          }
+        }
+        else if (new_is_positive && !old_is_positive) {
+          for (let i = cur_label_stat.start; i < cur_label_stat.initPoint; i++) {
+            this.tokens[i].flag = 1 - this.tokens[i].flag;
+          }
+          for (let i = cur_label_stat.initPoint + 1; i<= new_end; i++) {
+            this.tokens[i].flag = 1 - this.tokens[i].flag;
+          }
+        }
+        else if (!new_is_positive && old_is_positive) {
+          for (let i = cur_label_stat.end; i > cur_label_stat.initPoint; i--) {
+            this.tokens[i].flag = 1 - this.tokens[i].flag;
+          }
+          for (let i = cur_label_stat.initPoint - 1; i >= new_start; i--) {
+            this.tokens[i].flag = 1 - this.tokens[i].flag;
+          }
+        }
+        else if (!new_is_positive && !old_is_positive) {
+          for (let i = Math.min(new_start, cur_label_stat.start); i < Math.max(new_start, cur_label_stat.start); i++) {
+            this.tokens[i].flag = 1 - this.tokens[i].flag;
+          }
+        }
+        cur_label_stat.start = new_start;
+        cur_label_stat.end = new_end;
       }
     },
     onClick() {
