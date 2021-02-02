@@ -14,7 +14,7 @@ from selenium.webdriver.common.keys import Keys
 
 from ..config import *
 from ..constant import *
-from ..concept_map.common import get_relative_path_from_href
+from ..concept_map.common import get_relative_path_from_href, migrate_apidoc_page_path
 
 browser = webdriver.Chrome()
 
@@ -30,20 +30,28 @@ def __collect_concept_description_javadoc():
     descriptions = OrderedDict()
 
     # 抽取module结点的描述
-    module_nodes = [node for node in concept_map.nodes if node in Ntype_attributes and Ntype_attributes[node] == 'MODULE']
+    module_nodes = [
+        node for node in concept_map.nodes if node in Ntype_attributes and Ntype_attributes[node] == 'MODULE']
     for module_node in module_nodes:
         local_href = concept_map.nodes[module_node]['local_href']
+        # 图谱中记载的还是老的href信息，临时进行转换
+        local_href = migrate_apidoc_page_path(local_href)
         browser.get(local_href)
         time.sleep(0.04)
-        content_container = browser.find_element(By.XPATH, r'//div[@class="contentContainer"]')
+        content_container = browser.find_element(
+            By.XPATH, r'//div[@class="contentContainer"]')
         try:
-            description_block = content_container.find_element(By.XPATH, r'.//section[@class="moduleDescription"]/div[@class="block"]')
-            description_text = description_block.text
+            description_block = content_container.find_element(
+                By.XPATH, r'.//section[@class="moduleDescription"]/div[@class="block"]')
+            description_text = description_block.get_attribute("outerHTML")
+            '''
+            # 2021.2.2: 重新收集description，保留尽可能多信息，不删除附加描述
             try:
                 appendation_title = description_block.find_element(By.XPATH, r'./h2').text
-                description_text = description_text[0:description_text.find(appendation_title)]
+                description_text = description_text[0:description_text.find('<h2>')]
             except:
                 pass
+            '''
             descriptions[module_node] = description_text
         except NoSuchElementException:
             pass
@@ -51,66 +59,85 @@ def __collect_concept_description_javadoc():
     logging.info('=== module description collected ===')
     with open(os.path.join(TEMP_FILE_STORE_PATH, "javadoc_description_module.pkl"), 'wb') as wf:
         pickle.dump(descriptions, wf)
-    
+
     # 抽取package结点描述
-    package_nodes = [node for node in concept_map.nodes if node in Ntype_attributes and Ntype_attributes[node] == 'PACKAGE']
+    package_nodes = [
+        node for node in concept_map.nodes if node in Ntype_attributes and Ntype_attributes[node] == 'PACKAGE']
     for package_node in package_nodes:
         local_href = concept_map.nodes[package_node]['local_href']
+        local_href = migrate_apidoc_page_path(local_href)
         browser.get(local_href)
         time.sleep(0.04)
-        content_container = browser.find_element(By.XPATH, r'//div[@class="contentContainer"]')
+        content_container = browser.find_element(
+            By.XPATH, r'//div[@class="contentContainer"]')
         try:
-            description_block = content_container.find_element(By.XPATH, r'.//section[@class="packageDescription"]/div[@class="block"]')
-            description_text = description_block.text
+            description_block = content_container.find_element(
+                By.XPATH, r'.//section[@class="packageDescription"]/div[@class="block"]')
+            description_text = description_block.get_attribute("outerHTML")
+            '''
             try:
                 appendation_title = description_block.find_element(By.XPATH, r'./h2').text
                 description_text = description_text[0:description_text.find(appendation_title)]
             except:
                 pass
+            '''
             descriptions[package_node] = description_text
         except NoSuchElementException:
             pass
-    
+
     logging.info('=== package description collected ===')
     with open(os.path.join(TEMP_FILE_STORE_PATH, "javadoc_description_module_package.pkl"), 'wb') as wf:
         pickle.dump(descriptions, wf)
 
-    #抽取class level结点描述
-    class_level_nodes = [node for node in concept_map.nodes if node in Ntype_attributes and Ntype_attributes[node] in class_level_node_types]
+    # 抽取class level结点描述
+    class_level_nodes = [
+        node for node in concept_map.nodes if node in Ntype_attributes and Ntype_attributes[node] in class_level_node_types]
     for class_level_node in class_level_nodes:
         local_href = concept_map.nodes[class_level_node]['local_href']
+        local_href = migrate_apidoc_page_path(local_href)
         browser.get(local_href)
         time.sleep(0.04)
-        content_container = browser.find_element(By.XPATH, r'//div[@class="contentContainer"]')
+        content_container = browser.find_element(
+            By.XPATH, r'//div[@class="contentContainer"]')
         try:
-            description_block = content_container.find_element(By.XPATH, r'.//section[@class="description"]/div[@class="block"]')
-            description_text = description_block.text
+            description_block = content_container.find_element(
+                By.XPATH, r'.//section[@class="description"]/div[@class="block"]')
+            description_text = description_block.get_attribute("outerHTML")
+            '''
             try:
-                appendation_title = description_block.find_element(By.XPATH, r'./h2').text
-                description_text = description_text[0:description_text.find(appendation_title)]
+                appendation_title = description_block.find_element(
+                    By.XPATH, r'./h2').text
+                description_text = description_text[0:description_text.find(
+                    appendation_title)]
             except:
                 pass
+            '''
             descriptions[class_level_node] = description_text
         except NoSuchElementException:
             pass
-        
-        #为所有成员添加描述
+
+        # 为所有成员添加描述
         class_successors = concept_map.succ[class_level_node]
-        class_members = [node for node in class_successors if concept_map[class_level_node][node]['Etype'] == EdgeType.INCLUDE]
+        class_members = [node for node in class_successors if concept_map[class_level_node]
+                         [node]['Etype'] == EdgeType.INCLUDE]
         for class_member in class_members:
             try:
-                member_id = re.search(r'(?<=#).+$', get_relative_path_from_href(concept_map.nodes[class_member]['local_href'])).group()
-                member_section = content_container.find_element(By.XPATH, f'.//a[@id="{member_id}"]/../..')
-                member_description_block = member_section.find_element(By.XPATH, r'./div[@class="block"]')
-                member_description = member_description_block.text
+                member_id = re.search(r'(?<=#).+$', get_relative_path_from_href(
+                    concept_map.nodes[class_member]['local_href'])).group()
+                member_section = content_container.find_element(
+                    By.XPATH, f'.//a[@id="{member_id}"]/../..')
+                member_description_block = member_section.find_element(
+                    By.XPATH, r'./div[@class="block"]')
+                member_description = member_description_block.get_attribute(
+                    "outerHTML")
                 descriptions[class_member] = member_description
             except:
                 print(class_member)
     return descriptions
 
 
-def collect_concept_description(doc_name = JAVADOC_GLOBAL_NAME):
+def collect_concept_description(doc_name=JAVADOC_GLOBAL_NAME):
     switch = {
-        JAVADOC_GLOBAL_NAME : __collect_concept_description_javadoc
+        JAVADOC_GLOBAL_NAME: __collect_concept_description_javadoc
     }
     return switch[doc_name]()

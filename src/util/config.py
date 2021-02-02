@@ -28,7 +28,7 @@ LATEST_CONCEPT_MAP_PATH = {
 # 为实现HERMES mk1需要分析文档语义，因此将所有概念描述抽出并存放与此
 # 2020.12.18 文档语义分析已经从HERMES剥离，代号将进行进一步考虑，HERMES专注于concept map抽取
 APIDOC_DESCRIPTION_STORE_PATH = {
-    JAVADOC_GLOBAL_NAME: f'{base_dir}/data/apidoc_description/javadoc_descriptions.pkl'
+    JAVADOC_GLOBAL_NAME: f'{base_dir}/data/apidoc_description/javadoc_descriptions.json'
 }
 
 # 为从侧面验证HERMES mk1的效果，将bing中对概念的描述进行了存储，可以用于后期对比

@@ -26,11 +26,20 @@ def get_relative_path_from_href(href):
     return ret
 
 
-def get_latest_concept_map(doc_name = 'javadoc'):
+def get_latest_concept_map(doc_name='javadoc'):
     graph_path = LATEST_CONCEPT_MAP_PATH[doc_name]
     return nx.read_gexf(graph_path)
-    
+
+
+def migrate_apidoc_page_path(old_path):
+    '''
+    项目中期，文档地址从nirvash type 0移动到了本地工作区，导致concept map中原先记载的local href失效，用此方法临时进行转换将就一下= =
+    '''
+    new_path = old_path.replace('F:', 'C:/workspace')
+    return new_path
+
 
 if __name__ == "__main__":
-    print(get_relative_path_from_href("file:///F:/SOworkspace/apidocs/javadocs/api/java.net.http/java/net/http/package-summary.html"))
+    print(get_relative_path_from_href(
+        "file:///F:/SOworkspace/apidocs/javadocs/api/java.net.http/java/net/http/package-summary.html"))
     print(get_relative_path_from_href("www.baidu.com"))
