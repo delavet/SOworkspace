@@ -31,6 +31,16 @@ APIDOC_DESCRIPTION_STORE_PATH = {
     JAVADOC_GLOBAL_NAME: f'{base_dir}/data/apidoc_description/javadoc_descriptions.json'
 }
 
+# 2021.2.5 重启将API实体与WIKI实体的链接工作，代号DEUS-X-MACHINA
+# 存储初步的DOMAIN TERM抽取结果，为API和其描述文本中抽取的domain term的映射
+INITIAL_API_DOMAIN_TERM_MAP_STORE_PATH = {
+    JAVADOC_GLOBAL_NAME: f'{base_dir}/data/apidoc_description/javadoc_init_api_term_map.json'
+}
+# 存储所有的domain term列表
+API_DOMAIN_TERM_STORE_PATH = {
+    JAVADOC_GLOBAL_NAME: f'{base_dir}/data/apidoc_description/javadoc_domain_terms.json'
+}
+
 # 为从侧面验证HERMES mk1的效果，将bing中对概念的描述进行了存储，可以用于后期对比
 # 2020.12.18 基于bing的验证方案已经废弃
 BING_API_CONCEPT_STORE_PATH = {
