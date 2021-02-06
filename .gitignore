@@ -113,3 +113,5 @@ model/
 
 .DS_Store
 requirements.txt
+Pipfile
+Pipfile.lock

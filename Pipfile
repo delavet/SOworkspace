@@ -25,6 +25,9 @@ pandas = "*"
 beautifulsoup4 = "*"
 lxml = "*"
 xgboost = "*"
+sekg = "*"
+spacy = "*"
+kgtools = "*"
 
 [requires]
 python_version = "3.7"
