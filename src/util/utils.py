@@ -33,3 +33,7 @@ def get_html_text_except_code(html: str) -> str:
     for pre in soup.find_all('pre'):
         pre.extract()
     return soup.text
+
+
+def single_line_print(to_print):
+    print("\r", to_print, end="", flush=True)

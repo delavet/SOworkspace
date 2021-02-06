@@ -36,9 +36,22 @@ APIDOC_DESCRIPTION_STORE_PATH = {
 INITIAL_API_DOMAIN_TERM_MAP_STORE_PATH = {
     JAVADOC_GLOBAL_NAME: f'{base_dir}/data/apidoc_description/javadoc_init_api_term_map.json'
 }
-# 存储所有的domain term列表
+# 存储初步抽取后得到的所有的domain term列表
 API_DOMAIN_TERM_STORE_PATH = {
     JAVADOC_GLOBAL_NAME: f'{base_dir}/data/apidoc_description/javadoc_domain_terms.json'
+}
+# 2021.2.6 目前的fuse方案是根据fudan的论文进行的纯基于近义词检测的fuse
+# 存储清理与fuse之后API与fuse的domain term的对应关系
+FUSED_API_DOMAIN_TERM_MAP_STORE_PATH = {
+    JAVADOC_GLOBAL_NAME: f'{base_dir}/data/apidoc_description/javadoc_fused_api_term_map.json'
+}
+# 存储清理与fuse之后domain term与API的对应关系（即和上面这个是反过来的映射）
+FUSED_DOMAIN_TERM_API_MAP_STORE_PATH = {
+    JAVADOC_GLOBAL_NAME: f'{base_dir}/data/apidoc_description/javadoc_fused_term_api_map.json'
+}
+# 存储清理与fuse后所有的domain term以及其alias关系
+FUSED_DOMAIN_TERM_STORE_PATH = {
+    JAVADOC_GLOBAL_NAME: f'{base_dir}/data/apidoc_description/javadoc_fused_domain_terms.json'
 }
 
 # 为从侧面验证HERMES mk1的效果，将bing中对概念的描述进行了存储，可以用于后期对比
