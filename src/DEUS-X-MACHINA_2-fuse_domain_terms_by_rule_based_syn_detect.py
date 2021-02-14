@@ -12,9 +12,13 @@ def fuse_domain_terms_by_rule_based_syns_detect(doc_name: str = JAVADOC_GLOBAL_N
     for term in not_fused_terms:
         if valid_term(term):
             new_terms.append(term)
+        else:
+            print("filtered term: ", term)
     not_fused_terms = set(new_terms)
+    print(len(not_fused_terms))
     term_fusion = Fusion()
-    synsets = term_fusion.fuse(not_fused_terms)
+    synsets = term_fusion.fuse_by_synonym(not_fused_terms)
+    # synsets = term_fusion.fuse(not_fused_terms)
     fused_term_to_aliases_map = {}
     fused_alias_to_term_map = {}
     for synset in synsets:
@@ -23,9 +27,9 @@ def fuse_domain_terms_by_rule_based_syns_detect(doc_name: str = JAVADOC_GLOBAL_N
         for t in synset.terms:
             fused_alias_to_term_map[t] = k
     # fused_terms = fused_term_to_aliases_map.keys()
-    with open(FUSED_DOMAIN_TERM_STORE_PATH, 'w', encoding='utf-8') as wf:
+    with open(FUSED_DOMAIN_TERM_STORE_PATH[doc_name], 'w', encoding='utf-8') as wf:
         json.dump(fused_term_to_aliases_map, wf, ensure_ascii=False, indent=2)
-    with open(INITIAL_API_DOMAIN_TERM_MAP_STORE_PATH, 'r', encoding='utf-8') as rf:
+    with open(INITIAL_API_DOMAIN_TERM_MAP_STORE_PATH[doc_name], 'r', encoding='utf-8') as rf:
         initial_api_term_map = json.load(rf)
     fused_term_to_api_map = {}
     fused_api_to_term_map = {}
@@ -41,9 +45,9 @@ def fuse_domain_terms_by_rule_based_syns_detect(doc_name: str = JAVADOC_GLOBAL_N
                 fused_api_to_term_map[term].append(api_name)
             else:
                 fused_api_to_term_map[term] = [api_name]
-    with open(FUSED_API_DOMAIN_TERM_MAP_STORE_PATH, 'w', encoding='utf-8') as wf_api_term, open(FUSED_DOMAIN_TERM_API_MAP_STORE_PATH, 'w', encoding='utf-8') as wf_term_api:
-        json.dump(fused_api_to_term_map, wf_api_term)
-        json.dump(fused_term_to_api_map, wf_term_api)
+    with open(FUSED_API_DOMAIN_TERM_MAP_STORE_PATH[doc_name], 'w', encoding='utf-8') as wf_api_term, open(FUSED_DOMAIN_TERM_API_MAP_STORE_PATH[doc_name], 'w', encoding='utf-8') as wf_term_api:
+        json.dump(fused_api_to_term_map, wf_api_term, ensure_ascii=False, indent=2)
+        json.dump(fused_term_to_api_map, wf_term_api, ensure_ascii=False, indent=2)
 
 
 if __name__ == "__main__":

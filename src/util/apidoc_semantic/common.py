@@ -35,9 +35,9 @@ def valid_term(term):
     '''
     global TERM_STOPLIST
     term = str(term)
-    if len(term) <= 2 or term.isdigit() or (len(term) > 30 and len(term.split()) > 4):
+    if len(term) <= 2 or term.isdigit() or (len(term) > 20 and len(term.split()) > 3):
         return False
-    prefix, *rest = term.split()
+    prefix, *rest = term.lower().split()
     if prefix in TERM_STOPLIST:
         return False
     return True

@@ -7,6 +7,7 @@ import re
 import textdistance
 from kgtools.annotation import TimeLog, Cache
 from nltk.corpus import wordnet
+from tqdm import tqdm
 
 from .common import lemmatize
 from .synset import Synset
@@ -231,7 +232,7 @@ class Fusion:
     def handle_pairs(self, terms, stopwords):
         inner_synonyms = set()
         inner_abbreviations = set()
-        total = len(terms) * len(terms) / 2
+        total = int(len(terms) * (len(terms) - 1) / 2)
         count = 0
         for i in range(len(terms) - 1):
             for j in range(i + 1, len(terms)):
@@ -341,10 +342,12 @@ class Fusion:
     def detect_synonym_relations(self, terms, stopwords):
         result = set()
         terms = list(terms)
-        for start_term_index, start_t in enumerate(terms):
+        print("loop start")
+        for start_term_index, start_t in tqdm(enumerate(terms)):
             end_term_list = terms[(start_term_index + 1):]
             result = result | self.handle_term_to_list_for_synonym(
                 start_t, end_term_list)
+            # single_line_print(f"{start_term_index} of {len(terms)}")
 
         for t in terms:
             lemma = lemmatize(t).lower()
@@ -356,11 +359,14 @@ class Fusion:
     def fuse_by_synonym(self, terms, term_count=None, stopwords=None):
         if type(terms) != set:
             terms = set(terms)
+        print("start detecting syn relations")
         synonym_relations = self.detect_synonym_relations(terms, stopwords)
+        print("end detecting syn relations")
         # print("syn: ", [(t1.text, t2.text) for t1, t2 in synonym_relations])
         # print("abbr:", [(t1.text, t2.text) for t1, t2 in abbr_relations])
+        print("start merging syn relations")
         synsets = self.merge_synonyms(synonym_relations)
-
+        print("final processing")
         visited = set()
         for synset in synsets:
             visited.update(synset.terms)
@@ -370,6 +376,7 @@ class Fusion:
         if term_count is not None:
             for synset in synsets:
                 synset.init_count(term_count)
+        print("processed! return synsets now.")
         return synsets
 
     @TimeLog

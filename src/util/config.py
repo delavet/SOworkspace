@@ -36,6 +36,9 @@ APIDOC_DESCRIPTION_STORE_PATH = {
 INITIAL_API_DOMAIN_TERM_MAP_STORE_PATH = {
     JAVADOC_GLOBAL_NAME: f'{base_dir}/data/apidoc_description/javadoc_init_api_term_map.json'
 }
+INITIAL_API_DOMAIN_TERM__SENTENCE_MAP_STORE_PATH = {
+    JAVADOC_GLOBAL_NAME: f'{base_dir}/data/apidoc_description/javadoc_init_api_term_sentence_map.json'
+}
 # 存储初步抽取后得到的所有的domain term列表
 API_DOMAIN_TERM_STORE_PATH = {
     JAVADOC_GLOBAL_NAME: f'{base_dir}/data/apidoc_description/javadoc_domain_terms.json'
