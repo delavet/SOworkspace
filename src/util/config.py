@@ -1,7 +1,5 @@
 import os
 
-import elasticsearch
-
 JAVADOC_GLOBAL_NAME = 'javadoc'
 
 # 判断当前运行的项目基础路径
@@ -95,6 +93,12 @@ APIDOC_API_URL_REGEX_PATTERN = {
 EUREKA_DATASET_STORE_PATH = {
     JAVADOC_GLOBAL_NAME: f'{base_dir}/data/EUREKA_trainset/java'
 }
+
+# 2021.2.18：初版的EUREKA数据集不好，已经过人工重新标注，放在下面目录中，由EUREKA 2.1处理
+EUREKA_REFINED_LABEL_STORE_PATH = {
+    JAVADOC_GLOBAL_NAME: f'{base_dir}/data/EUREKA_refine_label'
+}
+
 # EUREKA使用的数据集文件名，之后会进一步分离成为训练集和测试集
 EUREKA_FULL_DATASET_FILE_NAME = 'ner_dataset.json'
 EUREKA_TRAIN_SET_FILE_NAME = 'ner_trainset.json'
