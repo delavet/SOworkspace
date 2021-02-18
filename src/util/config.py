@@ -1,5 +1,7 @@
 import os
 
+import elasticsearch
+
 JAVADOC_GLOBAL_NAME = 'javadoc'
 
 # 判断当前运行的项目基础路径
@@ -116,6 +118,10 @@ ANEMONE_BERT_DATASET_FILE_NAME = 'bert_nel_dataset.json'
 ANEMONE_BERT_TRAIN_SET_FILE_NAME = 'bert_nel_trainset.json'
 ANEMONE_BERT_TEST_SET_FILE_NAME = 'bert_nel_testset.json'
 
+API_ELASTIC_DOC_MAP_STORE_PATH = {
+    JAVADOC_GLOBAL_NAME: f'{base_dir}/data/cache/api_elastic_doc_map.json'
+}
+
 # MYSQL属性
 Mysql_addr = "162.105.16.191"
 Mysql_user = "root"
@@ -125,3 +131,7 @@ Mysql_dbname_sotorrent = "sotorrent"
 pre_generated_views_in_Mysql = {
     '<java>': 'JavaPosts'
 }
+
+# Elasticsearch属性
+Elasticsearch_host = 'localhost'
+Elasticsearch_port = 9200
