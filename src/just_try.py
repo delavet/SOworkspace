@@ -47,14 +47,13 @@ if __name__ == "__main__":
     es = Elasticsearch(hosts=Elasticsearch_host, port=Elasticsearch_port)
     query_body = {
         'query': {
-            'match': {
+            'wildcard': {
                 'name': {
-                    'query': 'arraylist',
-                    'fuzziness': 'auto'
+                    'value': '*arraylist*'
                 }
             }
         },
     }
-    res = es.search(index=JAVADOC_GLOBAL_NAME, filter_path='hits.hits._source.description',
+    res = es.search(index=JAVADOC_GLOBAL_NAME, filter_path='hits.hits._source.name',
                     body=query_body)
     pprint(res)

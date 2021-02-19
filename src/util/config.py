@@ -122,6 +122,11 @@ ANEMONE_BERT_DATASET_FILE_NAME = 'bert_nel_dataset.json'
 ANEMONE_BERT_TRAIN_SET_FILE_NAME = 'bert_nel_trainset.json'
 ANEMONE_BERT_TEST_SET_FILE_NAME = 'bert_nel_testset.json'
 
+EZA_PIPELINE_DATA_STORE_PATH = {
+    JAVADOC_GLOBAL_NAME: f'{base_dir}/data/EZA_pipeline/java'
+}
+EZA_PIPELINE_INPUT_FILE_NAME = 'EZA_input.json'
+
 API_ELASTIC_DOC_MAP_STORE_PATH = {
     JAVADOC_GLOBAL_NAME: f'{base_dir}/data/cache/api_elastic_doc_map.json'
 }

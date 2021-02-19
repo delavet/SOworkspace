@@ -20,6 +20,7 @@ def _generate_train_data(sentence: str, target_doc: str = JAVADOC_GLOBAL_NAME):
     '''
     将post中的一段话进行分析给出对应的NER训练数据
     ## parameter
+
     `sentence` : 可能是问题也可能是回答
     `target_doc` : 目标APIDOC类型
     ## return
