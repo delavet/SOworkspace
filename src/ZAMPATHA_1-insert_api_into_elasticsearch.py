@@ -43,7 +43,8 @@ def insert_api_concepts_into_elasticsearch(doc_name: str = JAVADOC_GLOBAL_NAME):
         # 插入全是小写，这样就没有大小写问题了。。。
         doc_body = {
             'name': api_name.lower(),
-            'description': desc.lower()
+            'description': desc.lower(),
+            'node_name': node
         }
         index += 1
         api_elastic_map[node] = index
