@@ -60,7 +60,7 @@ if __name__ == "__main__":
     query_body = {
         'query': {
             'match': {
-                'content': {
+                'name': {
                     'query': 'arraylist',
                     'fuzziness': 'auto'
                 }
@@ -70,5 +70,5 @@ if __name__ == "__main__":
         'size': 20
     }
     res = es.search(index=JAVADOC_GLOBAL_NAME,
-                    filter_path='hits.hits._source.name', body=query_body)
+                    filter_path='hits.hits._source.node_name', body=query_body)
     print(res)

@@ -54,6 +54,6 @@ if __name__ == "__main__":
             }
         },
     }
-    res = es.search(index=JAVADOC_GLOBAL_NAME, filter_path='hits.hits._source.name',
+    res = es.search(index=JAVADOC_GLOBAL_NAME, filter_path='hits.hits._source.node_name',
                     body=query_body)
     pprint(res)
