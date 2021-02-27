@@ -73,14 +73,20 @@ def generate_bert_dataset_from_general_dataset(general_dataset_file_path, target
                 process_general_case(case)
             )
         print(len(bert_dataset))
-        json.dump(bert_dataset, wf, ensure_ascii=False, indent=2)
+        wf.writelines([json.dumps(data, ensure_ascii=False) +
+                       '\n' for data in bert_dataset])
+        # json.dump(bert_dataset, wf, ensure_ascii=False, indent=2)
     with open(os.path.join(ANEMONE_DATASET_STORE_PATH[JAVADOC_GLOBAL_NAME], ANEMONE_BERT_TRAIN_SET_FILE_NAME), 'w', encoding="utf-8") as wf_train, open(os.path.join(ANEMONE_DATASET_STORE_PATH[JAVADOC_GLOBAL_NAME], ANEMONE_BERT_TEST_SET_FILE_NAME), 'w', encoding="utf-8") as wf_test:
         random.shuffle(bert_dataset)
         split_index = len(bert_dataset) - 5000
         train_set = bert_dataset[:split_index]
         test_set = bert_dataset[split_index:]
-        json.dump(train_set, wf_train, indent=2, ensure_ascii=False)
-        json.dump(test_set, wf_test, indent=2, ensure_ascii=False)
+        wf_train.writelines([json.dumps(data, ensure_ascii=False) +
+                             '\n' for data in train_set])
+        wf_test.writelines([json.dumps(data, ensure_ascii=False) +
+                            '\n' for data in test_set])
+        #json.dump(train_set, wf_train, indent=2, ensure_ascii=False)
+        #json.dump(test_set, wf_test, indent=2, ensure_ascii=False)
 
 
 if __name__ == "__main__":
