@@ -61,7 +61,7 @@ def transfer_posts2EZAdata(post_file_path: str, index: int, target_doc: str = JA
 
     返回`list`，内部每个都是初始交给EZA pipeline的格式，例如：
     ```json
-    [{'text': "It's called the diamond operator. It was introduced in Java 1.7.",'label': {'api': {}}]
+    [{'text': "It's called the diamond operator. It was introduced in Java 1.7.",'label': {'api': {}}, "thread_id" : "1"}]
     ```
     这里的label什么都没有，因为是等待EUREKA给出预测
     '''
