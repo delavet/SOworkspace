@@ -6,12 +6,19 @@ from tqdm import tqdm
 '''
 因为第一次构建的concept map出现了一些失误，有部分的结点没有Ntype属性
 这里做一下refine，生成一版新的concept map
+#注意：
+
+新的concept map为了支持加入多种边的类型，变成了nx.MultiDiGraph，而原先是nx.DiGraph
 '''
 
 
 def refine_concept_map(doc_name: str):
     '''
     运行之前要先修改LATEST CONCEPT MAP的存储路径
+
+    # 注意：
+
+    _新的concept map为了支持加入多种边的类型，变成了nx.MultiDiGraph，而原先是nx.DiGraph_
     '''
     old_concept_map = nx.read_gexf(SEALED_CONCEPT_MAP_20210312_PATH[doc_name])
     new_concept_map = nx.MultiDiGraph()

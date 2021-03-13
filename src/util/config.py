@@ -25,6 +25,11 @@ LATEST_CONCEPT_MAP_PATH = {
     JAVADOC_GLOBAL_NAME: f'{base_dir}/backup/concept_map_javadoc20210312.gexf'
 }
 
+# API概念之间只包含社区共现关系的map，称为community map
+LATEST_COMMUNITY_MAP_PATH = {
+    JAVADOC_GLOBAL_NAME: f'{base_dir}/data/community_data/java/community_map_javadoc20210312.gexf'
+}
+
 # 于2021年3月12日封存的concept map
 SEALED_CONCEPT_MAP_20210312_PATH = {
     JAVADOC_GLOBAL_NAME: f'{base_dir}/backup/concept_map_javadoc20200801.gexf'
@@ -134,6 +139,15 @@ EZA_PIPELINE_INPUT_FILE_NAME = 'EZA_input.json'
 
 API_ELASTIC_DOC_MAP_STORE_PATH = {
     JAVADOC_GLOBAL_NAME: f'{base_dir}/data/cache/api_elastic_doc_map.json'
+}
+
+# EZA PIPELINE的预测结果存储路径，用这个来分析社区关系
+MENIA_WHOLE_PREDICTION_STORE_PATH = {
+    JAVADOC_GLOBAL_NAME: '/media/dell/disk/yinh/torch/ANEMONE/whole_simple_prediction/filterd_predictions.json'
+}
+
+COMMUNITY_FREQUENCY_STORE_PATH = {
+    JAVADOC_GLOBAL_NAME: f'{base_dir}/data/community_data/java/community_frequency.json'
 }
 
 # MYSQL属性

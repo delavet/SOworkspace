@@ -33,6 +33,7 @@ class EdgeType:
     ATTACH_ANNOTATION = 'ATTACH_ANNOTATION'
     THROWS = 'THROWS'  # a method throw an exception or an error
     ALSO_SEE = 'ALSO_SEE'  # two related concepts, marked as also see in the doc
+    COOCCUR = 'COOCCUR'
 
 
 class NodeAttributes:
@@ -46,6 +47,7 @@ class NodeAttributes:
 
 class EdgeAttrbutes:
     Etype = 'Etype'
+    COOCCUR_FREQUENCY = 'cooccur_freq'  # only enabled while Etype is COOCCUR
 
 
 class_level_node_types = [
