@@ -31,6 +31,22 @@ def get_relative_path_from_href(href):
     return ret
 
 
+def pre_tokenize(text: str):
+    text = ' '.join([token.lower() if token.isupper()
+                     else token for token in text.split(' ')])
+    ret = ''
+    for i in range(len(text)):
+        ch = text[i]
+        latterCh = text[i+1] if i < len(text) - 1 else ''
+        if ch.isupper() and latterCh.isalpha() and not latterCh.isupper():
+            ret += ' ' + ch.lower()
+        elif ch == '_':
+            ret += ' '
+        else:
+            ret += ch
+    return ret
+
+
 if __name__ == "__main__":
     '''concept_map = get_latest_concept_map()
     Ntype_attributes = nx.get_node_attributes(concept_map, 'Ntype')
@@ -43,6 +59,7 @@ if __name__ == "__main__":
         "file:///F:/SOworkspace/apidocs/javadocs/api/java.net.http/java/net/http/package-summary.html",
         "http://docs.oracle.com/javase/6/docs/api/java/net/http/package-summary.html"
     ))
+    '''
     '''
     es = Elasticsearch(hosts=Elasticsearch_host, port=Elasticsearch_port)
     query_body = {
@@ -57,3 +74,6 @@ if __name__ == "__main__":
     res = es.search(index=JAVADOC_GLOBAL_NAME, filter_path='hits.hits._source.description',
                     body=query_body)
     pprint(res)
+    '''
+    print(pre_tokenize(
+        "DONNOT use throws ExceptionEinstead use try catch block on methodC1 and methodc2"))

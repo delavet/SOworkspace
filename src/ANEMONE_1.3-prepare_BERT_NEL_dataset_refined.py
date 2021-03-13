@@ -67,6 +67,9 @@ def __process_post(context_thread: dict, post_html: str, mention: str, entity: s
         # 截取mention出现的一句话以及前面的若干句话加在一起作为sentence，保证整体句子长度不超过MAX_LENGTH
         for s in sentences:
             if mention in s:
+                sentence = s  # 2021.3.11 停止使用尽可能增加句子长度的做法，因为这样给模型带来了巨大的数据负担容易爆显存。。
+            '''
+            if mention in s:
                 cur_length = len(nltk.word_tokenize(s))
                 sentence = s
                 if len(sentence_stack) == 0:
@@ -82,6 +85,9 @@ def __process_post(context_thread: dict, post_html: str, mention: str, entity: s
                 break
             else:
                 sentence_stack.append(s)
+            '''
+        if sentence == '':
+            return None
         sentence = prefix + ' ' + sentence
         entity_desc = get_api_name_from_entity_id(
             entity) + ' description: ' + description_attributes[entity]
