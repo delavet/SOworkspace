@@ -84,6 +84,7 @@ def add_community_rel_heuristic_1(doc_name: str):
                     concept_map[cooccur_api2][cooccur_api1][edge_index][EdgeAttrbutes.COOCCUR_FREQUENCY] = cooccur_freq
 
     print(f"detected {len(community_map.edges())} cooccur relationships")
+    print(f"detected {len(communtiy_map.nodes)} community api nodes")
     print("dumping community map")
     nx.write_gexf(community_map, LATEST_COMMUNITY_MAP_PATH[doc_name])
     # 决定先不向 concept map写入community关系了，反正信息都到community map里了
