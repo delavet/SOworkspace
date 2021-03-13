@@ -22,6 +22,11 @@ JAVADOC_PATH = os.path.join(APIDOC_PATH, 'javadocs')
 TEMP_FILE_STORE_PATH = f'{base_dir}/data/cache/'
 # 生成concept map后图数据存储的路径，在开发中会变化
 LATEST_CONCEPT_MAP_PATH = {
+    JAVADOC_GLOBAL_NAME: f'{base_dir}/backup/concept_map_javadoc20210312.gexf'
+}
+
+# 于2021年3月12日封存的concept map
+SEALED_CONCEPT_MAP_20210312_PATH = {
     JAVADOC_GLOBAL_NAME: f'{base_dir}/backup/concept_map_javadoc20200801.gexf'
 }
 

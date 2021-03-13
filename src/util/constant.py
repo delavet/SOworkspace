@@ -44,6 +44,10 @@ class NodeAttributes:
     COMMUNITY_FREQ = 'community_freq'
 
 
+class EdgeAttrbutes:
+    Etype = 'Etype'
+
+
 class_level_node_types = [
     NodeType.ANNOTATION,
     NodeType.CLASS,
