@@ -1,3 +1,5 @@
+import numpy as np
+
 from .config import *
 from bs4 import BeautifulSoup
 
@@ -37,3 +39,11 @@ def get_html_text_except_code(html: str) -> str:
 
 def single_line_print(to_print):
     print("\r", to_print, end="", flush=True)
+
+
+def sigmoid(x):
+    return 1.0 / (1 + np.exp(-float(x)))
+
+
+def normalize(x):
+    return sigmoid(x)

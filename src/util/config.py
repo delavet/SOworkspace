@@ -12,6 +12,10 @@ elif os.path.exists('/User/yinhang/Desktop/workspace/SOworkspace'):
 else:
     base_dir = '/media/dell/disk/yinh/SOworkspace'
 
+DOC_NAME_TO_SO_TAG = {
+    JAVADOC_GLOBAL_NAME: '<java>'
+}
+
 # 分析用的APIdoc的路径
 APIDOC_PATH = f'{base_dir}/apidocs/'
 # 最后把最后成品concept map会放在这里，目前啥也没有
@@ -89,6 +93,11 @@ SO_POSTS_STORE_PATH = {
     '<java>': f'{base_dir}/data/so_posts/java/'
 }
 
+# SO的post因为太多，所以是以pkl形式分段存放的，这里保存一个文件存放关于每个thread在哪个文件第几个的信息，以方便快速找到一个thread
+SO_POSTS_SEGMENT_INFO_STORE_PATH = {
+    JAVADOC_GLOBAL_NAME: f'{base_dir}/data/so_posts/javadoc_so_segment_info.json'
+}
+
 # 不同SDK文档对应的官网根URL纪录
 APIDOC_ROOT_URL = {
     JAVADOC_GLOBAL_NAME: 'docs.oracle.com'
@@ -148,6 +157,15 @@ MENIA_WHOLE_PREDICTION_STORE_PATH = {
 
 COMMUNITY_FREQUENCY_STORE_PATH = {
     JAVADOC_GLOBAL_NAME: f'{base_dir}/data/community_data/java/community_frequency.json'
+}
+
+COMMUNITY_RECORD_STORE_PATH = {
+    JAVADOC_GLOBAL_NAME: f'{base_dir}/data/community_data/java/community_record.json'
+}
+
+# MENIA初步推荐得到的作为每个社区的学习入口的帖子，将推荐结果储存在下面路径
+COMMUNITY_RECOMMEND_ENTRY_THREADS_STORE_PATH = {
+    JAVADOC_GLOBAL_NAME: f'{base_dir}/data/community_data/java/recommended_learning_entry_threads.json'
 }
 
 OPENKE_TRAIN2ID_STORE_PATH = {

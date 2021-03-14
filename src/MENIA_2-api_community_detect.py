@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import networkx as nx
 
 
-from util.config import LATEST_COMMUNITY_MAP_PATH, LATEST_CONCEPT_MAP_PATH, JAVADOC_GLOBAL_NAME
+from util.config import LATEST_COMMUNITY_MAP_PATH, LATEST_CONCEPT_MAP_PATH, JAVADOC_GLOBAL_NAME, COMMUNITY_RECORD_STORE_PATH
 
 
 def louvain_community_map(doc_name):
@@ -23,7 +23,7 @@ def louvain_community_map(doc_name):
         if v not in community_record.keys():
             community_record[v] = []
         community_record[v].append(k)
-    with open('/media/dell/disk/yinh/SOworkspace/data/cache/community_count.json', 'w', encoding='utf-8') as wf_c, open('/media/dell/disk/yinh/SOworkspace/data/cache/community_record.json', 'w', encoding='utf-8') as wf_r:
+    with open('/media/dell/disk/yinh/SOworkspace/data/cache/community_count.json', 'w', encoding='utf-8') as wf_c, open(COMMUNITY_RECORD_STORE_PATH[doc_name], 'w', encoding='utf-8') as wf_r:
         json.dump(community_count, wf_c, indent=2, ensure_ascii=False)
         json.dump(community_record, wf_r, indent=2, ensure_ascii=False)
 
