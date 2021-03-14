@@ -82,9 +82,13 @@ def add_community_rel_heuristic_1(doc_name: str):
                         cooccur_api2, cooccur_api1)
                     concept_map[cooccur_api2][cooccur_api1][edge_index][EdgeAttrbutes.Etype] = EdgeType.COOCCUR
                     concept_map[cooccur_api2][cooccur_api1][edge_index][EdgeAttrbutes.COOCCUR_FREQUENCY] = cooccur_freq
-
+    to_remove_nodes = []
+    for node in community_map.nodes:
+        if len(community_map.adj[node]) == 0:
+            to_remove_nodes.append(node)  # 目前的数据孤立的API太多了，尝试去掉孤立的API
+    community_map.remove_nodes_from(to_remove_nodes)
     print(f"detected {len(community_map.edges())} cooccur relationships")
-    print(f"detected {len(communtiy_map.nodes)} community api nodes")
+    print(f"detected {len(community_map.nodes)} community api nodes")
     print("dumping community map")
     nx.write_gexf(community_map, LATEST_COMMUNITY_MAP_PATH[doc_name])
     # 决定先不向 concept map写入community关系了，反正信息都到community map里了
