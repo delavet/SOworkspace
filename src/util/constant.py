@@ -1,3 +1,6 @@
+from pickle import NONE
+
+
 class NodeType:
     SCOPE = 'SCOPE'
     MODULE = 'MODULE'
@@ -57,6 +60,12 @@ class_level_node_types = [
     NodeType.ERROR,
     NodeType.EXCEPTION,
     NodeType.INTERFACE
+]
+
+high_level_node_types = [
+    NodeType.SCOPE,
+    NodeType.PACKAGE,
+    NodeType.MODULE
 ]
 
 

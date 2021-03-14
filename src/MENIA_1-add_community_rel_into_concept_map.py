@@ -4,6 +4,9 @@ import networkx as nx
 from util.constant import *
 from util.config import LATEST_CONCEPT_MAP_PATH, LATEST_COMMUNITY_MAP_PATH, MENIA_WHOLE_PREDICTION_STORE_PATH, JAVADOC_GLOBAL_NAME, COMMUNITY_FREQUENCY_STORE_PATH
 '''
+MENIA：基于社区内API之间关系的API post学习推荐算法
+
+MENIA-1
 根据EZA-pipeline的最终预测结果，为concept map添加社区之间的关系
 '''
 

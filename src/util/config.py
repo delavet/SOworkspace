@@ -150,6 +150,26 @@ COMMUNITY_FREQUENCY_STORE_PATH = {
     JAVADOC_GLOBAL_NAME: f'{base_dir}/data/community_data/java/community_frequency.json'
 }
 
+OPENKE_TRAIN2ID_STORE_PATH = {
+    JAVADOC_GLOBAL_NAME: f'{base_dir}/data/community_data/java/openke/train2id.txt'
+}
+
+OPENKE_VALID2ID_STORE_PATH = {
+    JAVADOC_GLOBAL_NAME: f'{base_dir}/data/community_data/java/openke/valid2id.txt'
+}
+
+OPENKE_TEST2ID_STORE_PATH = {
+    JAVADOC_GLOBAL_NAME: f'{base_dir}/data/community_data/java/openke/test2id.txt'
+}
+
+OPENKE_ENTITY2ID_STORE_PATH = {
+    JAVADOC_GLOBAL_NAME: f'{base_dir}/data/community_data/java/openke/entity2id.txt'
+}
+
+OPENKE_RELATION2ID_STORE_PATH = {
+    JAVADOC_GLOBAL_NAME: f'{base_dir}/data/community_data/java/openke/relation2id.txt'
+}
+
 # MYSQL属性
 Mysql_addr = "162.105.16.191"
 Mysql_user = "root"
