@@ -1,0 +1,55 @@
+{
+  "name": "homura",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "core-js": "^3.8.3",
+    "opencollective-postinstall": "^2.0.3",
+    "vue": "^3.0.4",
+    "vue-router": "^4.0.3",
+    "vuex": "^4.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.16",
+    "@babel/eslint-parser": "^7.12.16",
+    "@vue/cli-plugin-babel": "~5.0.0-alpha.7",
+    "@vue/cli-plugin-eslint": "~5.0.0-alpha.7",
+    "@vue/cli-plugin-router": "~5.0.0-alpha.7",
+    "@vue/cli-plugin-vuex": "~5.0.0-alpha.7",
+    "@vue/cli-service": "~5.0.0-alpha.7",
+    "@vue/compiler-sfc": "^3.0.4",
+    "@vue/eslint-config-standard": "^6.0.0",
+    "eslint": "^7.20.0",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.3.1",
+    "eslint-plugin-vue": "^7.2.0",
+    "lint-staged": "^10.5.4",
+    "@css-render/plugin-bem": "^0.12.0",
+    "@vicons/fluent": "^0.1.0",
+    "@vicons/ionicons4": "^0.1.0",
+    "@vicons/ionicons5": "^0.1.0",
+    "async-validator": "^3.4.0",
+    "css-render": "^0.12.0",
+    "date-fns": "^2.16.1",
+    "evtd": "^0.1.0",
+    "highlight.js": "^10.4.1",
+    "lodash-es": "^4.17.15",
+    "seemly": "^0.1.18",
+    "treemate": "^0.2.4",
+    "vdirs": "^0.0.3",
+    "vfonts": "^0.0.1",
+    "vooks": "^0.1.3",
+    "vue": "^3.0.7",
+    "vue-router": "^4.0.3",
+    "vueuc": "^0.2.6"
+  },
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  }
+}
