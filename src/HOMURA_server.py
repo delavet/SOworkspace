@@ -22,7 +22,7 @@ app.after_request(after_request)
 
 @app.route('/api/hello')
 def hello():
-    response = flask.make_response("hello")
+    response = flask.make_response("hello lex")
     return response
 
 
@@ -53,7 +53,7 @@ def get_learning_sections(doc_name):
     if start_index >= len(HOMURA_services[doc_name].community_ids):
         data = []
     else:
-        for i in range(start_index, max(end_index, len(HOMURA_services[doc_name].community_ids))):
+        for i in range(start_index, min(end_index, len(HOMURA_services[doc_name].community_ids))):
             data.append(HOMURA_services[doc_name].get_community_recommend_info(
                 HOMURA_services[doc_name].community_ids[i]))
     ret = {

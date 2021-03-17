@@ -1,0 +1,8 @@
+.section-card {
+  transition: all .3s cubic-bezier(.4, 0, .2, 1)!important;
+}
+
+.section-card:hover {
+  transform: scale(1.04);
+  box-shadow: 0 2px 10px 2px rgba(0, 0, 0, .08);
+}
