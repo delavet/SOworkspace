@@ -1,5 +1,6 @@
 import os
 import json
+from .utils import get_api_name_from_entity_id
 from .config import HOMURA_COMMUNITY_API_RECOMMEND_STORE_PATH, COMMUNITY_RECOMMEND_ENTRY_THREADS_STORE_PATH
 
 
@@ -24,7 +25,7 @@ class HOMURAservice:
         recommended_thread = self.community_thread_id_recommend.get(community_id, {"Id": 0, "Title": "", "Tags": ""})
         ret = {
             "section_id": community_id,
-            "apis": recommended_apis,
+            "apis": [get_api_name_from_entity_id(api) for api in recommended_apis],
             "thread_info": recommended_thread
         }
         return ret
