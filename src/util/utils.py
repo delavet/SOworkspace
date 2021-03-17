@@ -41,9 +41,11 @@ def single_line_print(to_print):
     print("\r", to_print, end="", flush=True)
 
 
-def sigmoid(x):
-    return 1.0 / (1 + np.exp(-float(x)))
+def sigmoid(x: float):
+    return 1.0 / (1 + np.exp(-x))
 
 
 def normalize(x):
-    return sigmoid(x)
+    if x is None:
+        x = 0
+    return sigmoid(float(x))

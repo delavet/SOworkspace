@@ -6,10 +6,16 @@ from typing import Tuple
 from ..config import SO_POSTS_SEGMENT_INFO_STORE_PATH, JAVADOC_GLOBAL_NAME, SO_POSTS_STORE_PATH, DOC_NAME_TO_SO_TAG
 from ..utils import normalize
 
+# ThreadInfoCenter的推荐策略
+strategy_heuristic = 'heuristic'
+strategy_AHP = 'AHP'
+
 
 class ThreadInfoCenter:
-    def __init__(self, doc_name: str = JAVADOC_GLOBAL_NAME) -> None:
+
+    def __init__(self, doc_name: str = JAVADOC_GLOBAL_NAME, strategy=strategy_heuristic) -> None:
         self.doc_name = doc_name
+        self.strategy = strategy
         with open(SO_POSTS_SEGMENT_INFO_STORE_PATH[doc_name], 'r', encoding='utf-8') as rf:
             self.thread_segment_info = dict(json.load(rf))
 
@@ -34,7 +40,7 @@ class ThreadInfoCenter:
             ret.append(detail_thread)
         return ret
 
-    def get_thread_recommend_score(self, thread_info: dict):
+    def get_thread_recommend_score_heuristic(self, thread_info: dict):
         '''
         获取一个thread的推荐分数，从以下几个角度考虑：
         1. ViewCount，0.1
@@ -46,9 +52,9 @@ class ThreadInfoCenter:
         返回一个thread的推荐分数
         '''
         view_count = normalize(
-            thread_info["ViewCount"] / 100)  # 感觉ViewCount实在太大了，给他改小点
-        thread_score = normalize(thread_info["Score"])
-        favorite_count = normalize(thread_info["FavoriteCount"])
+            thread_info.get("ViewCount", 0) / 100)  # 感觉ViewCount实在太大了，给他改小点
+        thread_score = normalize(thread_info.get("Score", 0))
+        favorite_count = normalize(thread_info.get("FavoriteCount", 0))
         how_to_score = 0
         if 'how' in thread_info["Title"].lower():
             how_to_score = 1
@@ -56,14 +62,23 @@ class ThreadInfoCenter:
             how_to_score = 0.4
         return 0.1*view_count + 0.4*thread_score + 0.3*favorite_count + 0.2*how_to_score
 
-    def resort_thread_by_recommend_score(self, thread_id_list: list) -> list[Tuple]:
+    def get_thread_recommend_score(self, thread_info: dict):
+        if self.strategy == strategy_heuristic:
+            return self.get_thread_recommend_score_heuristic(thread_info)
+        else:
+            # 需要增加AHP的策略方法，现在两个分支都用的一个方法
+            return self.get_thread_recommend_score_heuristic(thread_info)
+
+    def resort_thread_by_recommend_score(self, thread_id_list: list):
         '''
         ## return
         [(thread_detail_info, thread_score), ...]
+
+        一个tuple的列表，tuple的第一项是thread的所有详细信息（dict格式），第二项是thread的推荐得分
 
         # 一定要注意返回的格式发生了变化！！不再只是thread id的列表了
         '''
         detail_threads = self.batch_get_thread_detail_info(thread_id_list)
         thread_with_score = sorted(
-            [(thread, self.get_thread_recommend_score(thread)) for thread in detail_threads], key=lambda s: s[1])
+            [(thread, self.get_thread_recommend_score(thread)) for thread in detail_threads], key=lambda s: s[1], reverse=True)
         return thread_with_score

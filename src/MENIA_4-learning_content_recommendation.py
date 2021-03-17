@@ -1,5 +1,7 @@
 import json
 
+from tqdm import tqdm
+from collections import OrderedDict
 from util.community_info.api_info_center import APIinfoCenter
 from util.community_info.so_thread_info_center import ThreadInfoCenter
 from util.config import COMMUNITY_RECORD_STORE_PATH, JAVADOC_GLOBAL_NAME, COMMUNITY_RECOMMEND_ENTRY_THREADS_STORE_PATH
@@ -51,14 +53,14 @@ def recommend_learn_entry_threads(api_community: list, doc_name: str, api_info_c
 def recommend_learn_entry_thread_for_each_community(doc_name: str = JAVADOC_GLOBAL_NAME):
     with open(COMMUNITY_RECORD_STORE_PATH[doc_name], 'r', encoding='utf-8') as rf:
         api_communities = dict(json.load(rf))
-    recommend_result = {}
+    recommend_result = OrderedDict()
     api_info_center = APIinfoCenter(doc_name)
     thread_info_center = ThreadInfoCenter(doc_name)
-    for community_id, api_community in api_communities.items():
+    for community_id, api_community in tqdm(api_communities.items()):
         recommend_result[community_id] = recommend_learn_entry_threads(
             api_community, doc_name, api_info_center, thread_info_center)
     with open(COMMUNITY_RECOMMEND_ENTRY_THREADS_STORE_PATH[doc_name], 'w', encoding='utf-8') as wf:
-        json.dump(recommend_result)
+        json.dump(recommend_result, wf, indent=2, ensure_ascii=False)
 
 
 if __name__ == "__main__":
