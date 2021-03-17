@@ -1,14 +1,22 @@
 import os
 
 JAVADOC_GLOBAL_NAME = 'javadoc'
+WINDOWS = 'WINDOWS'
+MAC = 'MACINTOSH'
+UBUNTU = 'UBUNTU'
+CURRENT_PLATFORM = UBUNTU
 
-# 判断当前运行的项目基础路径
+
+# 判断当前运行的项目基础路径及运行平台
 if os.path.exists('C:/workspace/SOworkspace'):
     base_dir = 'C:/workspace/SOworkspace'
+    CURRENT_PLATFORM = WINDOWS
 elif os.path.exists('/media/dell/disk/yinh/SOworkspace'):
     base_dir = '/media/dell/disk/yinh/SOworkspace'
-elif os.path.exists('/User/yinhang/Desktop/workspace/SOworkspace'):
-    base_dir = '/User/yinhang/Desktop/workspace/SOworkspace'
+    CURRENT_PLATFORM = UBUNTU
+elif os.path.exists('/User/yinhang/workspace/SOworkspace'):
+    base_dir = '/User/yinhang/workspace/SOworkspace'
+    CURRENT_PLATFORM = MAC
 else:
     base_dir = '/media/dell/disk/yinh/SOworkspace'
 
@@ -152,7 +160,8 @@ API_ELASTIC_DOC_MAP_STORE_PATH = {
 
 # EZA PIPELINE的预测结果存储路径，用这个来分析社区关系
 MENIA_WHOLE_PREDICTION_STORE_PATH = {
-    JAVADOC_GLOBAL_NAME: '/media/dell/disk/yinh/torch/ANEMONE/whole_simple_prediction/filterd_predictions.json'
+    # 只有windows和ubuntu平台的机器上保留了这个预测数据，每次ubuntu机器预测完成后要记得手动同步数据 windows上来
+    JAVADOC_GLOBAL_NAME: '/media/dell/disk/yinh/torch/ANEMONE/whole_simple_prediction/filterd_predictions.json' if CURRENT_PLATFORM == UBUNTU else 'C:/workspace/SOworkspace/data/server_data/ANEMONE_prediction/filterd_predictions.json'
 }
 
 COMMUNITY_FREQUENCY_STORE_PATH = {
