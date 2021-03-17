@@ -49,3 +49,10 @@ def normalize(x):
     if x is None:
         x = 0
     return sigmoid(float(x))
+
+
+def get_api_name_from_entity_id(entity_id: str):
+    '''
+    concept map中API的ID经常带api和html等无用信息，所以就去掉一下
+    '''
+    return entity_id.replace('.html', '').replace('api/', '')

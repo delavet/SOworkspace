@@ -1,4 +1,5 @@
 import json
+import os
 import networkx as nx
 
 from ..config import COMMUNITY_FREQUENCY_STORE_PATH, JAVADOC_GLOBAL_NAME, LATEST_COMMUNITY_MAP_PATH, MENIA_WHOLE_PREDICTION_STORE_PATH

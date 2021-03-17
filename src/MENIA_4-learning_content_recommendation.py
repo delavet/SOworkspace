@@ -39,7 +39,7 @@ def recommend_learn_entry_threads(api_community: list, doc_name: str, api_info_c
     '''
     现在的做法没有加入图嵌入的API亲密关系推断，而是只是推荐
     # Return
-    返回推荐在此社区中学习的首个帖子的id
+    返回推荐在此社区中学习的首个帖子的id, title和tag
     '''
     recommend_learn_entry_api = get_recommend_entry_api(
         api_community, api_info_center)
@@ -47,7 +47,7 @@ def recommend_learn_entry_threads(api_community: list, doc_name: str, api_info_c
         recommend_learn_entry_api)
     recommended_thread_with_scores = thread_info_center.resort_thread_by_recommend_score(
         candidate_thread_ids)
-    return recommended_thread_with_scores[0][0]["Id"]
+    return recommended_thread_with_scores[0][0]["Id"], recommended_thread_with_scores[0][0]["Title"], recommended_thread_with_scores[0][0]["Tags"]
 
 
 def recommend_learn_entry_thread_for_each_community(doc_name: str = JAVADOC_GLOBAL_NAME):
@@ -57,8 +57,13 @@ def recommend_learn_entry_thread_for_each_community(doc_name: str = JAVADOC_GLOB
     api_info_center = APIinfoCenter(doc_name)
     thread_info_center = ThreadInfoCenter(doc_name)
     for community_id, api_community in tqdm(api_communities.items()):
-        recommend_result[community_id] = recommend_learn_entry_threads(
+        recommend_id, recommend_title, recommend_tags = recommend_learn_entry_threads(
             api_community, doc_name, api_info_center, thread_info_center)
+        recommend_result[community_id] = {
+            "Id": recommend_id,
+            "Title": recommend_title,
+            "Tags": recommend_tags
+        }
     with open(COMMUNITY_RECOMMEND_ENTRY_THREADS_STORE_PATH[doc_name], 'w', encoding='utf-8') as wf:
         json.dump(recommend_result, wf, indent=2, ensure_ascii=False)
 
