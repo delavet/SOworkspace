@@ -21,7 +21,7 @@
     </n-layout-sider>
     <n-layout class="content">
       <div id="nav">
-        <n-button @click="onCoolClick">Cool</n-button>
+        <n-button @click="onCoolClick">{{coolButtonText}}</n-button>
         <router-link to="/">Home</router-link> |
         <router-link to="/about">About</router-link>
       </div>
@@ -33,7 +33,7 @@
 <script>
 import { defineComponent, h } from 'vue'
 import { NIcon } from 'naive-ui'
-import { useRouter } from 'vue-router'
+import { mapActions, mapState } from 'vuex'
 import {
   BookOutline as BookIcon,
   PersonOutline as PersonIcon,
@@ -120,14 +120,6 @@ const menuItems = [
 ]
 
 export default defineComponent({
-  setup () {
-    const router = useRouter()
-    return {
-      onCoolClick: () => {
-        router.push('/about')
-      }
-    }
-  },
   data () {
     return {
       collapsed: true,
@@ -138,7 +130,15 @@ export default defineComponent({
     callback (value, item) {
       console.log(value, item)
       this.$router.push('/about')
-    }
+    },
+    ...mapActions({
+      onCoolClick: 'hello_homura'
+    })
+  },
+  computed: {
+    ...mapState({
+      coolButtonText: 'hello_world'
+    })
   }
 })
 </script>
