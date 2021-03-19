@@ -164,6 +164,11 @@ MENIA_WHOLE_PREDICTION_STORE_PATH = {
     JAVADOC_GLOBAL_NAME: '/media/dell/disk/yinh/torch/ANEMONE/whole_simple_prediction/filterd_predictions.json' if CURRENT_PLATFORM == UBUNTU else 'C:/workspace/SOworkspace/data/server_data/ANEMONE_prediction/filterd_predictions.json'
 }
 
+# 上边的预测数据是thread和API的字典，这个文件则是反过来的API和thread对应的字典，为了给HOMURA提供服务
+API_THREAD_ID_MAP_STORE_PATH = {
+    JAVADOC_GLOBAL_NAME: f'{base_dir}/data/community_data/java/API-thread_id_map.json'
+}
+
 COMMUNITY_FREQUENCY_STORE_PATH = {
     JAVADOC_GLOBAL_NAME: f'{base_dir}/data/community_data/java/community_frequency.json'
 }

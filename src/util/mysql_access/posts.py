@@ -4,8 +4,8 @@ from ..config import Mysql_addr, Mysql_dbname_sotorrent, Mysql_password, Mysql_u
 
 
 class DBPosts:
-    db = pymysql.connect(Mysql_addr, Mysql_user,
-                         Mysql_password, Mysql_dbname_sotorrent)
+    db = pymysql.connect(host=Mysql_addr, user=Mysql_user,
+                         password=Mysql_password, database=Mysql_dbname_sotorrent)
     cursor = db.cursor()
 
     def statistic_concept_frequency_v0(self, concept_name: str, view_name: str = 'JavaPosts'):
@@ -21,14 +21,47 @@ class DBPosts:
             print("!!!error: sql execute fail")
         return ret
 
+    def get_thread_info_by_ids(self, thread_ids: str):
+        '''
+        根据thread_id获取thread的基本信息
+        ## param
+
+        thread_ids：以逗号分隔的thread_id们，如"9395808,9395808"
+
+        ## Return
+        {
+            'Id': thread_id,
+            'Tags': <tag1><tag2>,
+            'Title': title
+        }
+
+        可能返回None
+        '''
+        sql = f"select `Id`, `Tags`, `Title` from `Posts` where `Id` in ( {thread_ids} )"
+        ret = []
+        self.cursor.execute(sql)
+        while 1:
+            try:
+                row = self.cursor.fetchone()
+                if row is None:
+                    break
+                ret.append({
+                    'Id': row[0],
+                    'Tags': row[1],
+                    'Title': row[2]
+                })
+            except:
+                break
+        return ret
+
     def collect_posts_by_tag(self, tag_name: str):
         answer_cursor = self.db.cursor()
         if tag_name in pre_generated_views_in_Mysql.keys():
-            sql = f"select `Id`, `Body`, `Tags`, `Title`, `Score`, `ViewCount`, `FavoriteCount`, `AcceptedAnswerId` from `Posts` where LOCATE('<java>', `Tags`) <> 0"
+            sql = f"select `Id`, `Body`, `Tags`, `Title`, `Score`, `ViewCount`, `FavoriteCount`, `AcceptedAnswerId` from `Posts` where LOCATE('{tag_name}', `Tags`) <> 0"
         else:
             # 有些tag相关的帖子已经事先生成了view，写在config里
-            java_view_name = pre_generated_views_in_Mysql[tag_name]
-            sql = f"select `Id`, `Body`, `Tags`, `Title`, `Score`, `ViewCount`, `FavoriteCount`, `AcceptedAnswerId` from `{java_view_name}`"
+            view_name = pre_generated_views_in_Mysql[tag_name]
+            sql = f"select `Id`, `Body`, `Tags`, `Title`, `Score`, `ViewCount`, `FavoriteCount`, `AcceptedAnswerId` from `{view_name}`"
         try:
             self.cursor.execute(sql)
             while 1:

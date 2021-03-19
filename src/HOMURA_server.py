@@ -64,6 +64,31 @@ def get_learning_sections(doc_name):
     return response
 
 
+@app.route('/api/getCommunitySubmap/<doc_name>', methods = ['GET'])
+def get_community_submap(doc_name):
+    section_id = request.args.get("sectionId", default=-1)
+    api_id = request.args.get("apiId", default=None)
+    ret = {
+        'success': True,
+        'data': []
+    }
+    try:
+        if section_id != -1:
+            if api_id is None:
+                ret['data'] = HOMURA_services[doc_name].get_community_submap_by_section(
+                    section_id)
+            else:
+                ret['data'] = HOMURA_services[doc_name].get_community_submap_by_api(
+                    api_id, section_id)
+        else:
+            ret['data'] = HOMURA_services[doc_name].get_community_submap_by_api(
+                api_id)
+    except Exception as e:
+        ret['success'] = False
+        ret['reason'] = e
+    response = flask.make_response(jsonify(ret))
+    return response
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=3001)

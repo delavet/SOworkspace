@@ -5,9 +5,10 @@ from selenium.common.exceptions import NoSuchElementException
 from util.concept_map.common import get_latest_concept_map
 from util.constant import *
 from util.nel.common import api_url_match
-from elasticsearch import Elasticsearch
+# from elasticsearch import Elasticsearch
 from util.config import JAVADOC_GLOBAL_NAME, Elasticsearch_host, Elasticsearch_port
 from pprint import pprint
+from util.mysql_access.posts import DBPosts
 
 
 def get_relative_path_from_href(href):
@@ -75,5 +76,4 @@ if __name__ == "__main__":
                     body=query_body)
     pprint(res)
     '''
-    print(pre_tokenize(
-        "DONNOT use throws ExceptionEinstead use try catch block on methodC1 and methodc2"))
+    print(DBPosts().get_thread_info_by_ids("9395808,9396545"))

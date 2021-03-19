@@ -8,7 +8,12 @@ axios.defaults.baseURL = 'http://localhost:3001/api'
 export default createStore({
   state: {
     hello: '',
-    current_section_id: -1
+    current_section_id: '30',
+    current_submap: {
+      nodes: [],
+      edges: []
+    },
+    current_show_detail_node: ''
   },
   mutations: {
     set_hello: (state, payload) => {

@@ -31,6 +31,11 @@ def get_latest_concept_map(doc_name='javadoc'):
     return nx.read_gexf(graph_path)
 
 
+def get_latest_community_map(doc_name='javadoc'):
+    graph_path = LATEST_COMMUNITY_MAP_PATH[doc_name]
+    return nx.read_gexf(graph_path)
+
+
 def migrate_apidoc_page_path(old_path):
     '''
     项目中期，文档地址从nirvash type 0移动到了本地工作区，导致concept map中原先记载的local href失效，用此方法临时进行转换将就一下= =

@@ -55,4 +55,9 @@ def get_api_name_from_entity_id(entity_id: str):
     '''
     concept map中API的ID经常带api和html等无用信息，所以就去掉一下
     '''
-    return entity_id.replace('.html', '').replace('api/', '')
+    ret = entity_id.replace('.html', '').replace('api/', '')
+    ret = ret.replace('%3C', '<')
+    ret = ret.replace('%3E', '>')
+    ret = ret.replace('%5B', '[')
+    ret = ret.replace('%5D', ']')
+    return ret

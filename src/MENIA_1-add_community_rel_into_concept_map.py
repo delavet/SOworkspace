@@ -2,7 +2,7 @@ import json
 import networkx as nx
 
 from util.constant import *
-from util.config import LATEST_CONCEPT_MAP_PATH, LATEST_COMMUNITY_MAP_PATH, MENIA_WHOLE_PREDICTION_STORE_PATH, JAVADOC_GLOBAL_NAME, COMMUNITY_FREQUENCY_STORE_PATH
+from util.config import LATEST_CONCEPT_MAP_PATH, LATEST_COMMUNITY_MAP_PATH, MENIA_WHOLE_PREDICTION_STORE_PATH, JAVADOC_GLOBAL_NAME, COMMUNITY_FREQUENCY_STORE_PATH, API_THREAD_ID_MAP_STORE_PATH
 '''
 MENIA：基于社区内API之间关系的API post学习推荐算法
 
@@ -41,16 +41,22 @@ def add_community_rel_heuristic_1(doc_name: str):
         nx.read_gexf(LATEST_CONCEPT_MAP_PATH[doc_name]))
     community_map = nx.Graph()
     community_frequency = {}
+    api_thread_id_map = {} # API和对应的thread的信息，这个信息没有加入图谱（控制图谱数据量），而是单独存成了一个文件，而共现的API对应的thread信息是加入到community map中的
     cooccur_map = {}
     for thread_id, prediction in EZA_predictions.items():
         apis = list(prediction.values())
         for api in apis:
             community_frequency[api] = community_frequency.get(api, 0) + 1
+            if api not in api_thread_id_map.keys():
+                api_thread_id_map[api] = []
+            api_thread_id_map[api].append(thread_id)
     print(f"found all {len(community_frequency.keys())} predicted apis")
-    print("dumping community frequency")
+    print("dumping community frequency and api-thread map")
     with open(COMMUNITY_FREQUENCY_STORE_PATH[doc_name], 'w', encoding='utf-8') as wf:
         json.dump(community_frequency, wf, ensure_ascii=False, indent=2)
-    print("community frequency dumped")
+    with open(API_THREAD_ID_MAP_STORE_PATH[doc_name], 'w', encoding='utf-8') as wf:
+        json.dump(api_thread_id_map, wf, ensure_ascii=False, indent=2)
+    print("community frequency and api-thread map dumped")
     # all_apis = list(community_frequency.keys())
     for thread_id, prediction in EZA_predictions.items():
         temp_apis = list(prediction.values())
@@ -73,13 +79,19 @@ def add_community_rel_heuristic_1(doc_name: str):
                 community_map.add_edge(cooccur_api1, cooccur_api2)
                 community_map[cooccur_api1][cooccur_api2][EdgeAttrbutes.Etype] = EdgeType.COOCCUR
                 community_map[cooccur_api1][cooccur_api2][EdgeAttrbutes.COOCCUR_FREQUENCY] = cooccur_freq
+                cooccur_threads = [] # 把两个API共同出现过的thread id加入到COMMUNITY MAP图谱中去
+                for thread_id in api_thread_id_map[cooccur_api1]:
+                    if thread_id in api_thread_id_map[cooccur_api2]:
+                        cooccur_threads.append(thread_id)
+                community_map[cooccur_api1][cooccur_api2][EdgeAttrbutes.COOCCUR_THREADS] = ','.join(cooccur_threads)
 
-                # 向concept map添加信息（虽然目前不保存加入community信息的concept map）
+                # 向concept map添加信息（虽然目前不保存加入community信息的concept map:20210319）
                 if community_frequency[cooccur_api1] >= community_frequency[cooccur_api2]:
                     edge_index = concept_map.add_edge(
                         cooccur_api1, cooccur_api2)
                     concept_map[cooccur_api1][cooccur_api2][edge_index][EdgeAttrbutes.Etype] = EdgeType.COOCCUR
                     concept_map[cooccur_api1][cooccur_api2][edge_index][EdgeAttrbutes.COOCCUR_FREQUENCY] = cooccur_freq
+
                 else:
                     edge_index = concept_map.add_edge(
                         cooccur_api2, cooccur_api1)
@@ -94,7 +106,7 @@ def add_community_rel_heuristic_1(doc_name: str):
     print(f"detected {len(community_map.nodes)} community api nodes")
     print("dumping community map")
     nx.write_gexf(community_map, LATEST_COMMUNITY_MAP_PATH[doc_name])
-    # 决定先不向 concept map写入community关系了，反正信息都到community map里了
+    # 20210310：决定先不向 concept map写入community关系了，反正信息都到community map里了
 
 
 if __name__ == "__main__":

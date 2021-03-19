@@ -50,7 +50,8 @@ class NodeAttributes:
 
 class EdgeAttrbutes:
     Etype = 'Etype'
-    COOCCUR_FREQUENCY = 'cooccur_freq'  # only enabled while Etype is COOCCUR
+    COOCCUR_FREQUENCY = 'cooccur_freq'  # only enabled while Etype is COOCCUR in COMMUNITY MAP
+    COOCCUR_THREADS = 'cooccur_threads'  # only enabled while Etype is COOCCUR in COMMUNITY MAP
 
 
 class_level_node_types = [
