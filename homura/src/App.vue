@@ -16,11 +16,13 @@
         :collapsed-width="80"
         :collapsed-icon-size="36"
         :items="menuItems"
-        @update:value="callback"
+        @update:value="menuCallback"
       />
     </n-layout-sider>
     <n-layout class="app-content">
-      <router-view />
+      <n-message-provider>
+        <router-view />
+      </n-message-provider>
     </n-layout>
   </n-layout>
 </template>
@@ -30,7 +32,9 @@ import { defineComponent, h } from 'vue'
 import { NIcon } from 'naive-ui'
 import { mapActions, mapState } from 'vuex'
 import {
-  BookOutline as BookIcon
+  Home as HomeIcon,
+  Bulb as BulbIcon,
+  Map as MapIcon
 } from '@vicons/ionicons5'
 
 function renderIcon (icon) {
@@ -39,15 +43,19 @@ function renderIcon (icon) {
 
 const menuItems = [
   {
-    label: '且听风吟',
-    key: 'hear-the-wind-sing',
-    icon: renderIcon(BookIcon)
+    label: 'Home Page',
+    key: 'home',
+    icon: renderIcon(HomeIcon)
   },
   {
-    label: '寻羊冒险记',
-    key: 'a-wild-sheep-chase',
-    disabled: true,
-    icon: renderIcon(BookIcon)
+    label: 'Learning Entries',
+    key: 'section',
+    icon: renderIcon(BulbIcon)
+  },
+  {
+    label: 'Learning Roadmap',
+    key: 'roadmap',
+    icon: renderIcon(MapIcon)
   }
 ]
 
@@ -59,9 +67,14 @@ export default defineComponent({
     }
   },
   methods: {
-    callback (value, item) {
-      console.log(value, item)
-      this.$router.push('/section')
+    menuCallback (value, item) {
+      if (value === 'home') {
+        this.$router.push('/')
+      } else if (value === 'section') {
+        this.$router.push('/section')
+      } else if (value === 'roadmap') {
+        this.$router.push('/roadmap')
+      }
     },
     handleScroll (e) {
       console.log(e.currentTarget)

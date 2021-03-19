@@ -17,9 +17,11 @@
 import { defineComponent, createApp } from 'vue'
 import SectionCard from './SectionCard'
 import store from '../store'
+import { useMessage } from 'naive-ui'
 
 const loadLimit = 20
 let WFmaxContentHeight = 0
+let loadingMessage = null
 
 export default defineComponent({
   data () {
@@ -27,10 +29,14 @@ export default defineComponent({
       loadEnabled: true,
       currentPage: 0,
       loadOver: false,
-      docName: 'javadoc'
+      docName: 'javadoc',
+      messageBox: undefined
     }
   },
   async created () {
+    const message = useMessage()
+    this.messageBox = message
+    loadingMessage = message.loading('loading learning entry data', { duration: 5000 })
     await this.fetchSections()
   },
   methods: {
@@ -64,23 +70,15 @@ export default defineComponent({
           apis: data.apis,
           threadTitle: data.thread_info.Title
         }).use(store)
-        // let html =
-        // `<div class="card">
-        //   <h2 class="section-id"> Section` + data.section_id + `</h2>
-        //   <h4> Related APIs:</h4>
-        //   <ul>`
-        // for (let j = 0; j < data.apis.length; j++) {
-        //   html += '<li>' + data.apis[j] + '</li>'
-        // }
-        // html += `</ul>
-        //   <h4> Popular threads:</h4>
-        //   <div>` + data.thread_info.Title + `</div>
-        // `
-        // html += '</div>'
         const appHost = document.createElement('div')
         this.$refs[`piping${min}`].appendChild(appHost)
         app.mount(appHost)
       })
+      if (loadingMessage) {
+        loadingMessage.destroy()
+        loadingMessage = null
+      }
+      this.messageBox.success('learning entry data loaded', { duration: 500 })
     },
     handleScroll (e) {
       // scrollTop + offsetHeight = scrollHeight
