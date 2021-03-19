@@ -19,7 +19,7 @@
         @update:value="callback"
       />
     </n-layout-sider>
-    <n-layout class="content" >
+    <n-layout class="app-content">
       <router-view />
     </n-layout>
   </n-layout>
@@ -61,7 +61,7 @@ export default defineComponent({
   methods: {
     callback (value, item) {
       console.log(value, item)
-      this.$router.push('/about')
+      this.$router.push('/section')
     },
     handleScroll (e) {
       console.log(e.currentTarget)
