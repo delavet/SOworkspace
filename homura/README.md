@@ -1,5 +1,11 @@
 # Project HOMURA
 
+An API learning assistant system developed by `vuejs` and `naive-ui`
+
+Prototype V0.0.1
+
+![](./home_page.png)
+
 ## Project setup
 
 ```
