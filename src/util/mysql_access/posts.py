@@ -54,6 +54,36 @@ class DBPosts:
                 break
         return ret
 
+    def collect_post_detail_html(self, thread_id):
+        answer_cursor = self.db.cursor()
+        sql = f"select `Id`, `Body`, `Tags`, `Title`, `Score`, `ViewCount`, `FavoriteCount`, `AcceptedAnswerId` from `Posts` where `Id` = {thread_id}"
+        item = {
+            'Id' : '',
+            'Tags': '',
+            'Title': '',
+            'Body': ''
+        }
+        try:
+            self.cursor.execute(sql)
+            row = self.cursor.fetchone()
+            if row is None:
+                return None
+            body = row[1],
+            item = {
+                'Id': row[0],
+                'Tags': row[2],
+                'Title': row[3],
+            }
+            answer_sql = f"select `Id`, `Body`, `Score` from `Posts` where `ParentId` = {row[0]}"
+            answer_cursor.execute(answer_sql)
+            answers_rows = answer_cursor.fetchall()
+            answers = '<br/>'.join([r[1] for r in answers_rows])
+            body = body + '<hr/>' + answers
+            item['Body'] = body
+        except Exception as e:
+            print(e)
+        return item
+        
     def collect_posts_by_tag(self, tag_name: str):
         answer_cursor = self.db.cursor()
         if tag_name in pre_generated_views_in_Mysql.keys():

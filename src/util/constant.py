@@ -63,6 +63,13 @@ class_level_node_types = [
     NodeType.INTERFACE
 ]
 
+field_level_node_types = [
+    NodeType.FIELD,
+    NodeType.METHOD,
+    NodeType.ENUM_CONSTANT,
+    NodeType.CONSTRUCTOR
+]
+
 high_level_node_types = [
     NodeType.SCOPE,
     NodeType.PACKAGE,

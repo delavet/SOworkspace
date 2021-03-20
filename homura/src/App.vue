@@ -20,9 +20,11 @@
       />
     </n-layout-sider>
     <n-layout class="app-content">
-      <n-message-provider>
-        <router-view />
-      </n-message-provider>
+        <n-message-provider>
+          <n-notification-provider>
+            <router-view />
+          </n-notification-provider>
+        </n-message-provider>
     </n-layout>
   </n-layout>
 </template>
@@ -32,9 +34,10 @@ import { defineComponent, h } from 'vue'
 import { NIcon } from 'naive-ui'
 import { mapActions, mapState } from 'vuex'
 import {
-  Home as HomeIcon,
-  Bulb as BulbIcon,
-  Map as MapIcon
+  HomeOutline as HomeIcon,
+  BulbOutline as BulbIcon,
+  MapOutline as MapIcon,
+  BookOutline as BookIcon
 } from '@vicons/ionicons5'
 
 function renderIcon (icon) {
@@ -56,6 +59,11 @@ const menuItems = [
     label: 'Learning Roadmap',
     key: 'roadmap',
     icon: renderIcon(MapIcon)
+  },
+  {
+    label: 'view SO threads about API',
+    key: 'detail',
+    icon: renderIcon(BookIcon)
   }
 ]
 
@@ -74,6 +82,8 @@ export default defineComponent({
         this.$router.push('/section')
       } else if (value === 'roadmap') {
         this.$router.push('/roadmap')
+      } else if (value === 'detail') {
+        this.$router.push('/detail')
       }
     },
     handleScroll (e) {

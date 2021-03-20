@@ -17,7 +17,9 @@
 import { defineComponent, createApp } from 'vue'
 import SectionCard from './SectionCard'
 import store from '../store'
+import router from '../router'
 import { useMessage } from 'naive-ui'
+import { mapState } from 'vuex'
 
 const loadLimit = 20
 let WFmaxContentHeight = 0
@@ -29,7 +31,6 @@ export default defineComponent({
       loadEnabled: true,
       currentPage: 0,
       loadOver: false,
-      docName: 'javadoc',
       messageBox: undefined
     }
   },
@@ -69,7 +70,7 @@ export default defineComponent({
           id: data.section_id,
           apis: data.apis,
           threadTitle: data.thread_info.Title
-        }).use(store)
+        }).use(store).use(router)
         const appHost = document.createElement('div')
         this.$refs[`piping${min}`].appendChild(appHost)
         app.mount(appHost)
@@ -98,7 +99,10 @@ export default defineComponent({
   computed: {
     loadUrl () {
       return '/getLearnSections/' + this.docName
-    }
+    },
+    ...mapState({
+      docName: 'doc_name'
+    })
   }
 })
 </script>

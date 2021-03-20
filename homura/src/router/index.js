@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import SectionWaterFall from '../views/SectionWaterFall.vue'
 import Roadmap from '../views/Roadmap.vue'
 import Home from '../views/Home.vue'
+import Detail from '../views/DetailPage.vue'
 
 const routes = [
   {
@@ -18,6 +19,11 @@ const routes = [
     path: '/roadmap',
     name: 'Roadmap',
     component: Roadmap
+  },
+  {
+    path: '/detail',
+    name: 'Detail',
+    component: Detail
   }
 ]
 

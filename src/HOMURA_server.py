@@ -85,10 +85,83 @@ def get_community_submap(doc_name):
                 api_id)
     except Exception as e:
         ret['success'] = False
-        ret['reason'] = e
+        ret['reason'] = str(e)
     response = flask.make_response(jsonify(ret))
     return response
 
+
+@app.route('/api/getConceptSubmap/<doc_name>', methods = ['GET'])
+def get_concept_submap(doc_name):
+    api_id = request.args.get("apiId", default=None)
+    ret = {
+        'success': True,
+        'data': []
+    }
+    ret['data'] = HOMURA_services[doc_name].get_concept_submap_by_api(
+        api_id)
+    try:
+        pass
+    except Exception as e:
+        ret['success'] = False
+        ret['reason'] = str(e)
+    response = flask.make_response(jsonify(ret))
+    return response
+
+
+@app.route('/api/getAPIDescription/<doc_name>', methods=['GET'])
+def get_api_description(doc_name):
+    api_id = request.args.get("apiId", default=None)
+    ret = {
+        'success': True,
+        'data': ''
+    }
+    try:
+        api_name, api_html = HOMURA_services[doc_name].get_api_description_html(api_id)
+        ret['data'] = {
+            'api_name': api_name,
+            'api_html': api_html
+        }
+    except Exception as e:
+        ret['success'] = False
+        ret['reason'] = str(e)
+    response = flask.make_response(jsonify(ret))
+    return response
+
+
+@app.route('/api/getThreadInfo/<doc_name>', methods=['GET'])
+def get_thread_info(doc_name):
+    api_id = request.args.get("apiId", default=None)
+    page = int(request.args.get("page", default=0))
+    limit = int(request.args.get("limit", default=20))
+    ret = {
+        'success': True,
+        'data': []
+    }
+    try:
+        thread_info = HOMURA_services[doc_name].get_thread_infos_by_api_local(api_id, page, limit)
+        ret['data'] = thread_info
+    except Exception as e:
+        ret['success'] = False
+        ret['reason'] = str(e)
+    response = flask.make_response(jsonify(ret))
+    return response
+
+
+@app.route('/api/getThreadHtml/<doc_name>', methods=['GET'])
+def get_thread_html(doc_name):
+    thread_id = str(request.args.get("threadId", default="9395808"))
+    ret = {
+        'success': True,
+        'data': []
+    }
+    try:
+        data = HOMURA_services[doc_name].get_thread_html(thread_id)
+        ret['data'] = data
+    except Exception as e:
+        ret['success'] = False
+        ret['reason'] = str(e)
+    response = flask.make_response(jsonify(ret))
+    return response
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=3001)

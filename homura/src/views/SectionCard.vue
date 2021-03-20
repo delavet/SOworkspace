@@ -30,9 +30,12 @@ export default defineComponent({
   methods: {
     handleClick () {
       this.set_id(this.id)
+      this.set_show_map(true)
+      this.$router.push('/roadmap')
     },
     ...mapMutations({
-      set_id: 'set_current_section_id'
+      set_id: 'set_current_section_id',
+      set_show_map: 'set_map_show_mode'
     })
   }
 })

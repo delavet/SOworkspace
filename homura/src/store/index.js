@@ -8,12 +8,17 @@ axios.defaults.baseURL = 'http://localhost:3001/api'
 export default createStore({
   state: {
     hello: '',
-    current_section_id: '30',
+    doc_name: 'javadoc',
+    current_section_id: '',
     current_submap: {
       nodes: [],
       edges: []
     },
-    current_show_detail_node: ''
+    current_show_detail_node: '', // 当前重点展示的结点，是被选中的结点，一开始就是center node，后面随着用户选择会变
+    current_map_center_node: '', // 整个submap的中心节点，除非图换了不然一直都是那一个结点
+    current_map_center_node_item: undefined,
+    current_show_detail_node_item: undefined,
+    show_community_map: true
   },
   mutations: {
     set_hello: (state, payload) => {
@@ -21,7 +26,23 @@ export default createStore({
     },
     set_current_section_id: (state, payload) => {
       state.current_section_id = payload
-      console.log(state.current_section_id)
+      // .log(state.current_section_id)
+    },
+    set_current_submap: (state, payload) => {
+      state.current_submap = payload
+    },
+    set_current_center_node: (state, payload) => {
+      state.current_map_center_node = payload
+      state.current_show_detail_node = payload
+    },
+    set_show_detail_node: (state, payload) => {
+      state.current_show_detail_node = payload
+    },
+    switch_map_show_mode: (state) => {
+      state.show_community_map = !state.show_community_map
+    },
+    set_map_show_mode: (state, payload) => {
+      state.show_community_map = payload
     }
   },
   actions: {
