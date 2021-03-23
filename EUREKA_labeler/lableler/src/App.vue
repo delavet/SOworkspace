@@ -115,12 +115,14 @@ export default {
     return {
       tokens: undefined,
       value: null,
+      /*
       options: Array(63)
         .fill()
         .map((_, i) => ({
           label: `ner_data_${i}.json`,
           value: `ner_data_${i}.json`,
-        })),
+        })),*/
+      options: [],
       selectDisabled: false,
       start_index_input: "1",
       cur_index: -1,
@@ -129,6 +131,13 @@ export default {
   created() {
     //this.$http.get('../static/ner_data_0.json')
     //this.tokens = parseData(data)
+    const opt = require.context('../public/static', false, /.json$/).keys()
+    for (let o of opt) {
+      this.options.push({
+        "label": o.slice(2),
+        "value": o.slice(2)
+      })
+    }
   },
   methods: {
     onAppMouseDown() {
