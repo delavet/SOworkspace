@@ -5,10 +5,14 @@ from selenium.common.exceptions import NoSuchElementException
 from util.concept_map.common import get_latest_concept_map
 from util.constant import *
 from util.nel.common import api_url_match
-# from elasticsearch import Elasticsearch
-from util.config import JAVADOC_GLOBAL_NAME, Elasticsearch_host, Elasticsearch_port
+from elasticsearch import Elasticsearch
+from util.config import APIDOC_WIKI_FASTTEXT_MODEL_STORE_PATH, JAVADOC_GLOBAL_NAME, Elasticsearch_host, Elasticsearch_port, HYBRID_WORD2VEC_CORPUS_STORE_PATH
 from pprint import pprint
-from util.mysql_access.posts import DBPosts
+#from util.mysql_access.posts import DBPosts
+from util.utils import get_api_qualified_name_from_entity_id
+from util.apidoc_search.vector_util import VectorUtil
+import numpy as np
+from util.apidoc_search.api_search_service import ApiSearchService
 
 
 def get_relative_path_from_href(href):
@@ -65,15 +69,40 @@ if __name__ == "__main__":
     es = Elasticsearch(hosts=Elasticsearch_host, port=Elasticsearch_port)
     query_body = {
         'query': {
-            'wildcard': {
-                'name': {
-                    'value': '*arraylist*'
+            'match': {
+                'description': {
+                    'query': 'clear arraylist immediately'
                 }
             }
         },
     }
-    res = es.search(index=JAVADOC_GLOBAL_NAME, filter_path='hits.hits._source.description',
-                    body=query_body)
+    res = es.search(index=JAVADOC_GLOBAL_NAME, body=query_body)
     pprint(res)
     '''
-    print(DBPosts().get_thread_info_by_ids("9395808,9396545"))
+
+    '''
+    x = [[1,2,3], [2,3,4]]
+    y = VectorUtil.get_weight_mean_vec(x)
+    print(y)
+    '''
+    '''
+    new_lines = []
+    with open(HYBRID_WORD2VEC_CORPUS_STORE_PATH[JAVADOC_GLOBAL_NAME], 'r', encoding='utf-8') as rf:
+        for line in rf:
+            new_lines.append(' '.join(line.split()).strip() + '\n')
+    with open(HYBRID_WORD2VEC_CORPUS_STORE_PATH[JAVADOC_GLOBAL_NAME], 'w', encoding='utf-8') as wf:
+        wf.writelines(new_lines)
+    '''
+
+    '''
+    vector_util = VectorUtil(APIDOC_WIKI_FASTTEXT_MODEL_STORE_PATH[JAVADOC_GLOBAL_NAME])
+    print(vector_util.get_word_similarity('array', 'arrays'))
+    print(vector_util.get_word_similarity('array', 'awt'))
+    print(vector_util.get_word_similarity('matrix', 'image'))
+    '''
+    service = ApiSearchService(JAVADOC_GLOBAL_NAME)
+    print('initilalized!')
+    pprint(service.search_literally('data structure'))
+    
+    # print(DBPosts().get_thread_info_by_ids("9395808,9396545"))
+    # print(get_api_qualified_name_from_entity_id('api/jdk.security.auth/com/sun/security/auth/NTUserPrincipal.html#&lt;init&gt;(java.lang.String)'))

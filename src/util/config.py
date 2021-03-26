@@ -42,6 +42,17 @@ LATEST_COMMUNITY_MAP_PATH = {
     JAVADOC_GLOBAL_NAME: f'{base_dir}/data/community_data/java/community_map_javadoc20210312.gexf'
 }
 
+# 带有domain term和wiki term拓展实体的concept map
+LATEST_HYPER_CONCEPT_MAP_PATH = {
+    JAVADOC_GLOBAL_NAME: f'{base_dir}/data/concept_map/hyper_concept_map_javaodc20210325.pkl'
+}
+
+# 复旦的API知识图谱
+
+FUDAN_CONCEPT_MAP_PATH = {
+    JAVADOC_GLOBAL_NAME: f'{base_dir}/data/concept_map/fudan_jdk_graph.pkl'
+}
+
 # 于2021年3月12日封存的concept map
 SEALED_CONCEPT_MAP_20210312_PATH = {
     JAVADOC_GLOBAL_NAME: f'{base_dir}/backup/concept_map_javadoc20200801.gexf'
@@ -205,6 +216,25 @@ OPENKE_RELATION2ID_STORE_PATH = {
 #专门为HOMURA提供服务的数据，存储每个社群中推荐先学习的API，基本就是一个重新排序的COMMUNITY_RECORD
 HOMURA_COMMUNITY_API_RECOMMEND_STORE_PATH = {
     JAVADOC_GLOBAL_NAME: f'{base_dir}/data/community_data/java/homura_community_api_recommend.json'
+}
+
+HYBRID_WORD2VEC_CORPUS_STORE_PATH = {
+    JAVADOC_GLOBAL_NAME: f'{base_dir}/data/MACHINA_dataset/hybrid_word2vec_corpus_javadoc.txt'
+}
+
+# 只有接入nirvash mk7时有效，在使用时务必接入硬盘
+WIKIDUMP_PATH = {
+    'title': 'G:/wikidump/article_titles.txt',
+    'article': 'G:/wikidump/articles_in_plain_text.txt'
+}
+
+# 用apidoc和wiki联合训练出来的fasttext model，选fasttext是怕有词汇表里没有的单词
+APIDOC_WIKI_FASTTEXT_MODEL_STORE_PATH = {
+    JAVADOC_GLOBAL_NAME: f'{base_dir}/model/java/apidoc_wiki_fasttext.model'
+}
+
+API_SHORT_DESCRIPTION_FASTTEXT_VECTOR_STORE_PATH = {
+    JAVADOC_GLOBAL_NAME: f'{base_dir}/data/apidoc_description/javadoc_api_desc_fasttext_vector.pkl'
 }
 
 # MYSQL属性

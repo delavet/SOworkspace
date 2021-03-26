@@ -1,29 +1,18 @@
 import json
 from collections import OrderedDict
 import networkx as nx
+from nltk.util import pr
 
 from tqdm import tqdm
 from elasticsearch import Elasticsearch
 from util.concept_map.common import get_latest_concept_map
 from util.config import JAVADOC_GLOBAL_NAME, Elasticsearch_host, Elasticsearch_port, API_ELASTIC_DOC_MAP_STORE_PATH
 from util.constant import NodeType, NodeAttributes
+from util.utils import get_api_name_from_entity_id, get_api_qualified_name_from_entity_id
+from util.apidoc_semantic.common import pre_tokenize
 
 
 es = Elasticsearch(hosts=Elasticsearch_host, port=Elasticsearch_port)
-
-
-def get_qualified_api_name(node_name: str):
-    ret = node_name
-    if '.html' in node_name:
-        ret = ret.replace('.html', '')
-    if 'api/' in node_name:
-        ret = ret.replace('api/', '')
-    ret = ret.replace('/', ' ')
-    ret = ret.replace('%3C', '<')
-    ret = ret.replace('%3E', '>')
-    ret = ret.replace('%5B', '[')
-    ret = ret.replace('%5D', ']')
-    return ret
 
 
 def insert_api_concepts_into_elasticsearch(doc_name: str = JAVADOC_GLOBAL_NAME):
@@ -32,7 +21,7 @@ def insert_api_concepts_into_elasticsearch(doc_name: str = JAVADOC_GLOBAL_NAME):
     api_elastic_map = OrderedDict()
     index = -1
     for node in tqdm(concept_map.nodes):
-        api_name = get_qualified_api_name(node)
+        api_name = get_api_qualified_name_from_entity_id(node)
         description = concept_map.nodes[node][NodeAttributes.DESCRIPTION] if NodeAttributes.DESCRIPTION in concept_map.nodes[node].keys(
         ) else ''
         node_type = concept_map.nodes[node][NodeAttributes.Ntype] if NodeAttributes.Ntype in concept_map.nodes[node].keys(
@@ -41,8 +30,17 @@ def insert_api_concepts_into_elasticsearch(doc_name: str = JAVADOC_GLOBAL_NAME):
             continue
         desc = node_type + ' ' + api_name + ": " + description
         # 插入全是小写，这样就没有大小写问题了。。。
+        name_tokens = api_name.lower().split('.')
+        name_tokens.append(';')
+        pre_tokenized_tokens = pre_tokenize(
+            ' '.join(api_name.split('.'))).lower().split(' ')
+        for token in pre_tokenized_tokens:
+            if token not in name_tokens and token != '':
+                name_tokens.append(token)
+        name = ' '.join(name_tokens)
+        
         doc_body = {
-            'name': api_name.lower(),
+            'name': name,
             'description': desc.lower(),
             'node_name': node
         }
@@ -60,7 +58,7 @@ if __name__ == "__main__":
     query_body = {
         'query': {
             'match': {
-                'name': {
+                'description': {
                     'query': 'arraylist',
                     'fuzziness': 'auto'
                 }
@@ -69,6 +67,5 @@ if __name__ == "__main__":
         'from': 0,
         'size': 20
     }
-    res = es.search(index=JAVADOC_GLOBAL_NAME,
-                    filter_path='hits.hits._source.node_name', body=query_body)
+    res = es.search(index=JAVADOC_GLOBAL_NAME, body=query_body)
     print(res)

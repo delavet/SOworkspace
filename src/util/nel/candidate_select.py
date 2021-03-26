@@ -133,15 +133,17 @@ def tokenize(text: str):
     return [token for token in raw_tokens if token != '' and ' ' not in token]
 
 
-def es_search(term: str, search_attr: str, fuzziness):
+def es_search(term: str, search_attr: str, fuzziness = None):
     global es
+    query_obj = {
+        'query': term
+    }
+    if fuzziness is not None:
+        query_obj['fuzziness'] = fuzziness
     query_body = {
         'query': {
             'match': {
-                search_attr: {
-                    'query': term,
-                    'fuzziness': fuzziness
-                }
+                search_attr: query_obj
             }
         },
     }
