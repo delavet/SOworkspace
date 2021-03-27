@@ -2,12 +2,18 @@ import flask
 
 from flask import Flask, request, jsonify
 from util.HOMURA_service import HOMURAservice
+from util.apidoc_search.api_search_service import ApiSearchService
 from util.config import JAVADOC_GLOBAL_NAME
+from util.utils import get_api_qualified_name_from_entity_id
 
 app = Flask(__name__)
 
 HOMURA_services = {
     JAVADOC_GLOBAL_NAME: HOMURAservice(JAVADOC_GLOBAL_NAME)
+}
+
+SEARCH_services = {
+    JAVADOC_GLOBAL_NAME: ApiSearchService(JAVADOC_GLOBAL_NAME)
 }
 
 
@@ -162,6 +168,57 @@ def get_thread_html(doc_name):
         ret['reason'] = str(e)
     response = flask.make_response(jsonify(ret))
     return response
+
+@app.route('/api/searchByLiteral/<doc_name>', methods=['POST'])
+def search_by_literal(doc_name):
+    query = request.json.get('query')
+    search_apis = SEARCH_services[doc_name].search_literally(query.lower())
+    data = []
+    ret = {
+        'success': True,
+        'data': []
+    }
+    try:
+        for api, score in search_apis:
+            id, desc = HOMURA_services[doc_name].get_api_id_short_description(api)
+            data.append({
+                'name': get_api_qualified_name_from_entity_id(api),
+                'description': desc,
+                'id': id
+            })
+        ret['data'] = data
+    except Exception as e:
+        ret['success'] = False
+        ret['reason'] = str(e)
+    response = flask.make_response(jsonify(ret))
+    return response
+
+
+@app.route('/api/searchByConcept/<doc_name>', methods=['POST'])
+def search_by_concept(doc_name):
+    query = request.json.get('query')
+    search_apis = SEARCH_services[doc_name].search_by_concept(query.lower())
+    data = []
+    ret = {
+        'success': True,
+        'data': []
+    }
+    try:
+        for api, score in search_apis:
+            id, desc = HOMURA_services[doc_name].get_api_id_short_description(
+                api)
+            data.append({
+                'name': get_api_qualified_name_from_entity_id(api),
+                'description': desc,
+                'id': id
+            })
+        ret['data'] = data
+    except Exception as e:
+        ret['success'] = False
+        ret['reason'] = str(e)
+    response = flask.make_response(jsonify(ret))
+    return response
+    
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=3001)

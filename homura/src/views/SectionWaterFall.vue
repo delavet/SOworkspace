@@ -19,7 +19,7 @@
             <p>If you are a start learner, who don't know where to start learning this <n-gradient-text type="danger">HUGE AMOUNT</n-gradient-text> of APIS. You can view these learning entries as your please and find a learning entry to start viewing these APIs</p>
             <p>However, viewing API names may not give you a deep impression about what these APIs are exactly talking about. Therefore, we append every learning entry a set of <n-gradient-text type="danger">popular questions</n-gradient-text> from SO that talk about these APIs, which could give you a better view. Hopeing these popular questions can help you find your interest better :)</p>
             <n-gradient-text :size="24" type="danger">BE AWARE</n-gradient-text>
-            <p>If you are an experienced developer about this SDK, you may refer to the <n-gradient-text type="danger">search function</n-gradient-text> we provided in <router-link class="link" to="/roadmap"><n-gradient-text type="info">here</n-gradient-text></router-link>.</p>
+            <p>If you are an experienced developer about this SDK, you may refer to the <n-gradient-text type="danger">search feature</n-gradient-text> we provided in <router-link class="link" to="/roadmap"><n-gradient-text type="info">here</n-gradient-text></router-link>.</p>
           </n-card>
         </n-modal>
         <div class="waterfall-content">
@@ -38,11 +38,11 @@
 </template>
 
 <script>
-import { defineComponent, createApp } from 'vue'
+import { defineComponent, createApp, h } from 'vue'
 import SectionCard from './SectionCard'
 import store from '../store'
 import router from '../router'
-import { useMessage } from 'naive-ui'
+import { useMessage, useNotification, NAvatar } from 'naive-ui'
 import { Help as HelpIcon } from '@vicons/ionicons5'
 import { mapState } from 'vuex'
 
@@ -68,6 +68,24 @@ export default defineComponent({
     this.messageBox = message
     loadingMessage = message.loading('loading learning entry data', { duration: 5000 })
     await this.fetchSections()
+  },
+  mounted () {
+    const notification = useNotification()
+    notification.create({
+      title: 'Hint',
+      description: 'About The Learning Entries',
+      content: `A Learning Entries is a set of APIs which we guess you may be interested in.
+This set of APIs are frequently discussed together in the Stack Overflow (SO) Community, which means they have close relationships.
+Through these entries, you can have a quick start and get a knowledge of how the SDK is used in the real development environment.
+Watch detail through the left Help button :-)
+      `,
+      avatar: () =>
+        h(NAvatar, {
+          size: 'small',
+          round: true,
+          src: 'https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg'
+        })
+    })
   },
   methods: {
     async fetchSections () {

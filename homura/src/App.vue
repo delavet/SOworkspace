@@ -37,7 +37,8 @@ import {
   HomeOutline as HomeIcon,
   BulbOutline as BulbIcon,
   MapOutline as MapIcon,
-  BookOutline as BookIcon
+  BookOutline as BookIcon,
+  SearchOutline as SearchIcon
 } from '@vicons/ionicons5'
 
 function renderIcon (icon) {
@@ -49,6 +50,11 @@ const menuItems = [
     label: 'Home Page',
     key: 'home',
     icon: renderIcon(HomeIcon)
+  },
+  {
+    label: 'Search Page',
+    key: 'search',
+    icon: renderIcon(SearchIcon)
   },
   {
     label: 'Learning Entries',
@@ -78,6 +84,8 @@ export default defineComponent({
     menuCallback (value, item) {
       if (value === 'home') {
         this.$router.push('/')
+      } else if (value === 'search') {
+        this.$router.push('/search')
       } else if (value === 'section') {
         this.$router.push('/section')
       } else if (value === 'roadmap') {

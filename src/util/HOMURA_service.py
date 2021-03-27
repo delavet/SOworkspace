@@ -241,3 +241,6 @@ class HOMURAservice:
             'html': '<hr/>'.join(bodys)
         }
         return ret
+
+    def get_api_id_short_description(self, api_name):
+        return self.APIname2id[api_name], self.concept_map.nodes[api_name].get(NodeAttributes.DESCRIPTION, '')

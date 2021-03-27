@@ -32,11 +32,101 @@
   </n-card>
   <n-modal v-model:show="showModal">
     <n-card style="width: 600px;" title="What are these fxxking maps?" :bordered="false" size="huge">
-      <p>A learning entry is a set of APIs which we guess you may be interested in <n-gradient-text type="danger"> :) </n-gradient-text> This set of APIs are frequently discussed together in the <n-gradient-text type="danger"> Stack Overflow (SO) </n-gradient-text> due to our analysis on SO</p>
-      <p>If you are a start learner, who don't know where to start learning this <n-gradient-text type="danger">HUGE AMOUNT</n-gradient-text> of APIS. You can view these learning entries as your please and find a learning entry to start viewing these APIs</p>
-      <p>However, viewing API names may not give you a deep impression about what these APIs are exactly talking about. Therefore, we append every learning entry a set of <n-gradient-text type="danger">popular questions</n-gradient-text> from SO that talk about these APIs, which could give you a better view. Hopeing these popular questions can help you find your interest better :)</p>
-      <n-gradient-text :size="24" type="danger">BE AWARE</n-gradient-text>
-      <p>If you are an experienced developer about this SDK, you may refer to the <n-gradient-text type="danger">search function</n-gradient-text> we provided in <router-link class="link" to="/roadmap"><n-gradient-text type="info">here</n-gradient-text></router-link>.</p>
+      <p>It is always necessary to use multiple APIs to complete a programming task. Therefore, learning the relationships between APIs is nessasary. The Roadmap is a <n-gradient-text type="danger"> Visualized Knowledge Graph </n-gradient-text> which shows a set of close APIs and their relationships.</p>
+      <p>The node in the graph represents various of API elements. The relationships is visualized through edges on the graph with the type of the relationship writen on the edge.</p>
+      <p>The Roadmap has a <n-gradient-text type="danger"> Center API </n-gradient-text>, which is the API you choose to learn from the learning entries recommended or you search it. This Center API is showed bigger than others. The Roadmap will show all related APIs around this API.</p>
+      <img src="/center_node.png"/>
+      <p>You can click <n-gradient-text type="danger">click</n-gradient-text> on the API to select it. Once you select the API, the detail panel on the right will show you the detail description of it. Through the <n-gradient-text type="success">book</n-gradient-text> button, you can view all Stack Overflow posts related to this API to learn how it is used in the real situation. Through the <n-gradient-text type="info">navigate</n-gradient-text> button, you can change the Center API of the current Roadmap, which means you choose this new API to learn. The Roadmap will be automatically refreshed.</p>
+      <img src="/nav.png" width="500"/>
+      <p>We prepare two kinds of Roadmap to reveal different kinds of relationships between APIs. You can switch these two maps through the left-top side two buttons.</p>
+      <img src="/switch_btn.png"/>
+      <h2>1. Concept Map</h2>
+      <p>The Concept Map shows the relationships that the designer of the java SDK give these APIs, such as inheritation, implement, etc.</p>
+      <h2>2. Community Map</h2>
+      <p>The Community Map shows the relationship that APIs are frequently discussed together in the Stack Overflow Community.</p>
+      <n-h2>The Legend of the RoadMap</n-h2>
+      <n-table :single-line="false">
+        <n-thead>
+          <n-tr>
+            <n-th>Icon</n-th>
+            <n-th>API Element Type</n-th>
+          </n-tr>
+        </n-thead>
+        <n-tbody>
+          <n-tr>
+            <n-td>
+              <img src="/function.svg" height="24" width="24"/>
+            </n-td>
+            <n-td>
+              Method / Function
+            </n-td>
+          </n-tr>
+          <n-tr>
+            <n-td>
+              <img src="/class.svg" height="24" width="24"/>
+            </n-td>
+            <n-td>
+              Class
+            </n-td>
+          </n-tr>
+          <n-tr>
+            <n-td>
+              <img src="/error.svg" height="24" width="24"/>
+            </n-td>
+            <n-td>
+              Error
+            </n-td>
+          </n-tr>
+          <n-tr>
+            <n-td>
+              <img src="/exception.svg" height="24" width="24"/>
+            </n-td>
+            <n-td>
+              Exception
+            </n-td>
+          </n-tr>
+          <n-tr>
+            <n-td>
+              <img src="/field.svg" height="24" width="24"/>
+            </n-td>
+            <n-td>
+              A Field / Attribute in the Class
+            </n-td>
+          </n-tr>
+          <n-tr>
+            <n-td>
+              <img src="/interface.svg" height="24" width="24"/>
+            </n-td>
+            <n-td>
+              Interface
+            </n-td>
+          </n-tr>
+          <n-tr>
+            <n-td>
+              <img src="/package.svg" height="24" width="24"/>
+            </n-td>
+            <n-td>
+              Package
+            </n-td>
+          </n-tr>
+          <n-tr>
+            <n-td>
+              <img src="/module.svg" height="24" width="24"/>
+            </n-td>
+            <n-td>
+              Module
+            </n-td>
+          </n-tr>
+          <n-tr>
+            <n-td>
+              <img src="/object.svg" height="24" width="24"/>
+            </n-td>
+            <n-td>
+              Other elements, such as an URL to an external resource
+            </n-td>
+          </n-tr>
+        </n-tbody>
+      </n-table>
     </n-card>
   </n-modal>
 </div>
@@ -69,25 +159,18 @@ export default defineComponent({
     }
   },
   mounted () {
-    console.log('mounted')
+    // console.log('mounted')
     this.community = this.show_community_map
-    debugger
     const message = useMessage()
     const notification = useNotification()
     notification.create({
-      title: "Wouldn't it be Nice",
-      description: 'From the Beach Boys',
-      content: `Wouldn't it be nice if we were older
-Then we wouldn't have to wait so long
-And wouldn't it be nice to live together
-In the kind of world where we belong
-You know its gonna make it that much better
-When we can say goodnight and stay together
-Wouldn't it be nice if we could wake up
-In the morning when the day is new
-And after having spent the day together
-Hold each other close the whole night through`,
-      meta: '2019-5-27 15:11',
+      title: 'Hint',
+      description: 'How to use the roadmap',
+      content: `The API Roadmap is a graph which shows different relationships between APIs in the SDK.
+We provide two kinds of map for you to observe APIs and their relationships.
+The Community Map shows the relationship that APIs are frequently discussed together in the Stack Overflow Community.
+The Concept Map shows the relationships that the designer of the java SDK give these APIs, such as inheritation, implement, etc.
+Use the Help Icon Button on the left side to get more information:)`,
       avatar: () =>
         h(NAvatar, {
           size: 'small',

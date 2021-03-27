@@ -11,7 +11,7 @@
       <n-h6>A <n-gradient-text type="warning"> JAVADOC </n-gradient-text> API <n-gradient-text type="success"> learning assistant system </n-gradient-text></n-h6>
       <p id="section-nav" class="home-p">Start learn! From recommended <router-link class="link" to="/section"><n-gradient-text type="info">learning entries</n-gradient-text></router-link></p>
       <h2 class="home-h">OR</h2>
-      <p class="home-p">Search APIs you're interested in</p>
+      <p class="home-p"><router-link class="link" to="/search"><n-gradient-text type="info">Search APIs</n-gradient-text></router-link> you're interested in</p>
       <div id="search-space">
         <n-auto-complete
           id="search-input"
