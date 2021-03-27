@@ -1,16 +1,37 @@
 <template>
-  <div class="waterfall-container" @scroll="handleScroll">
-    <div class="waterfall-content">
-      <div class="piping" ref="piping0">
+  <n-layout>
+    <n-layout-header bordered id="header">
+      <n-space id="head-space" size="large" align="baseline">
+        <n-h1>Exploring Learning Entries</n-h1>
+        <n-tooltip trigger="hover">
+          <template #trigger>
+            <n-button ghost circle size="small" @click="showModal = true"><n-icon size="20"><help-icon/></n-icon></n-button>
+          </template>
+          What is learning entry?
+        </n-tooltip>
+      </n-space>
+    </n-layout-header>
+    <n-layout style="height: 93vh;">
+      <div class="waterfall-container" @scroll="handleScroll">
+        <n-modal v-model:show="showModal">
+          <n-card style="width: 600px;" title="What is learning entry?" :bordered="false" size="huge">
+            内容
+            <template #footer> 尾部 </template>
+          </n-card>
+        </n-modal>
+        <div class="waterfall-content">
+          <div class="piping" ref="piping0">
+          </div>
+          <div class="piping" ref="piping1">
+          </div>
+          <div class="piping" ref="piping2">
+          </div>
+          <div class="piping" ref="piping3">
+          </div>
+        </div>
       </div>
-      <div class="piping" ref="piping1">
-      </div>
-      <div class="piping" ref="piping2">
-      </div>
-      <div class="piping" ref="piping3">
-      </div>
-    </div>
-  </div>
+    </n-layout>
+  </n-layout>
 </template>
 
 <script>
@@ -19,6 +40,7 @@ import SectionCard from './SectionCard'
 import store from '../store'
 import router from '../router'
 import { useMessage } from 'naive-ui'
+import { Help as HelpIcon } from '@vicons/ionicons5'
 import { mapState } from 'vuex'
 
 const loadLimit = 20
@@ -31,8 +53,12 @@ export default defineComponent({
       loadEnabled: true,
       currentPage: 0,
       loadOver: false,
-      messageBox: undefined
+      messageBox: undefined,
+      showModal: false
     }
+  },
+  components: {
+    HelpIcon
   },
   async created () {
     const message = useMessage()
@@ -109,7 +135,7 @@ export default defineComponent({
 
 <style>
 .waterfall-container {
-  height: 100vh;
+  height: 100%;
   overflow: auto;
   display: flex;
   justify-content: center;
@@ -139,6 +165,16 @@ export default defineComponent({
 
 .section-id {
   text-align: center;
+}
+
+#header {
+  height: 7vh;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  padding-top: 20px;
+  padding-left: 25px;
 }
 
 </style>

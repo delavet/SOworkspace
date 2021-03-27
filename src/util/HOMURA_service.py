@@ -8,13 +8,13 @@ from util.constant import *
 from .utils import get_api_name_from_entity_id
 from .config import HOMURA_COMMUNITY_API_RECOMMEND_STORE_PATH, COMMUNITY_RECOMMEND_ENTRY_THREADS_STORE_PATH, API_THREAD_ID_MAP_STORE_PATH, APIDOC_DESCRIPTION_STORE_PATH
 from .concept_map.common import get_latest_concept_map, get_latest_community_map
-from .mysql_access.posts import DBPosts
+# from .mysql_access.posts import DBPosts
 from .community_info.so_thread_info_center import ThreadInfoCenter
 
 
 class HOMURAservice:
     def __init__(self, doc_name):
-        self.post_db = DBPosts()
+        # self.post_db = DBPosts()
         self.thread_info_center = ThreadInfoCenter(doc_name)
         self.api_recommend_constraint = 5
         with open(HOMURA_COMMUNITY_API_RECOMMEND_STORE_PATH[doc_name], 'r', encoding='utf-8') as rf:
@@ -198,10 +198,11 @@ class HOMURAservice:
         api_name = self.id2APIname[api_id]
         return get_api_name_from_entity_id(api_name), self.api_doc_descriptions.get(api_name, '<div></div>')
 
+    '''
     def get_thread_infos_by_api(self, api_id, page, limit):
-        '''
-        没做推荐，直接把post一股脑的甩给他了
-        '''
+        
+        # 没做推荐，直接把post一股脑的甩给他了
+        
         api_name = self.id2APIname[api_id]
         thread_ids = self.API_thread_id_map[api_name]
         start = page * limit
@@ -211,6 +212,7 @@ class HOMURAservice:
         query = ','.join(thread_ids[start:end])
         ret = self.post_db.get_thread_info_by_ids(query)
         return ret
+    '''
 
     def get_thread_infos_by_api_local(self, api_id, page, limit):
         '''
