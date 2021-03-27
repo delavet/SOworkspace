@@ -102,7 +102,13 @@ if __name__ == "__main__":
     '''
     service = ApiSearchService(JAVADOC_GLOBAL_NAME)
     print('initilalized!')
-    pprint(service.search_literally('data structure'))
+    pprint(service.search_by_concept('FIFO collection'))
+    '''
+    pprint(service.search_literally('network security'))
+    pprint(service.search_by_concept('network security'))
+    pprint(service.search_by_concept('paint lines on whiteboard'))
+    pprint(service.search_by_concept('unique item collection'))
+    '''
     
     # print(DBPosts().get_thread_info_by_ids("9395808,9396545"))
     # print(get_api_qualified_name_from_entity_id('api/jdk.security.auth/com/sun/security/auth/NTUserPrincipal.html#&lt;init&gt;(java.lang.String)'))

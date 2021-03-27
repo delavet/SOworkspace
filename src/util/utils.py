@@ -1,5 +1,6 @@
 import numpy as np
 
+from gensim.models import FastText, Word2Vec
 from .config import *
 from bs4 import BeautifulSoup
 
@@ -81,3 +82,19 @@ def get_api_qualified_name_from_entity_id(entity_id: str):
     ret = '.'.join(tokens)
     ret = ret.replace('#', '.')
     return ret
+
+
+def get_apidoc_wiki_embedding_model(doc_name = JAVADOC_GLOBAL_NAME):
+    '''
+    获取从api文档与wiki联合训练的embedding model
+    ## 20210326
+    目前用的fasttext
+    '''
+    return FastText.load(APIDOC_WIKI_FASTTEXT_MODEL_STORE_PATH[doc_name])
+
+
+def get_node2vec_model(doc_name = JAVADOC_GLOBAL_NAME):
+    '''
+    获取文档图谱的node2vec model
+    '''
+    return Word2Vec.load(NODE2VEC_MODEL_STORE_PATH[doc_name])

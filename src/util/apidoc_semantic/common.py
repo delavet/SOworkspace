@@ -6,6 +6,7 @@ from nltk.corpus import stopwords
 from bs4 import BeautifulSoup
 
 __lemmatizer = spacy.load('en_core_web_sm', disable=['parser', 'ner'])
+__parser = spacy.load('en_core_web_sm', disable=['ner'])
 TERM_STOPLIST = set(stopwords.words('english'))
 
 
@@ -20,6 +21,23 @@ def preprocess(sentence: str) -> str:
     global __lemmatizer
     processed_doc = __lemmatizer(sentence)
     return ' '.join(' '.join([token.lemma_ for token in processed_doc if not token.is_stop]).split())
+
+
+def extract_noun_chunks(sentence: str) -> str:
+    global __parser
+    doc = __parser(sentence)
+    ret = []
+    for chunk in doc.noun_chunks:
+        chunk_arr = []
+        if len(chunk) == 0:
+            continue
+        for token in chunk:
+            if token.is_stop:
+                continue
+            chunk_arr.append(token.lemma_)
+        chunk_lemma = " ".join(chunk_arr)
+        ret.append(chunk_lemma.lower())
+    return ret
 
 
 def pre_tokenize(text: str) -> str:

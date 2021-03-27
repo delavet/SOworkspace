@@ -11,11 +11,8 @@ The methods are copied from gensim.models.keyedvectors.Doc2VecKeyedVectors in ge
 
 class VectorUtil:
 
-    def __init__(self, model_path = APIDOC_WIKI_FASTTEXT_MODEL_STORE_PATH[JAVADOC_GLOBAL_NAME]) -> None:
-        if model_path in APIDOC_WIKI_FASTTEXT_MODEL_STORE_PATH.values():
-            self.model = FastText.load(model_path)
-        else:
-            self.model = FastText.load(model_path)
+    def __init__(self, model) -> None:
+        self.model = model
 
     @staticmethod
     def similarity(vector_1, vector_2):

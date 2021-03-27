@@ -6,6 +6,8 @@ MAC = 'MACINTOSH'
 UBUNTU = 'UBUNTU'
 CURRENT_PLATFORM = UBUNTU
 
+WORD_EMBEDDING_DIMENTION = 100
+
 
 # 判断当前运行的项目基础路径及运行平台
 if os.path.exists('C:/workspace/SOworkspace'):
@@ -233,8 +235,21 @@ APIDOC_WIKI_FASTTEXT_MODEL_STORE_PATH = {
     JAVADOC_GLOBAL_NAME: f'{base_dir}/model/java/apidoc_wiki_fasttext.model'
 }
 
+# 图谱的node2vec模型
+NODE2VEC_MODEL_STORE_PATH = {
+    JAVADOC_GLOBAL_NAME: f'{base_dir}/model/java/node2vec.model'
+}
+
 API_SHORT_DESCRIPTION_FASTTEXT_VECTOR_STORE_PATH = {
     JAVADOC_GLOBAL_NAME: f'{base_dir}/data/apidoc_description/javadoc_api_desc_fasttext_vector.pkl'
+}
+
+DOMAIN_WIKI_TERM_FASTTEXT_VECTOR_STORE_PATH = {
+    JAVADOC_GLOBAL_NAME: f'{base_dir}/data/apidoc_description/javadoc_terms_fasttext_vector.pkl'
+}
+
+NODE2VEC_RANDOM_WALK_STORE_PATH = {
+    JAVADOC_GLOBAL_NAME: f'{base_dir}/data/apidoc_description/node2vec_random_walk.txt'
 }
 
 # MYSQL属性
@@ -250,3 +265,4 @@ pre_generated_views_in_Mysql = {
 # Elasticsearch属性
 Elasticsearch_host = 'localhost'
 Elasticsearch_port = 9200
+Elasticsearch_term_index_name_template = 'term_{}'
