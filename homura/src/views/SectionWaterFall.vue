@@ -7,16 +7,19 @@
           <template #trigger>
             <n-button ghost circle size="small" @click="showModal = true"><n-icon size="20"><help-icon/></n-icon></n-button>
           </template>
-          What is learning entry?
+          What is a learning entry?
         </n-tooltip>
       </n-space>
     </n-layout-header>
     <n-layout style="height: 93vh;">
       <div class="waterfall-container" @scroll="handleScroll">
         <n-modal v-model:show="showModal">
-          <n-card style="width: 600px;" title="What is learning entry?" :bordered="false" size="huge">
-            内容
-            <template #footer> 尾部 </template>
+          <n-card style="width: 600px;" title="What is a learning entry?" :bordered="false" size="huge">
+            <p>A learning entry is a set of APIs which we guess you may be interested in <n-gradient-text type="danger"> :) </n-gradient-text> This set of APIs are frequently discussed together in the <n-gradient-text type="danger"> Stack Overflow (SO) </n-gradient-text> due to our analysis on SO</p>
+            <p>If you are a start learner, who don't know where to start learning this <n-gradient-text type="danger">HUGE AMOUNT</n-gradient-text> of APIS. You can view these learning entries as your please and find a learning entry to start viewing these APIs</p>
+            <p>However, viewing API names may not give you a deep impression about what these APIs are exactly talking about. Therefore, we append every learning entry a set of <n-gradient-text type="danger">popular questions</n-gradient-text> from SO that talk about these APIs, which could give you a better view. Hopeing these popular questions can help you find your interest better :)</p>
+            <n-gradient-text :size="24" type="danger">BE AWARE</n-gradient-text>
+            <p>If you are an experienced developer about this SDK, you may refer to the <n-gradient-text type="danger">search function</n-gradient-text> we provided in <router-link class="link" to="/roadmap"><n-gradient-text type="info">here</n-gradient-text></router-link>.</p>
           </n-card>
         </n-modal>
         <div class="waterfall-content">
