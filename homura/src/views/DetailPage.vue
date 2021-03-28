@@ -3,7 +3,7 @@
       <n-layout>
         <n-layout-header bordered id="detail-page-header">
           <n-space size="large" align="baseline">
-            <n-h1>View Stack Overflow Threads</n-h1>
+            <n-h1>Browse&Learn Stack Overflow Threads</n-h1>
             <n-tooltip trigger="hover">
               <template #trigger>
                 <n-button ghost circle size="small" @click="showModal = true"><n-icon size="20"><help-icon/></n-icon></n-button>

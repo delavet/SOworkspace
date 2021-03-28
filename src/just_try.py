@@ -102,9 +102,9 @@ if __name__ == "__main__":
     '''
     service = ApiSearchService(JAVADOC_GLOBAL_NAME)
     print('initilalized!')
-    pprint(service.search_by_concept('FIFO collection'))
+    pprint(service.search_by_concept('network security'))
     '''
-    pprint(service.search_literally('network security'))
+    pprint(service.search_literally('FIFO collection'))
     pprint(service.search_by_concept('network security'))
     pprint(service.search_by_concept('paint lines on whiteboard'))
     pprint(service.search_by_concept('unique item collection'))

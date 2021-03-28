@@ -22,7 +22,9 @@
     <n-layout class="app-content">
         <n-message-provider>
           <n-notification-provider>
-            <router-view />
+            <keep-alive>
+              <router-view />
+            </keep-alive>
           </n-notification-provider>
         </n-message-provider>
     </n-layout>

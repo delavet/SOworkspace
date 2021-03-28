@@ -1,5 +1,11 @@
 <template>
   <div class="home">
+    <n-tooltip trigger="hover">
+      <template #trigger>
+        <n-button ghost circle size="small" @click="showModal = true" id="home-help-btn"><n-icon size="15"><help-icon/></n-icon></n-button>
+      </template>
+      What are these maps?
+    </n-tooltip>
     <n-space vertical>
       <h1
         id="project-name"
@@ -27,23 +33,66 @@
         </n-button>
       </div>
     </n-space>
+    <n-modal v-model:show="showModal">
+      <n-card style="max-width: 1200px; height:400px;" title="How to use this service?" :bordered="false" size="huge">
+        <n-steps :current="current" status="process">
+          <n-step title="Find an API to learn">
+            <div class="n-step-description">
+              <p>Choose one API to start your learn journey~ If you are a complete novice, don't know where to start, you can browse some popular <router-link class="link" to="/section"><n-gradient-text type="info">Learning Entries</n-gradient-text></router-link> we prepare for you and find out what you interested in.</p>
+              <p>Or, you can search for java APIs with any keywords you come up with in the <router-link class="link" to="/search"><n-gradient-text type="info">Search Page</n-gradient-text></router-link> to find out APIs which meet your need</p>
+              <n-button
+                v-if="current === 1"
+                @click="handleButtonClick"
+              >
+                Next
+              </n-button>
+            </div>
+          </n-step>
+          <n-step title="Learn the API you choose in the Roadmap">
+            <div class="n-step-description">
+              <p>The API you choose in the first step are set as the center API of our <router-link class="link" to="/roadmap"><n-gradient-text type="info">Roadmap</n-gradient-text></router-link>. Through the Roadmap, you can browse the relationships between the API you choose and all other APIs which are related to it. You can also navigate in the Roadmap to continue learning other related APIs. <router-link class="link" to="/roadmap"><n-gradient-text type="info">Check it Out!</n-gradient-text></router-link></p>
+              <n-button
+                v-if="current === 2"
+                @click="handleButtonClick"
+              >
+                Next
+              </n-button>
+            </div>
+          </n-step>
+          <n-step title="Learn Stack Overflow threads about the API">
+            <div class="n-step-description">
+              <p>While navigating in the Roadmap,you can further browse popular Stack Overflow threads which are talking about the current API you learn. These valuable threads can help you better learn the API in the real development scenario. Good Luck. :-) <router-link class="link" to="/detail"><n-gradient-text type="info">Try it out</n-gradient-text></router-link></p>
+              <n-button
+                v-if="current === 3"
+                @click="handleButtonClick"
+              >
+                Next
+              </n-button>
+            </div>
+          </n-step>
+        </n-steps>
+      </n-card>
+    </n-modal>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import { defineComponent } from 'vue'
-import { Search } from '@vicons/ionicons5'
+import { Search, Help as HelpIcon } from '@vicons/ionicons5'
 
 export default defineComponent({
   name: 'Home',
   components: {
-    Search
+    Search,
+    HelpIcon
   },
   data () {
     return {
       searchValue: '',
-      heroine: 'HOMURA'
+      heroine: 'HOMURA',
+      current: 1,
+      showModal: true
     }
   },
   methods: {
@@ -57,6 +106,9 @@ export default defineComponent({
     projectNameMouseLeave () {
       this.heroine = 'HOMURA'
       this.$refs.name.style.color = '#F1394B'
+    },
+    handleButtonClick () {
+      this.current = (this.current % 3) + 1
     }
   },
   computed: {
@@ -108,6 +160,13 @@ export default defineComponent({
   width: 450px;
   display: inline-block;
   margin-right: 20px;
+}
+
+#home-help-btn {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 20px;
 }
 
 .home-p {
