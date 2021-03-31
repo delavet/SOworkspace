@@ -84,6 +84,24 @@ def get_api_qualified_name_from_entity_id(entity_id: str):
     return ret
 
 
+def pre_tokenize(text: str) -> str:
+    '''
+    预先以CamelCase和下划线分隔来处理句子，返回分隔后的句子
+    '''
+    # text = ' '.join([token.lower() if token.isupper() else token for token in ])
+    ret = ''
+    for i in range(len(text)):
+        ch = text[i]
+        latterCh = text[i+1] if i < len(text) - 1 else ''
+        if ch.isupper() and latterCh.isalpha() and not latterCh.isupper():
+            ret += ' ' + ch
+        elif ch == '_' or ch == '-':
+            ret += ' '
+        else:
+            ret += ch
+    return ret.strip()
+
+
 def get_apidoc_wiki_embedding_model(doc_name = JAVADOC_GLOBAL_NAME):
     '''
     获取从api文档与wiki联合训练的embedding model

@@ -8,8 +8,7 @@ from elasticsearch import Elasticsearch
 from util.concept_map.common import get_latest_concept_map
 from util.config import JAVADOC_GLOBAL_NAME, Elasticsearch_host, Elasticsearch_port, API_ELASTIC_DOC_MAP_STORE_PATH
 from util.constant import NodeType, NodeAttributes
-from util.utils import get_api_name_from_entity_id, get_api_qualified_name_from_entity_id
-from util.apidoc_semantic.common import pre_tokenize
+from util.utils import get_api_name_from_entity_id, get_api_qualified_name_from_entity_id, pre_tokenize
 
 
 es = Elasticsearch(hosts=Elasticsearch_host, port=Elasticsearch_port)
