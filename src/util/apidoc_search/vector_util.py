@@ -2,7 +2,9 @@ import numpy as np
 from gensim import matutils
 from numpy import dot, array
 from ..config import APIDOC_WIKI_FASTTEXT_MODEL_STORE_PATH, JAVADOC_GLOBAL_NAME
-from gensim.models import FastText
+from gensim.utils import simple_preprocess
+from ..utils import get_html_text_except_code
+
 
 """
 The methods are copied from gensim.models.keyedvectors.Doc2VecKeyedVectors in gensim for compute the vector similarity
@@ -111,6 +113,14 @@ class VectorUtil:
             except KeyError:
                 continue
         return VectorUtil.get_weight_mean_vec(vector_list)
+
+    def get_doc2vec_vector(self, doc: str):
+        tokens = simple_preprocess(doc)
+        return self.model.infer_vector(tokens)
+
+    def get_html_doc2vec_vector(self, doc_html: str):
+        text = get_html_text_except_code(doc_html)
+        return self.get_doc2vec_vector(text)
 
     def get_word_similarity(self, word1, word2):
         return self.model.similarity(word1, word2)

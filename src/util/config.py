@@ -182,6 +182,11 @@ API_THREAD_ID_MAP_STORE_PATH = {
     JAVADOC_GLOBAL_NAME: f'{base_dir}/data/community_data/java/API-thread_id_map.json'
 }
 
+# 使用LAVENTHA对API对应的thread进行了重新排序
+API_THREAD_ID_RESORT_MAP_STORE_PATH = {
+    JAVADOC_GLOBAL_NAME: f'{base_dir}/data/community_data/java/API-thread_id_resort_map.json'
+}
+
 COMMUNITY_FREQUENCY_STORE_PATH = {
     JAVADOC_GLOBAL_NAME: f'{base_dir}/data/community_data/java/community_frequency.json'
 }
@@ -250,6 +255,10 @@ DOMAIN_WIKI_TERM_FASTTEXT_VECTOR_STORE_PATH = {
 
 NODE2VEC_RANDOM_WALK_STORE_PATH = {
     JAVADOC_GLOBAL_NAME: f'{base_dir}/data/apidoc_description/node2vec_random_walk.txt'
+}
+
+SO_DOC2VEC_MODEL_STORE_PATH = {
+    JAVADOC_GLOBAL_NAME: f'{base_dir}/model/java/so_doc2vec.model'
 }
 
 # MYSQL属性
