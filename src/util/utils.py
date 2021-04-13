@@ -1,3 +1,4 @@
+from os import lseek
 import numpy as np
 
 from gensim.models import FastText, Word2Vec
@@ -63,6 +64,7 @@ def get_api_name_from_entity_id(entity_id: str):
     ret = ret.replace('%5D', ']')
     return ret
 
+
 def get_api_qualified_name_from_entity_id(entity_id: str):
     '''
     生成比上面更正经的，可以和复旦的concept map匹配的api信息
@@ -84,6 +86,34 @@ def get_api_qualified_name_from_entity_id(entity_id: str):
     return ret
 
 
+def get_api_extreme_short_name_from_entity_id(entity_id: str):
+    '''
+    生成API的最短描述字符串，如方法名或类名、包名
+    ## 注意：可能有重名的情况发生
+    '''
+    ret = entity_id.replace('.html', '').replace('api/', '')
+    ret = ret.replace('%3C', '<')
+    ret = ret.replace('%3E', '>')
+    ret = ret.replace('%5B', '[')
+    ret = ret.replace('%5D', ']')
+    ret = ret.replace('&lt;', '<')
+    ret = ret.replace('&gt;', '>')
+    tokens = ret.split('/')
+    ret = tokens[-1]
+    sharp_index = ret.find('#')
+    if sharp_index != -1:
+        ret = ret[sharp_index + 1:]
+    # 删除method的参数列表，只留方法名
+    bracket_index = ret.find('<')
+    if bracket_index == -1:
+        bracket_index = ret.find('(')
+    if bracket_index == -1:
+        bracket_index = ret.find('[')
+    if bracket_index != -1:
+        ret = ret[:bracket_index]
+    return ret
+
+
 def pre_tokenize(text: str) -> str:
     '''
     预先以CamelCase和下划线分隔来处理句子，返回分隔后的句子
@@ -102,7 +132,7 @@ def pre_tokenize(text: str) -> str:
     return ret.strip()
 
 
-def get_apidoc_wiki_embedding_model(doc_name = JAVADOC_GLOBAL_NAME):
+def get_apidoc_wiki_embedding_model(doc_name=JAVADOC_GLOBAL_NAME):
     '''
     获取从api文档与wiki联合训练的embedding model
     ## 20210326
@@ -111,7 +141,7 @@ def get_apidoc_wiki_embedding_model(doc_name = JAVADOC_GLOBAL_NAME):
     return FastText.load(APIDOC_WIKI_FASTTEXT_MODEL_STORE_PATH[doc_name])
 
 
-def get_node2vec_model(doc_name = JAVADOC_GLOBAL_NAME):
+def get_node2vec_model(doc_name=JAVADOC_GLOBAL_NAME):
     '''
     获取文档图谱的node2vec model
     '''
