@@ -220,7 +220,7 @@ OPENKE_RELATION2ID_STORE_PATH = {
     JAVADOC_GLOBAL_NAME: f'{base_dir}/data/community_data/java/openke/relation2id.txt'
 }
 
-#专门为HOMURA提供服务的数据，存储每个社群中推荐先学习的API，基本就是一个重新排序的COMMUNITY_RECORD
+# 专门为HOMURA提供服务的数据，存储每个社群中推荐先学习的API，基本就是一个重新排序的COMMUNITY_RECORD
 HOMURA_COMMUNITY_API_RECOMMEND_STORE_PATH = {
     JAVADOC_GLOBAL_NAME: f'{base_dir}/data/community_data/java/homura_community_api_recommend.json'
 }
@@ -263,6 +263,10 @@ SO_DOC2VEC_MODEL_STORE_PATH = {
 
 EXP_COMMUNITY_FREQUENCY_THRESHOLDS = [
     5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+
+EXP_DEUS_X_MACHINA_EXP_CANDIDATE_THREADS_STORE_PATH = {
+    JAVADOC_GLOBAL_NAME: f'{base_dir}/data/exp/DXM_EXP_CANDIDATES.json'
+}
 
 # MYSQL属性
 Mysql_addr = "162.105.16.191"
