@@ -65,20 +65,19 @@ if __name__ == "__main__":
         "http://docs.oracle.com/javase/6/docs/api/java/net/http/package-summary.html"
     ))
     '''
-    '''
+
     es = Elasticsearch(hosts=Elasticsearch_host, port=Elasticsearch_port)
     query_body = {
         'query': {
             'match': {
-                'description': {
-                    'query': 'clear arraylist immediately'
+                'name': {
+                    'query': 'exists'
                 }
             }
         },
     }
     res = es.search(index=JAVADOC_GLOBAL_NAME, body=query_body)
     pprint(res)
-    '''
 
     '''
     x = [[1,2,3], [2,3,4]]
@@ -100,15 +99,15 @@ if __name__ == "__main__":
     print(vector_util.get_word_similarity('array', 'awt'))
     print(vector_util.get_word_similarity('matrix', 'image'))
     '''
+    '''
     service = ApiSearchService(JAVADOC_GLOBAL_NAME)
     print('initilalized!')
     pprint(service.search_by_concept('network security'))
-    '''
     pprint(service.search_literally('FIFO collection'))
     pprint(service.search_by_concept('network security'))
     pprint(service.search_by_concept('paint lines on whiteboard'))
     pprint(service.search_by_concept('unique item collection'))
     '''
-    
+
     # print(DBPosts().get_thread_info_by_ids("9395808,9396545"))
     # print(get_api_qualified_name_from_entity_id('api/jdk.security.auth/com/sun/security/auth/NTUserPrincipal.html#&lt;init&gt;(java.lang.String)'))
