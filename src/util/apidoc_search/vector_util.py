@@ -115,10 +115,16 @@ class VectorUtil:
         return VectorUtil.get_weight_mean_vec(vector_list)
 
     def get_doc2vec_vector(self, doc: str):
+        '''
+        从plain text中获取doc2vec
+        '''
         tokens = simple_preprocess(doc)
         return self.model.infer_vector(tokens)
 
     def get_html_doc2vec_vector(self, doc_html: str):
+        '''
+        从html中获取doc2vec
+        '''
         text = get_html_text_except_code(doc_html)
         return self.get_doc2vec_vector(text)
 

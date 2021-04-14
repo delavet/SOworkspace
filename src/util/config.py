@@ -261,6 +261,9 @@ SO_DOC2VEC_MODEL_STORE_PATH = {
     JAVADOC_GLOBAL_NAME: f'{base_dir}/model/java/so_doc2vec.model'
 }
 
+EXP_COMMUNITY_FREQUENCY_THRESHOLDS = [
+    5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+
 # MYSQL属性
 Mysql_addr = "162.105.16.191"
 Mysql_user = "root"
