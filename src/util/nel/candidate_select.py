@@ -1,9 +1,10 @@
-from util.constant import EdgeAttrbutes, EdgeType
+from util.constant import EdgeAttrbutes, EdgeType, NodeAttributes
 from util.utils import get_api_qualified_name_from_entity_id
 from .common import api_url_match, camel_case_split, longest_common_subsequence
 from ..concept_map.common import get_latest_concept_map
 from elasticsearch import Elasticsearch
 from util.config import Elasticsearch_host, Elasticsearch_port
+from util.constant import high_level_node_types
 
 import networkx as nx
 import re
@@ -239,3 +240,7 @@ def es_candidate_strict_selector(mention: str):
     res = es_search(search_term, 'name')
     for candidate in res:
         yield candidate
+
+
+def entity_is_high_level(entity):
+    return concept_map.nodes[entity].get(NodeAttributes.Ntype, '') in high_level_node_types

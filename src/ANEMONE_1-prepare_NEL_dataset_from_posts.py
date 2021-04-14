@@ -2,7 +2,7 @@ from networkx.classes import graphviews
 from util.config import SO_POSTS_STORE_PATH, ANEMONE_DATASET_STORE_PATH, JAVADOC_GLOBAL_NAME, ANEMONE_GENERAL_DATASET_FILE_NAME, APIDOC_API_URL_REGEX_PATTERN, TEMP_FILE_STORE_PATH, EUREKA_REFINED_LABEL_STORE_PATH
 from util.constant import SO_POST_STOP_WORDS
 from util.concept_map.common import get_latest_concept_map, get_relative_path_from_href
-from util.nel.candidate_select import es_candidate_strict_selector, get_gt_candidate, match_even_one_token, search_for_possible_ground_truth_entity, simple_candidate_selector, substring_candidate_selector, es_candidate_selector
+from util.nel.candidate_select import entity_is_high_level, es_candidate_strict_selector, get_gt_candidate, match_even_one_token, search_for_possible_ground_truth_entity, simple_candidate_selector, substring_candidate_selector, es_candidate_selector
 from bs4 import BeautifulSoup
 from util.utils import get_all_indexes
 from tqdm import tqdm
@@ -82,6 +82,8 @@ def _generate_nel_data(post_body: str, context_thread: dict, target_doc: str = J
             # 2021.3.5 改进为基于elasticsearch的candidate选择器
             # 2021.4.13 将elasticsearch的规则限制为极其严格
             for candidate in es_candidate_strict_selector(mention):
+                if entity_is_high_level(candidate):
+                    continue
                 candidates.add(candidate)
                 temp_counter += 1
                 if temp_counter > 8:  # 最多给8个反例吧，给一个反例目前来看训练出来没啥用处
