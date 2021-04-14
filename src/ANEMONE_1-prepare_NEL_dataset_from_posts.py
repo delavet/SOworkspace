@@ -4,7 +4,7 @@ from util.constant import SO_POST_STOP_WORDS
 from util.concept_map.common import get_latest_concept_map, get_relative_path_from_href
 from util.nel.candidate_select import entity_is_high_level, es_candidate_strict_selector, get_gt_candidate, match_even_one_token, search_for_possible_ground_truth_entity, simple_candidate_selector, substring_candidate_selector, es_candidate_selector
 from bs4 import BeautifulSoup
-from util.utils import get_all_indexes
+from util.utils import get_all_indexes, get_api_qualified_name_from_entity_id_without_parameter
 from tqdm import tqdm
 
 import os
@@ -79,12 +79,19 @@ def _generate_nel_data(post_body: str, context_thread: dict, target_doc: str = J
                     continue
             temp_counter = 0
             candidates = set([ground_truth_entity])
+            candidate_qualified_names = set(
+                [get_api_qualified_name_from_entity_id_without_parameter(ground_truth_entity)])
             # 2021.3.5 改进为基于elasticsearch的candidate选择器
             # 2021.4.13 将elasticsearch的规则限制为极其严格
             for candidate in es_candidate_strict_selector(mention):
                 if entity_is_high_level(candidate):
                     continue
                 candidates.add(candidate)
+                candidate_qualified_name = get_api_qualified_name_from_entity_id_without_parameter(
+                    candidate)
+                if candidate_qualified_name in candidate_qualified_names:
+                    continue  # 防止数据集中出现一个mention找到了数个重载函数的情况，这样会让模型很confuse
+                candidate_qualified_names.add(candidate_qualified_name)
                 temp_counter += 1
                 if temp_counter > 8:  # 最多给8个反例吧，给一个反例目前来看训练出来没啥用处
                     break
