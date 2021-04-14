@@ -1,3 +1,5 @@
+from util.constant import EdgeAttrbutes, EdgeType
+from util.utils import get_api_qualified_name_from_entity_id
 from .common import api_url_match, camel_case_split, longest_common_subsequence
 from ..concept_map.common import get_latest_concept_map
 from elasticsearch import Elasticsearch
@@ -131,6 +133,29 @@ def tokenize(text: str):
             cur_token = cur_token + cur_ch
             cur_index += 1
     return [token for token in raw_tokens if token != '' and ' ' not in token]
+
+
+def match_even_one_token(mention: str, entity_name: str):
+    '''
+    判断mention中是不是至少有一个token是和实体名对应的
+    因为原始数据中出现了一些写着用什么method但是引用却是类的引用的情况，所以用这个使得数据集更加整齐一些
+    '''
+    tokens = [t.lower() for t in tokenize(mention)]
+    name = get_api_qualified_name_from_entity_id(entity_name).lower()
+    return any([t for t in tokens if t in name])
+
+
+def search_for_possible_ground_truth_entity(mention: str, orignal_ground_truth_entity: str):
+    '''
+    一开始抽取出的NEL ground_truth可能不靠谱
+    可能有链接是类但是mention是类中方法的情况
+    所以如果grount truth匹配失败就试着上他的成员里寻找新的ground truth
+    '''
+    succes = list(concept_map.adj[orignal_ground_truth_entity])
+    for entity in succes:
+        if concept_map[orignal_ground_truth_entity][entity][EdgeAttrbutes.Etype] == EdgeType.INCLUDE and match_even_one_token(mention, entity):
+            return entity
+    return None
 
 
 def es_search(term: str, search_attr: str, fuzziness=None):

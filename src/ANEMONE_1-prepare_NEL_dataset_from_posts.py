@@ -2,7 +2,7 @@ from networkx.classes import graphviews
 from util.config import SO_POSTS_STORE_PATH, ANEMONE_DATASET_STORE_PATH, JAVADOC_GLOBAL_NAME, ANEMONE_GENERAL_DATASET_FILE_NAME, APIDOC_API_URL_REGEX_PATTERN, TEMP_FILE_STORE_PATH, EUREKA_REFINED_LABEL_STORE_PATH
 from util.constant import SO_POST_STOP_WORDS
 from util.concept_map.common import get_latest_concept_map, get_relative_path_from_href
-from util.nel.candidate_select import es_candidate_strict_selector, get_gt_candidate, simple_candidate_selector, substring_candidate_selector, es_candidate_selector
+from util.nel.candidate_select import es_candidate_strict_selector, get_gt_candidate, match_even_one_token, search_for_possible_ground_truth_entity, simple_candidate_selector, substring_candidate_selector, es_candidate_selector
 from bs4 import BeautifulSoup
 from util.utils import get_all_indexes
 from tqdm import tqdm
@@ -69,6 +69,14 @@ def _generate_nel_data(post_body: str, context_thread: dict, target_doc: str = J
             # 没找到ground truth则不构建他的数据了
             if ground_truth_entity is None:
                 continue
+            # 2021.4.14 发现部分的ground truth引用那mention说的是method但是引用却是类，这种ground truth，在检测其所有成员也匹配不上mention的字面量后就废弃
+            if not match_even_one_token(mention, ground_truth_entity):
+                potential_ground_truth = search_for_possible_ground_truth_entity(
+                    mention, ground_truth_entity)
+                if potential_ground_truth is not None:
+                    ground_truth_entity = potential_ground_truth
+                else:
+                    continue
             temp_counter = 0
             candidates = set([ground_truth_entity])
             # 2021.3.5 改进为基于elasticsearch的candidate选择器
@@ -136,6 +144,7 @@ def generate_nel_general_dataset_for_javadoc():
             dataset.extend(partial_general_dataset)
             with open(os.path.join(TEMP_FILE_STORE_PATH, f'general_nel_dataset_from_post_0_to_{filename}.json'), 'w', encoding='utf-8') as wf_temp:
                 json.dump(dataset, wf_temp, ensure_ascii=False, indent=2)
+        print(f'finally generate dataset of items {len(dataset)}')
         json.dump(dataset, wf, ensure_ascii=False, indent=2)
 
 
