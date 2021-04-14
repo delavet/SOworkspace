@@ -2,7 +2,7 @@ from networkx.classes import graphviews
 from util.config import SO_POSTS_STORE_PATH, ANEMONE_DATASET_STORE_PATH, JAVADOC_GLOBAL_NAME, ANEMONE_GENERAL_DATASET_FILE_NAME, APIDOC_API_URL_REGEX_PATTERN, TEMP_FILE_STORE_PATH, EUREKA_REFINED_LABEL_STORE_PATH
 from util.constant import SO_POST_STOP_WORDS
 from util.concept_map.common import get_latest_concept_map, get_relative_path_from_href
-from util.nel.candidate_select import get_gt_candidate, simple_candidate_selector, substring_candidate_selector, es_candidate_selector
+from util.nel.candidate_select import es_candidate_strict_selector, get_gt_candidate, simple_candidate_selector, substring_candidate_selector, es_candidate_selector
 from bs4 import BeautifulSoup
 from util.utils import get_all_indexes
 from tqdm import tqdm
@@ -72,11 +72,14 @@ def _generate_nel_data(post_body: str, context_thread: dict, target_doc: str = J
             temp_counter = 0
             candidates = set([ground_truth_entity])
             # 2021.3.5 改进为基于elasticsearch的candidate选择器
-            for candidate in es_candidate_selector(mention):
+            # 2021.4.13 将elasticsearch的规则限制为极其严格
+            for candidate in es_candidate_strict_selector(mention):
                 candidates.add(candidate)
                 temp_counter += 1
                 if temp_counter > 8:  # 最多给8个反例吧，给一个反例目前来看训练出来没啥用处
                     break
+            if len(candidates) <= 1:
+                continue  # 2021.4.14 把只有一个候选的乐色数据筛掉不加入训练集，看看训练集还剩多少
             for candidate_entity in candidates:
                 ret.append(
                     {
@@ -108,8 +111,8 @@ def transfer_posts2general_dataset(post_file_path: str, target_doc: str = JAVADO
     ret = []
     with open(post_file_path, 'rb') as rbf:
         print(f'processing {post_file_path}')
-        threads = pickle.load(rbf)
-        for i, thread in tqdm(enumerate(threads)):
+        threads = list(pickle.load(rbf))
+        for thread in tqdm(threads):
             question = thread['Body']
             answers = [item['Body'] for item in thread['Answers']]
             ret.extend(_generate_nel_data(question, thread, target_doc))

@@ -133,7 +133,7 @@ def tokenize(text: str):
     return [token for token in raw_tokens if token != '' and ' ' not in token]
 
 
-def es_search(term: str, search_attr: str, fuzziness = None):
+def es_search(term: str, search_attr: str, fuzziness=None):
     global es
     query_obj = {
         'query': term
@@ -201,3 +201,16 @@ def es_candidate_selector(mention: str):
     for candidate in res:
         yield candidate
     return res
+
+
+def es_candidate_strict_selector(mention: str):
+    '''
+    基于elastic search严格匹配的候选实体查找器
+    ## 2021.4.14只在API的名字中做candidate的搜索，而且此时使用的elasticsearch是由ZAMPATHA 1.1生成的，API名是非常短的，只包含必要信息
+    '''
+    mention_tokens = tokenize(mention)
+    search_term = ' '.join(mention_tokens).lower()
+
+    res = es_search(search_term, 'name')
+    for candidate in res:
+        yield candidate
