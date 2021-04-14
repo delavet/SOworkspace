@@ -39,10 +39,15 @@ def resort_api_thread_id_map(doc_name=JAVADOC_GLOBAL_NAME):
             new_thread_ids.append(thread['Id'])
             title = thread['Title']
             thread_doc = title + ' '
+            question = get_html_text_except_code(thread['Body'])
+            thread_doc += question
+            '''
+            # 20210401:这里之前用第一个回答计算thread doc，之后改成问题的doc试一试
             answers = thread['Answers']
             if len(answers) > 0:
                 first_ans_doc = get_html_text_except_code(answers[0]['Body'])
                 thread_doc += first_ans_doc
+            '''
             thread_vec = vector_tool.get_doc2vec_vector(thread_doc)
             thread_vecs.append(thread_vec)
         similarities = VectorUtil.cosine_similarities(np.array(desc_vec), np.array(thread_vecs))
