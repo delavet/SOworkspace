@@ -65,7 +65,7 @@ def _generate_nel_data(post_body: str, context_thread: dict, target_doc: str = J
             if mention not in nel_gt_entities:
                 continue  # 2021.3.5 如果不在标注过的实体mention中就跳过，有点激进不知道数据量会不会太小，如果不行再改回去
             ground_truth_url = a.get('href')
-            ground_truth_entity = get_gt_candidate(mention, ground_truth_url)
+            ground_truth_entity = get_gt_candidate(ground_truth_url)
             # 没找到ground truth则不构建他的数据了
             if ground_truth_entity is None:
                 continue
