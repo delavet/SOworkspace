@@ -16,6 +16,9 @@ if os.path.exists('C:/workspace/SOworkspace'):
 elif os.path.exists('/media/dell/disk/yinh/SOworkspace'):
     base_dir = '/media/dell/disk/yinh/SOworkspace'
     CURRENT_PLATFORM = UBUNTU
+elif os.path.exists('/root/SOworkspace'):
+    base_dir = '/root/SOworkspace' #部署环境
+    CURRENT_PLATFORM = UBUNTU
 elif os.path.exists('/User/yinhang/workspace/SOworkspace'):
     base_dir = '/User/yinhang/workspace/SOworkspace'
     CURRENT_PLATFORM = MAC
