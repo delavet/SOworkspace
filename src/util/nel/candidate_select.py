@@ -133,6 +133,8 @@ def tokenize(text: str):
         else:
             cur_token = cur_token + cur_ch
             cur_index += 1
+    if len(cur_token) > 0:
+        raw_tokens.append(cur_token)
     return [token for token in raw_tokens if token != '' and ' ' not in token]
 
 
