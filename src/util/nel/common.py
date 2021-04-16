@@ -61,7 +61,9 @@ def longest_common_subsequence(A: str, B: str) -> int:
         for j in range(1, n + 1):
             if A[i - 1] == B[j - 1]:
                 dp[i][j] = dp[i - 1][j - 1] + 1
-                ans = max(ans, dp[i][j])
+            else:
+                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
+            ans = max(ans, dp[i][j])
     return ans
 
 
