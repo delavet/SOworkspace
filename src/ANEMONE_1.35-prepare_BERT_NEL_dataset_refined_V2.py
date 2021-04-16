@@ -13,8 +13,15 @@ import random
 import nltk
 import os
 
+'''
+# 2021.4.14
+为新的ANEMONE准备数据集，主要做出以下改变
+1. 将context的sentence和prefix分开输入模型，模型自己可以决定利不利用prefix的信息
+2. entity的description不加入api的名字作为前缀，因为打算只做一个语境匹配模型
+'''
 
-CASE_THRESHOLD = 5
+
+CASE_THRESHOLD = 3
 MAX_LENGTH = 128
 
 concept_map = get_latest_concept_map()
@@ -89,8 +96,8 @@ def __process_post(context_thread: dict, post_html: str, mention: str, entity: s
         if sentence == '':
             return None
         # sentence = prefix + ' ' + sentence
-        entity_desc = get_api_name_from_entity_id(
-            entity) + ' description: ' + description_attributes[entity]
+        # entity_desc = get_api_name_from_entity_id(entity) + ' description: ' + description_attributes[entity] # 原先的entity description是带api名字前缀的，后来决定用API名匹配+语境匹配的方式，ANEMONE只实现语境匹配，所以不加这个信息了
+        entity_desc = description_attributes[entity]
         thread_id = context_thread['Id']
         ret = {
             'prefix': prefix,
