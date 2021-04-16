@@ -2,7 +2,7 @@ import json
 import networkx as nx
 
 from util.constant import *
-from util.config import LATEST_CONCEPT_MAP_PATH, LATEST_COMMUNITY_MAP_PATH, MENIA_WHOLE_PREDICTION_STORE_PATH, JAVADOC_GLOBAL_NAME, COMMUNITY_FREQUENCY_STORE_PATH, API_THREAD_ID_MAP_STORE_PATH
+from util.config import LATEST_CONCEPT_MAP_PATH, LATEST_COMMUNITY_MAP_PATH, MENIA_CLASS_LEVEL_PREDICTION_STORE_PATH, MENIA_WHOLE_PREDICTION_STORE_PATH, JAVADOC_GLOBAL_NAME, COMMUNITY_FREQUENCY_STORE_PATH, API_THREAD_ID_MAP_STORE_PATH
 '''
 MENIA：基于社区内API之间关系的API post学习推荐算法
 
@@ -11,6 +11,8 @@ MENIA-1
 '''
 
 COMMUNITY_THRESHOLD = 5  # 决定两API共现超过多少次就算紧密关系的
+MODE = 'class'
+USE_MENIA_PREDICTION_PATH = MENIA_CLASS_LEVEL_PREDICTION_STORE_PATH if MODE == 'class' else MENIA_WHOLE_PREDICTION_STORE_PATH # 是使用转化后的只有类的api链接纪录还是使用原始的api链接纪录
 
 
 def copy_node(community_map: nx.Graph, concept_map: nx.MultiDiGraph, node: str):
@@ -35,7 +37,7 @@ def add_community_rel_heuristic_1(doc_name: str):
     生成的COOCCUR的关系同时也被加入到concept map中，此时边的方向是社区频率高的指向低的api
     '''
     global COMMUNITY_THRESHOLD
-    with open(MENIA_WHOLE_PREDICTION_STORE_PATH[doc_name], 'r', encoding='utf-8') as rf:
+    with open(USE_MENIA_PREDICTION_PATH[doc_name], 'r', encoding='utf-8') as rf:
         EZA_predictions = dict(json.load(rf))
     concept_map = nx.MultiDiGraph(
         nx.read_gexf(LATEST_CONCEPT_MAP_PATH[doc_name]))

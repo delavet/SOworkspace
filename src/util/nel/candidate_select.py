@@ -65,11 +65,11 @@ splitters = set(
     ])
 
 
-def get_gt_candidate(mention: str, ground_truth_url: str):
+def get_gt_candidate(ground_truth_url: str):
     '''
     根据SO帖子中天然的ground-truth，搜索图得到对应的链接实体
     ## parameter
-    `mention` : 帖子中对API的提及文本
+    
     `ground_truth_url` : mention对应的超链接url
     '''
     global api_entities

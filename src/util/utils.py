@@ -106,11 +106,13 @@ def get_api_qualified_name_from_entity_id_without_parameter(entity_id: str):
     ret = '.'.join(tokens)
     ret = ret.replace('#', '.')
     # 删除method的参数列表，只留方法名
-    bracket_index = ret.find('<')
-    if bracket_index == -1:
-        bracket_index = ret.find('(')
-    if bracket_index == -1:
-        bracket_index = ret.find('[')
+    bracket_index_1 = ret.find('<')
+    bracket_index_2 = ret.find('(')
+    bracket_index_3 = ret.find('[')
+    l = [i for i in [bracket_index_1, bracket_index_2, bracket_index_3] if i != -1]
+    if len(l) == 0:
+        l.append(-1)
+    bracket_index = min(l)
     if bracket_index != -1:
         ret = ret[:bracket_index]
     return ret

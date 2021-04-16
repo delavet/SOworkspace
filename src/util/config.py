@@ -177,7 +177,11 @@ API_ELASTIC_DOC_MAP_STORE_PATH = {
 # EZA PIPELINE的预测结果存储路径，用这个来分析社区关系
 MENIA_WHOLE_PREDICTION_STORE_PATH = {
     # 只有windows和ubuntu平台的机器上保留了这个预测数据，每次ubuntu机器预测完成后要记得手动同步数据 windows上来
-    JAVADOC_GLOBAL_NAME: '/media/dell/disk/yinh/torch/ANEMONE/whole_simple_prediction/filterd_predictions.json' if CURRENT_PLATFORM == UBUNTU else 'C:/workspace/SOworkspace/data/server_data/ANEMONE_prediction/filterd_predictions.json'
+    JAVADOC_GLOBAL_NAME: '/media/dell/disk/yinh/torch/ANEMONE/whole_simple_prediction_sync/all_predictions.json' if CURRENT_PLATFORM == UBUNTU else 'C:/workspace/SOworkspace/data/server_data/ANEMONE_prediction/all_predictions_sync.json'
+}
+
+MENIA_CLASS_LEVEL_PREDICTION_STORE_PATH = {
+    JAVADOC_GLOBAL_NAME: '/media/dell/disk/yinh/torch/ANEMONE/whole_simple_prediction_sync/class_predictions.json' if CURRENT_PLATFORM == UBUNTU else 'C:/workspace/SOworkspace/data/server_data/ANEMONE_prediction/class_predictions_sync.json'
 }
 
 # 上边的预测数据是thread和API的字典，这个文件则是反过来的API和thread对应的字典，为了给HOMURA提供服务
