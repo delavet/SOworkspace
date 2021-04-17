@@ -5,14 +5,18 @@
     </template>
     <n-h4>Related API</n-h4>
     <n-text code v-for="api in apis" :key="api" style="white-space: normal; word-break: break-all; margin-bottom: 6px;">{{ api }}</n-text>
-    <n-h4>Popular Thread</n-h4>
+    <n-h4>Tags</n-h4>
+    <n-space v-for="tag in tags" :key="tag">
+      <n-tag type="info">{{tag}}</n-tag>
+    </n-space>
+    <n-h4>Popular Discussion</n-h4>
     {{ threadTitle }}
   </n-card>
 </template>
 
 <script>
 import { defineComponent } from 'vue'
-import { NCard, NH4, NText } from 'naive-ui'
+import { NCard, NH4, NText, NSpace, NTag } from 'naive-ui'
 import { mapMutations } from 'vuex'
 
 export default defineComponent({
@@ -20,12 +24,15 @@ export default defineComponent({
   components: {
     NCard,
     NH4,
-    NText
+    NText,
+    NSpace,
+    NTag
   },
   props: {
     id: String,
     apis: Array,
-    threadTitle: String
+    threadTitle: String,
+    tags: Array
   },
   methods: {
     handleClick () {

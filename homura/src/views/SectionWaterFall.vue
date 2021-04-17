@@ -120,7 +120,8 @@ export default defineComponent({
         const app = createApp(SectionCard, {
           id: data.section_id,
           apis: data.apis,
-          threadTitle: data.thread_info.Title
+          threadTitle: data.thread_info.Title,
+          tags: data.tags
         }).use(store).use(router)
         const appHost = document.createElement('div')
         this.$refs[`piping${min}`].appendChild(appHost)

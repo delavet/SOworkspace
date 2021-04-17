@@ -89,14 +89,26 @@ export default defineComponent({
   methods: {
     async loadThread () {
       loadingMessage = this.messageBox.loading('loading thread info', { duration: 5000 })
-      const paramObj = {
-        apiId: this.current_api,
-        page: this.page - 1,
-        limit: 20
+      debugger
+      let res = {}
+      console.log(this.show_detail_mode)
+      if (this.show_detail_mode) {
+        const paramObj = {
+          apiId: this.current_api,
+          page: this.page - 1,
+          limit: 20
+        }
+        res = await this.$http.get(this.loadUrl, {
+          params: paramObj
+        })
+      } else {
+        const paramObj = {
+          threads: this.current_threads,
+          page: this.page - 1,
+          limit: 20
+        }
+        res = await this.$http.post(this.acquireUril, paramObj)
       }
-      const res = await this.$http.get(this.loadUrl, {
-        params: paramObj
-      })
       const datas = res.data.data
       this.items = datas
       if (loadingMessage) {
@@ -133,13 +145,18 @@ export default defineComponent({
     loadUrl () {
       return '/getThreadInfo/' + this.docName
     },
+    acquireUril () {
+      return '/acquireThreadInfos/' + this.docName
+    },
     loadHtmlUrl () {
       return '/getThreadHtml/' + this.docName
     },
     ...mapState({
       current_api: 'current_show_detail_node',
       docName: 'doc_name',
-      apiName: 'current_show_detail_api_name'
+      apiName: 'current_show_detail_api_name',
+      show_detail_mode: 'show_current_detail_node',
+      current_threads: 'current_show_detail_threads'
     })
   }
 })

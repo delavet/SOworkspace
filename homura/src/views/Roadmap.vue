@@ -328,8 +328,30 @@ Use the Help Icon Button on the left side to get more information:)`,
       const width = document.getElementById('roadmap-root-container').scrollWidth
       const height = document.getElementById('roadmap-root-container').scrollHeight
       // eslint-disable-next-line new-cap
+
+      const that = this
       const grid = new G6.Grid({
         img: 'PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDEwIEwgNDAgMTAgTSAxMCAwIEwgMTAgNDAgTSAwIDIwIEwgNDAgMjAgTSAyMCAwIEwgMjAgNDAgTSAwIDMwIEwgNDAgMzAgTSAzMCAwIEwgMzAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2UwZTBlMCIgb3BhY2l0eT0iMC4yIiBzdHJva2Utd2lkdGg9IjEiLz48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZTBlMGUwIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4='
+      })
+      const contextMenu = new G6.Menu({
+        getContent (evt) {
+          return `
+          <h3>view related SO threads</h3>`
+        },
+        handleMenuClick: (target, item) => {
+          const threads = item._cfg.model.relatedThreads
+          that.set_current_show_detail_threads(threads)
+          that.set_show_detail_mode(false)
+          that.$router.push('/detail')
+        },
+        // offsetX and offsetY include the padding of the parent container
+        // 需要加上父级容器的 padding-left 16 与自身偏移量 10
+        offsetX: 16 + 10,
+        // 需要加上父级容器的 padding-top 24 、画布兄弟元素高度、与自身偏移量 10
+        offsetY: 0,
+        // the types of items that allow the menu show up
+        // 在哪些类型的元素上响应
+        itemTypes: ['edge']
       })
       const graph = new G6.Graph({
         container: 'roadmap-container',
@@ -337,7 +359,7 @@ Use the Help Icon Button on the left side to get more information:)`,
         width: width,
         height: height,
         linkCenter: false,
-        plugins: [grid],
+        plugins: [grid, contextMenu],
         animate: true,
         modes: {
           default: [
@@ -403,7 +425,7 @@ Use the Help Icon Button on the left side to get more information:)`,
         const { item } = evt
         graph.setItemState(item, 'hover', false)
       })
-      const that = this
+
       graph.on('nodeselectchange', (evt) => {
         // console.log('nodeselectchange!')
         if (evt.select) {
@@ -427,6 +449,7 @@ Use the Help Icon Button on the left side to get more information:)`,
       this.set_current_submap(graph)
     },
     showThreads () {
+      this.set_show_detail_mode(true)
       this.$router.push('/detail')
     },
     onCommunityBtnClick () {
@@ -462,7 +485,9 @@ Use the Help Icon Button on the left side to get more information:)`,
       set_current_center_node: 'set_current_center_node',
       set_show_detail_node: 'set_show_detail_node',
       switch_map_show_mode: 'switch_map_show_mode',
-      set_map_show_mode: 'set_map_show_mode'
+      set_map_show_mode: 'set_map_show_mode',
+      set_show_detail_mode: 'set_show_current_detail_mode',
+      set_current_show_detail_threads: 'set_current_show_detail_threads'
     })
   },
   computed: {
