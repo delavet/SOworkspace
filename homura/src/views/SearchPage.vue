@@ -1,6 +1,6 @@
 <template>
   <div class="search-home">
-    <n-layout>
+    <n-layout style="{background-color:rgba(0,0,0,0)}">
       <n-layout-header>
         <div id="search-space">
           <n-auto-complete

@@ -15,6 +15,7 @@ export default createStore({
       edges: []
     },
     current_show_detail_node: '', // 当前重点展示的结点，是被选中的结点，一开始就是center node，后面随着用户选择会变
+    current_show_detail_api_name: '...',
     current_map_center_node: '', // 整个submap的中心节点，除非图换了不然一直都是那一个结点
     current_map_center_node_item: undefined,
     current_show_detail_node_item: undefined,
@@ -37,6 +38,9 @@ export default createStore({
     },
     set_show_detail_node: (state, payload) => {
       state.current_show_detail_node = payload
+    },
+    set_show_detail_api_name: (state, payload) => {
+      state.current_show_detail_api_name = payload
     },
     switch_map_show_mode: (state) => {
       state.show_community_map = !state.show_community_map
