@@ -6,7 +6,7 @@ import networkx as nx
 from util.constant import *
 
 from .utils import get_api_name_from_entity_id
-from .config import HOMURA_COMMUNITY_API_RECOMMEND_STORE_PATH, COMMUNITY_RECOMMEND_ENTRY_THREADS_STORE_PATH, API_THREAD_ID_MAP_STORE_PATH, APIDOC_DESCRIPTION_STORE_PATH
+from .config import HOMURA_COMMUNITY_API_RECOMMEND_STORE_PATH, COMMUNITY_RECOMMEND_ENTRY_THREADS_STORE_PATH, API_THREAD_ID_MAP_STORE_PATH, APIDOC_DESCRIPTION_STORE_PATH, HOMURA_COMMUNITY_TAGS_RECOMMEND_STORE_PATH
 from .concept_map.common import get_latest_concept_map, get_latest_community_map
 # from .mysql_access.posts import DBPosts
 from .community_info.so_thread_info_center import ThreadInfoCenter
@@ -20,6 +20,8 @@ class HOMURAservice:
         with open(HOMURA_COMMUNITY_API_RECOMMEND_STORE_PATH[doc_name], 'r', encoding='utf-8') as rf:
             self.community_api_recommend = json.load(rf)
             self.community_ids = list(self.community_api_recommend.keys())
+        with open(HOMURA_COMMUNITY_TAGS_RECOMMEND_STORE_PATH[doc_name], 'r', encoding='utf-8') as rf1:
+            self.community_tags_recommend = json.load(rf1)
         with open(COMMUNITY_RECOMMEND_ENTRY_THREADS_STORE_PATH[doc_name], 'r', encoding='utf-8') as rf2:
             self.community_thread_id_recommend = json.load(rf2)
         with open(API_THREAD_ID_MAP_STORE_PATH[doc_name], 'r', encoding='utf-8') as rf3:
@@ -35,9 +37,7 @@ class HOMURAservice:
             self.id2APIname[str(i)] = node  # 因为URL问题不得不把node name转换成数字id
             self.APIname2id[node] = str(i)
             i += 1
-        
-        
-    
+
     def get_community_recommend_info(self, community_id):
         '''
         获取一个社群的概要推荐信息
@@ -45,18 +45,20 @@ class HOMURAservice:
         '''
         community_id = str(community_id)
         recommended_apis = self.community_api_recommend.get(community_id, [])
+        recommended_tags = self.community_tags_recommend.get(community_id, [])
         if len(recommended_apis) > self.api_recommend_constraint:
             recommended_apis = recommended_apis[:self.api_recommend_constraint]
-        recommended_thread = self.community_thread_id_recommend.get(community_id, {"Id": 0, "Title": "", "Tags": ""})
+        recommended_thread = self.community_thread_id_recommend.get(
+            community_id, {"Id": 0, "Title": "", "Tags": ""})
         ret = {
             "section_id": community_id,
             "apis": [get_api_name_from_entity_id(api) for api in recommended_apis],
-            "thread_info": recommended_thread
+            "thread_info": recommended_thread,
+            "tags": recommended_tags
         }
         return ret
 
-    
-    def get_community_submap_by_api(self, api_id, section_id = None):
+    def get_community_submap_by_api(self, api_id, section_id=None):
         '''
         根据API名返回需要渲染的COMMUNITY MAP的子图
         '''
@@ -70,13 +72,14 @@ class HOMURAservice:
             self.community_map, api_name, depth_limit=4))
         if section_id is not None:
             section_apis = self.community_api_recommend.get(section_id, [])
-            submap_nodes = [node for node in submap_nodes if node in section_apis]
+            submap_nodes = [
+                node for node in submap_nodes if node in section_apis]
         subgraph = nx.subgraph(self.community_map, submap_nodes)
         nodes = []
         edges = []
         for node in subgraph.nodes:
             node_data = {
-                'id': self.APIname2id[node], 
+                'id': self.APIname2id[node],
                 'label': subgraph.nodes[node][NodeAttributes.NAME],
                 'apiName': node,
                 'apiShortName': get_api_name_from_entity_id(node),
@@ -173,7 +176,7 @@ class HOMURAservice:
                 }
                 nodes.append(node_data)
             for source, target in subgraph.edges():
-                if f'{source}_{target}' in edge_hash or source not in node_hash  or target not in node_hash:
+                if f'{source}_{target}' in edge_hash or source not in node_hash or target not in node_hash:
                     continue
                 edge_hash.add(f'{source}_{target}')
                 edge_data = {
@@ -189,7 +192,6 @@ class HOMURAservice:
             'nodes': nodes,
             'edges': edges
         }
-                     
 
     def get_api_description_html(self, api_id):
         '''
@@ -227,12 +229,13 @@ class HOMURAservice:
         id_batch = thread_ids[start: end]
         ret = self.thread_info_center.batch_get_thread_concise_info(id_batch)
         return ret
-    
+
     def get_thread_html(self, thread_id):
         '''
         获取一个thread的原始html和title
         '''
-        thread_detail_info = self.thread_info_center.get_thread_detail_info(thread_id)
+        thread_detail_info = self.thread_info_center.get_thread_detail_info(
+            thread_id)
         answers = thread_detail_info['Answers']
         bodys = [thread_detail_info['Body']]
         bodys.extend([answer['Body'] for answer in answers])
