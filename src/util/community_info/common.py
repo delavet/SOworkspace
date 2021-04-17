@@ -29,16 +29,19 @@ def extend_thread2api_detection_result_with_ground_truth(doc_name: str):
             links = thread.get("Links", [])
             apidoc_links = [link for link in links if re.search(
                 APIDOC_API_URL_REGEX_PATTERN[JAVADOC_GLOBAL_NAME], str(link)) is not None]
-            if len(apidoc_links) == 0:
-                continue
-            thread_id = thread["Id"]
-            if thread_id not in all_predictions.keys():
-                all_predictions[thread_id] = {}
+            api_map = {}
             for apidoc_link in apidoc_links:
                 api = get_gt_candidate(apidoc_link)
                 if api is None:
                     continue
-                if apidoc_link in all_predictions[thread_id].values():
+                api_map[apidoc_link] = api
+            if len(api_map) == 0:
+                continue
+            thread_id = str(thread["Id"])
+            if thread_id not in all_predictions.keys():
+                all_predictions[thread_id] = {}
+            for apidoc_link, api in api_map.items():
+                if api in all_predictions[thread_id].values():
                     continue
                 all_predictions[thread_id][apidoc_link] = api
     with open(MENIA_WHOLE_PREDICTION_STORE_PATH[doc_name], 'w', encoding='utf-8') as wf:
