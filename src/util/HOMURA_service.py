@@ -230,6 +230,18 @@ class HOMURAservice:
         ret = self.thread_info_center.batch_get_thread_concise_info(id_batch)
         return ret
 
+    def get_thread_infos_by_thread_ids_local(self, thread_ids, page, limit):
+        '''
+        用本地文件拿数据，在服务器太拉胯的时候用
+        '''
+        start = page * limit
+        if start >= len(thread_ids):
+            return []
+        end = min(len(thread_ids) - 1, (page + 1) * limit)
+        id_batch = thread_ids[start: end]
+        ret = self.thread_info_center.batch_get_thread_concise_info(id_batch)
+        return ret
+
     def get_thread_html(self, thread_id):
         '''
         获取一个thread的原始html和title

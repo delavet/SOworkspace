@@ -44,7 +44,7 @@ LATEST_CONCEPT_MAP_PATH = {
 
 # API概念之间只包含社区共现关系的map，称为community map
 LATEST_COMMUNITY_MAP_PATH = {
-    JAVADOC_GLOBAL_NAME: f'{base_dir}/data/community_data/java/community_map_javadoc20210312.gexf'
+    JAVADOC_GLOBAL_NAME: f'{base_dir}/data/community_data/java/community_map_javadoc20210417.gexf'
 }
 
 # 带有domain term和wiki term拓展实体的concept map

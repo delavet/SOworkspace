@@ -3,6 +3,7 @@ import networkx as nx
 
 from util.constant import *
 from util.config import LATEST_CONCEPT_MAP_PATH, LATEST_COMMUNITY_MAP_PATH, MENIA_CLASS_LEVEL_PREDICTION_STORE_PATH, MENIA_WHOLE_PREDICTION_STORE_PATH, JAVADOC_GLOBAL_NAME, COMMUNITY_FREQUENCY_STORE_PATH, API_THREAD_ID_MAP_STORE_PATH
+from util.utils import get_api_extreme_short_name_from_entity_id
 '''
 MENIA：基于社区内API之间关系的API post学习推荐算法
 
@@ -10,8 +11,8 @@ MENIA-1
 根据EZA-pipeline的最终预测结果，为concept map添加社区之间的关系
 '''
 
-COMMUNITY_THRESHOLD = 5  # 决定两API共现超过多少次就算紧密关系的
-MODE = 'class'
+COMMUNITY_THRESHOLD = 90  # 决定两API共现超过多少次就算紧密关系的
+MODE = 'whole'
 USE_MENIA_PREDICTION_PATH = MENIA_CLASS_LEVEL_PREDICTION_STORE_PATH if MODE == 'class' else MENIA_WHOLE_PREDICTION_STORE_PATH # 是使用转化后的只有类的api链接纪录还是使用原始的api链接纪录
 
 
@@ -73,7 +74,8 @@ def add_community_rel_heuristic_1(doc_name: str):
         copy_node(community_map, concept_map, cooccur_api)
     for cooccur_api1 in cooccur_map.keys():
         for cooccur_api2 in cooccur_map[cooccur_api1]:
-            if cooccur_api2 in community_map.adj[cooccur_api1].keys() or cooccur_api2 == cooccur_api1:
+            # 也排除了两个短名相同的API共同出现的情况，最大限度防止ANEMONE预测失误的干扰
+            if cooccur_api2 in community_map.adj[cooccur_api1].keys() or get_api_extreme_short_name_from_entity_id(cooccur_api1) == get_api_extreme_short_name_from_entity_id(cooccur_api2):
                 continue
             cooccur_freq = cooccur_map[cooccur_api1][cooccur_api2]
             if cooccur_freq > COMMUNITY_THRESHOLD:
@@ -81,11 +83,12 @@ def add_community_rel_heuristic_1(doc_name: str):
                 community_map.add_edge(cooccur_api1, cooccur_api2)
                 community_map[cooccur_api1][cooccur_api2][EdgeAttrbutes.Etype] = EdgeType.COOCCUR
                 community_map[cooccur_api1][cooccur_api2][EdgeAttrbutes.COOCCUR_FREQUENCY] = cooccur_freq
-                cooccur_threads = [] # 把两个API共同出现过的thread id加入到COMMUNITY MAP图谱中去
-                for thread_id in api_thread_id_map[cooccur_api1]:
-                    if thread_id in api_thread_id_map[cooccur_api2]:
-                        cooccur_threads.append(thread_id)
-                community_map[cooccur_api1][cooccur_api2][EdgeAttrbutes.COOCCUR_THREADS] = ','.join(cooccur_threads)
+                thread_ids1 = set(api_thread_id_map[cooccur_api1])
+                thread_ids2 = set(api_thread_id_map[cooccur_api2])
+                # 把两个API共同出现过的thread id加入到COMMUNITY MAP图谱中去
+                cooccur_threads = list(thread_ids1 & thread_ids2)
+                community_map[cooccur_api1][cooccur_api2][EdgeAttrbutes.COOCCUR_THREADS] = ','.join(
+                    cooccur_threads)
 
                 # 向concept map添加信息（虽然目前不保存加入community信息的concept map:20210319）
                 if community_frequency[cooccur_api1] >= community_frequency[cooccur_api2]:

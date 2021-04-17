@@ -13,14 +13,17 @@ community_count_map = {}
 
 
 def log_statitic(freq, res, counts, log):
+    global community_count_map
     log.write("社群统计概况：\n")
-    a_mean = np.mean(counts)
-    a_var = np.var(counts)
-    a_std = np.std(counts)
-    a_max = np.max(counts)
-    a_min = np.min(counts)
-    a_mid = np.median(counts)
-    log.write(f"[{freq},{res}] 社群数量：{len(counts)}\n")
+    real_counts = [_ for _ in counts if _ > 3]
+    a_mean = np.mean(real_counts)
+    a_var = np.var(real_counts)
+    a_std = np.std(real_counts)
+    a_max = np.max(real_counts)
+    a_min = np.min(real_counts)
+    a_mid = np.median(real_counts)
+    log.write(f"[{freq},{res}] 社群数量：{len(real_counts)}\n")
+    community_count_map[res][freq] = len(real_counts)
     log.write(f"[{freq},{res}] 平均API数量：{a_mean}\n")
     log.write(f"[{freq},{res}] 社群API数量方差：{a_var}\n")
     log.write(f"[{freq},{res}] 社群API数量标准差：{a_std}\n")
@@ -29,11 +32,9 @@ def log_statitic(freq, res, counts, log):
 
 
 def louvain_community_map(doc_name, COMMUNITY_THRESHOLD, RESOLUTION, log):
-    global community_count_map
     print(f"community_threshold: {COMMUNITY_THRESHOLD}, resolution: {RESOLUTION}")
     log.write(
         f"===community_threshold: {COMMUNITY_THRESHOLD}, resolution: {RESOLUTION}===\n")
-
     community_map = nx.read_gexf(
         f"{base_dir}/data/exp/community_map_thresold_{COMMUNITY_THRESHOLD}.gexf")
 
@@ -41,8 +42,6 @@ def louvain_community_map(doc_name, COMMUNITY_THRESHOLD, RESOLUTION, log):
     partition = community_louvain.best_partition(community_map, resolution=RESOLUTION)
     print(f"resolution {RESOLUTION}, detect community numbers: ",
           len(set(partition.values())))
-    community_count_map[RESOLUTION][COMMUNITY_THRESHOLD] = len(
-        set(partition.values()))
     community_count = {}
     community_record = {}
     for k, v in partition.items():

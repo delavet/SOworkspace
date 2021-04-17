@@ -153,6 +153,27 @@ def get_thread_info(doc_name):
     return response
 
 
+@app.route('/api/acquireThreadInfos/<doc_name>', methods=['POST'])
+def acquire_thread_info(doc_name):
+    threads = request.json.get('threads').split(',')
+    page = int(request.json.get('page'))
+    limit = int(request.json.get('limit'))
+    ret = {
+        'success': True,
+        'data': []
+    }
+    try:
+        thread_info = HOMURA_services[doc_name].get_thread_infos_by_thread_ids_local(
+            threads, page, limit)
+        ret['data'] = thread_info
+    except Exception as e:
+        ret['success'] = False
+        ret['reason'] = str(e)
+    response = flask.make_response(jsonify(ret))
+    return response
+
+
+
 @app.route('/api/getThreadHtml/<doc_name>', methods=['GET'])
 def get_thread_html(doc_name):
     thread_id = str(request.args.get("threadId", default="9395808"))
