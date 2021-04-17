@@ -49,6 +49,7 @@ import { mapState } from 'vuex'
 const loadLimit = 20
 let WFmaxContentHeight = 0
 let loadingMessage = null
+let showed = false
 
 export default defineComponent({
   data () {
@@ -71,21 +72,24 @@ export default defineComponent({
   },
   mounted () {
     const notification = useNotification()
-    notification.create({
-      title: 'Hint',
-      description: 'About The Learning Entries',
-      content: `A Learning Entries is a set of APIs which we guess you may be interested in.
-This set of APIs are frequently discussed together in the Stack Overflow (SO) Community, which means they have close relationships.
-Through these entries, you can have a quick start and get a knowledge of how the SDK is used in the real development environment.
-Watch detail through the left Help button :-)
-      `,
-      avatar: () =>
-        h(NAvatar, {
-          size: 'small',
-          round: true,
-          src: 'https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg'
-        })
-    })
+    if (!showed) {
+      showed = true
+      notification.create({
+        title: 'Hint',
+        description: 'About The Learning Entries',
+        content: `A Learning Entries is a set of APIs which we guess you may be interested in.
+  This set of APIs are frequently discussed together in the Stack Overflow (SO) Community, which means they have close relationships.
+  Through these entries, you can have a quick start and get a knowledge of how the SDK is used in the real development environment.
+  Watch detail through the left Help button :-)
+        `,
+        avatar: () =>
+          h(NAvatar, {
+            size: 'small',
+            round: true,
+            src: 'https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg'
+          })
+      })
+    }
   },
   methods: {
     async fetchSections () {

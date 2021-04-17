@@ -1,11 +1,10 @@
 <template>
   <div class="search-home">
-    <n-layout>
+    <n-layout style="{background-color:rgba(0,0,0,0)}">
       <n-layout-header>
         <div id="search-space">
           <n-auto-complete
             id="search-input"
-            :options="searchOptions"
             v-model:value="searchValue"
             size="large"
             placeholder="input any word you think out, we will complete the rest :-)"
@@ -17,47 +16,22 @@
           </n-button>
         </div>
       </n-layout-header>
-      <n-layout>
-        <n-grid :cols="2">
-          <n-grid-item>
-            <n-space vertical>
-              <n-h2>
-                Literal Search Result
-              </n-h2>
-              <n-list borderd>
-                <n-list-item v-for="item in literal_items" :key="item.id">
-                  <n-thing>
-                    <template #header>
-                      {{item.name}}
-                    </template>
-                    <template #description>
-                      {{item.description}}
-                    </template>
-                  </n-thing>
-                </n-list-item>
-              </n-list>
-            </n-space>
-          </n-grid-item>
-          <n-grid-item>
-            <n-space vertical>
-              <n-h2>
-                Conceptual Search Result
-              </n-h2>
-              <n-list borderd>
-                <n-list-item v-for="item in concept_items" :key="item.id">
-                  <n-thing>
-                    <template #header>
-                      {{item.name}}
-                    </template>
-                    <template #description>
-                      {{item.description}}
-                    </template>
-                  </n-thing>
-                </n-list-item>
-              </n-list>
-            </n-space>
-          </n-grid-item>
-        </n-grid>
+      <n-layout id = "result-layout">
+        <n-card
+          id="result-card"
+          title="Search Result"
+          size = "huge"
+          :bordered="false">
+          <n-list>
+            <n-list-item v-for="item in literal_items" :key="item.id">
+              <template #suffix>
+                <n-button @click="onViewClick(item)">browse in Roadmap</n-button>
+              </template>
+              <n-thing :title="item.name" :description="item.description">
+              </n-thing>
+            </n-list-item>
+          </n-list>
+        </n-card>
       </n-layout>
     </n-layout>
   </div>
@@ -66,7 +40,7 @@
 <script>
 import { defineComponent } from 'vue'
 import { Search } from '@vicons/ionicons5'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import { useMessage } from 'naive-ui'
 
 let loadingMessage = null
@@ -83,8 +57,7 @@ export default defineComponent({
     return {
       searchValue: '',
       messageBox: undefined,
-      literal_items: [],
-      concept_items: []
+      literal_items: []
     }
   },
   methods: {
@@ -96,18 +69,26 @@ export default defineComponent({
       const paramObj = {
         query: this.searchValue
       }
-      const literalRes = await this.$http.post(this.loadLiteralUrl, paramObj)
-      const conceptRes = await this.$http.post(this.loadConceptUrl, paramObj)
+      const literalRes = await this.$http.post(this.loadUrl, paramObj)
       const literalData = literalRes.data.data
-      const conceptData = conceptRes.data.data
       this.literal_items = literalData
-      this.concept_items = conceptData
       if (loadingMessage) {
         loadingMessage.destroy()
         loadingMessage = null
       }
       this.messageBox.success('thread info list loaded', { duration: 500 })
-    }
+    },
+    onViewClick (item) {
+      this.set_id(item.id)
+      this.set_section_id('')
+      this.set_show_map(false)
+      this.$router.push('/roadmap')
+    },
+    ...mapMutations({
+      set_id: 'set_current_center_node',
+      set_section_id: 'set_current_section_id',
+      set_show_map: 'set_map_show_mode'
+    })
   },
   computed: {
     searchOptions () {
@@ -119,8 +100,8 @@ export default defineComponent({
         }
       })
     },
-    loadLiteralUrl () {
-      return '/searchByLiteral/' + this.docName
+    loadUrl () {
+      return '/search/' + this.docName
     },
     loadConceptUrl () {
       return '/searchByConcept/' + this.docName
@@ -135,7 +116,6 @@ export default defineComponent({
 <style scoped>
 .search-home {
   text-align: center;
-  background: url("../assets/HOMURA.jpg");
   width: 100%;
   height: 100%;
   background-size: cover;
@@ -144,6 +124,7 @@ export default defineComponent({
 #search-space {
   display: flex;
   justify-content: center;
+  margin: 20px;
 }
 
 #search-input {
@@ -152,4 +133,23 @@ export default defineComponent({
   margin-right: 20px;
 }
 
+#result-content {
+  overflow: scroll;
+}
+
+#result-layout {
+  justify-content: center;
+  display: flex;
+  flex-direction: row;
+}
+
+#result-card {
+  overflow: auto;
+  margin: 20px;
+  border-radius: 15px;
+  box-shadow: 0 2px 10px 2px rgba(0, 0, 0, .08);
+  height: 100%;
+  max-width:708px;
+  word-break: break-all;
+}
 </style>

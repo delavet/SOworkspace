@@ -81,6 +81,8 @@
 import { defineComponent } from 'vue'
 import { Search, Help as HelpIcon } from '@vicons/ionicons5'
 
+let showed = false
+
 export default defineComponent({
   name: 'Home',
   components: {
@@ -92,7 +94,13 @@ export default defineComponent({
       searchValue: '',
       heroine: 'HOMURA',
       current: 1,
-      showModal: true
+      showModal: false
+    }
+  },
+  mounted () {
+    if (!showed) {
+      showed = true
+      this.showModal = true
     }
   },
   methods: {

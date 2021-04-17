@@ -141,6 +141,7 @@ import ApiDetailPane from '../components/ApiDetailPane.vue'
 import G6 from '@antv/g6'
 
 let localCurrentGraph = null
+let showed = false
 
 export default defineComponent({
   name: 'Roadmap',
@@ -163,31 +164,34 @@ export default defineComponent({
     this.community = this.show_community_map
     const message = useMessage()
     const notification = useNotification()
-    notification.create({
-      title: 'Hint',
-      description: 'How to use the roadmap',
-      content: `The API Roadmap is a graph which shows different relationships between APIs in the SDK.
+    if (!showed) {
+      showed = true
+      notification.create({
+        title: 'Hint',
+        description: 'How to use the roadmap',
+        content: `The API Roadmap is a graph which shows different relationships between APIs in the SDK.
 We provide two kinds of map for you to observe APIs and their relationships.
 The Community Map shows the relationship that APIs are frequently discussed together in the Stack Overflow Community.
 The Concept Map shows the relationships that the designer of the java SDK give these APIs, such as inheritation, implement, etc.
 Use the Help Icon Button on the left side to get more information:)`,
-      avatar: () =>
-        h(NAvatar, {
-          size: 'small',
-          round: true,
-          src: 'https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg'
-        }),
-      onAfterLeave: () => {
-        message.success("Wouldn't it be Nice")
-      }
-    })
+        avatar: () =>
+          h(NAvatar, {
+            size: 'small',
+            round: true,
+            src: 'https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg'
+          }),
+        onAfterLeave: () => {
+          message.success("Wouldn't it be Nice")
+        }
+      })
+    }
     this.initGraph()
   },
   methods: {
     async getGraphData () {
       const paramObj = {}
-      if (this.current_show_detail_node !== '') {
-        paramObj.apiId = this.current_show_detail_node
+      if (this.current_map_center_node !== '') {
+        paramObj.apiId = this.current_map_center_node
       }
       if (this.current_section_id !== '') {
         paramObj.sectionId = this.current_section_id
@@ -401,7 +405,7 @@ Use the Help Icon Button on the left side to get more information:)`,
       })
       const that = this
       graph.on('nodeselectchange', (evt) => {
-        console.log('nodeselectchange!')
+        // console.log('nodeselectchange!')
         if (evt.select) {
           // .clearItemStates(that.current_show_detail_node, 'selected')
           // graph.setItemState(evt.target, 'selected', true)

@@ -46,7 +46,7 @@
 
 <script>
 import { defineComponent } from 'vue'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import { BookOutline as BookIcon, NavigateOutline as NaviIcon } from '@vicons/ionicons5'
 
 export default defineComponent({
@@ -82,11 +82,17 @@ export default defineComponent({
   },
   methods: {
     onClick () {
+      this.set_api_name(this.apiName)
       this.$emit('show-threads')
     },
     onClick2 () {
+      this.set_center_node(this.current_show_detail_node)
       this.$emit('show-extend-submap')
-    }
+    },
+    ...mapMutations({
+      set_api_name: 'set_show_detail_api_name',
+      set_center_node: 'set_current_center_node'
+    })
   },
   computed: {
     loadUrl () {
