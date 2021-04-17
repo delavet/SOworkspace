@@ -17,7 +17,7 @@ elif os.path.exists('/media/dell/disk/yinh/SOworkspace'):
     base_dir = '/media/dell/disk/yinh/SOworkspace'
     CURRENT_PLATFORM = UBUNTU
 elif os.path.exists('/root/SOworkspace'):
-    base_dir = '/root/SOworkspace' #部署环境
+    base_dir = '/root/SOworkspace'  # 部署环境
     CURRENT_PLATFORM = UBUNTU
 elif os.path.exists('/User/yinhang/workspace/SOworkspace'):
     base_dir = '/User/yinhang/workspace/SOworkspace'
@@ -230,6 +230,11 @@ OPENKE_RELATION2ID_STORE_PATH = {
 # 专门为HOMURA提供服务的数据，存储每个社群中推荐先学习的API，基本就是一个重新排序的COMMUNITY_RECORD
 HOMURA_COMMUNITY_API_RECOMMEND_STORE_PATH = {
     JAVADOC_GLOBAL_NAME: f'{base_dir}/data/community_data/java/homura_community_api_recommend.json'
+}
+
+# 专门为HOMURA提供服务的数据，存储每个社群对应的SO中最热门的几个tag
+HOMURA_COMMUNITY_TAGS_RECOMMEND_STORE_PATH = {
+    JAVADOC_GLOBAL_NAME: f'{base_dir}/data/community_data/java/homura_community_tags_recommend.json'
 }
 
 HYBRID_WORD2VEC_CORPUS_STORE_PATH = {
