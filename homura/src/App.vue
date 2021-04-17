@@ -14,7 +14,7 @@
       <n-menu
         :collapsed="collapsed"
         :collapsed-width="80"
-        :collapsed-icon-size="36"
+        :collapsed-icon-size="24"
         :items="menuItems"
         @update:value="menuCallback"
       />
