@@ -1,9 +1,60 @@
 from os import lseek
 import numpy as np
+import re
+import string
 
 from gensim.models import FastText, Word2Vec
 from .config import *
 from bs4 import BeautifulSoup
+
+
+splitters = set(
+    [
+        ",",
+        ".",
+        "/",
+        ";",
+        "'",
+        "`",
+        "\\",
+        "[",
+        "]",
+        "<",
+        ">",
+        "?",
+        ":",
+        '"',
+        "{",
+        "}",
+        "~",
+        "!",
+        "@",
+        "#",
+        "$",
+        "%",
+        "^",
+        "&",
+        "(",
+        ")",
+        "-",
+        "=",
+        "_",
+        "+",
+        "，",
+        "。",
+        "、",
+        "；",
+        "‘",
+        "’",
+        "【",
+        "】",
+        "·",
+        "！",
+        "…",
+        "（",
+        "）",
+    ])
+
 
 
 def get_all_indexes(sub: str, s: str):
@@ -51,6 +102,47 @@ def normalize(x):
     if x is None:
         x = 0
     return sigmoid(float(x))
+
+
+def pre_tokenize(text: str):
+    # text = ' '.join([token.lower() if token.isupper() else token for token in ])
+    ret = ''
+    for i in range(len(text)):
+        ch = text[i]
+        latterCh = text[i+1] if i < len(text) - 1 else ''
+        if ch.isupper() and latterCh.isalpha() and not latterCh.isupper():
+            ret += ' ' + ch
+        elif ch == '_' or ch == '-':
+            ret += ' '
+        else:
+            ret += ch
+    return ret
+
+
+def tokenize(text: str):
+    text = pre_tokenize(text)
+    raw_tokens = []
+    cur_index = 0
+    cur_token = ""
+    while cur_index < len(text):
+        cur_ch = text[cur_index]
+        if cur_ch in string.punctuation:
+            if len(cur_token) > 0:
+                raw_tokens.append(cur_token)
+            raw_tokens.append(cur_ch)
+            cur_token = ""
+            cur_index += 1
+        elif re.search(r"^\s$", cur_ch) is not None:
+            if len(cur_token) > 0:
+                raw_tokens.append(cur_token)
+            cur_token = ""
+            cur_index += 1
+        else:
+            cur_token = cur_token + cur_ch
+            cur_index += 1
+    if len(cur_token) > 0:
+        raw_tokens.append(cur_token)
+    return [token for token in raw_tokens if token != '' and ' ' not in token]
 
 
 def get_api_name_from_entity_id(entity_id: str):

@@ -218,7 +218,34 @@ def search_by_concept(doc_name):
         ret['reason'] = str(e)
     response = flask.make_response(jsonify(ret))
     return response
-    
+
+
+@app.route('/api/search/<doc_name>', methods=['POST'])
+def search_synthesis(doc_name):
+    query = request.json.get('query')
+    search_apis = SEARCH_services[doc_name].search_synthesis(query.lower())
+    data = []
+    ret = {
+        'success': True,
+        'data': []
+    }
+    try:
+        for api, score in search_apis:
+            id, desc = HOMURA_services[doc_name].get_api_id_short_description(
+                api)
+            data.append({
+                'name': get_api_qualified_name_from_entity_id(api),
+                'description': desc,
+                'id': id,
+                'score': score
+            })
+        ret['data'] = data
+    except Exception as e:
+        ret['success'] = False
+        ret['reason'] = str(e)
+    response = flask.make_response(jsonify(ret))
+    return response
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=3001)

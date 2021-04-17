@@ -6,13 +6,15 @@ import numpy as np
 
 from elasticsearch import Elasticsearch
 
+from util.nel.common import longest_common_subsequence
+
 from ..constant import *
 from util.apidoc_search.vector_util import VectorUtil
 from ..config import APIDOC_WIKI_FASTTEXT_MODEL_STORE_PATH, DOMAIN_WIKI_TERM_FASTTEXT_VECTOR_STORE_PATH, Elasticsearch_term_index_name_template, JAVADOC_GLOBAL_NAME, Elasticsearch_host, Elasticsearch_port, API_SHORT_DESCRIPTION_FASTTEXT_VECTOR_STORE_PATH
 from ..nel.candidate_select import es_wildcard_search, es_search
 from ..apidoc_semantic.common import extract_noun_chunks, pre_tokenize, preprocess
 from ..concept_map.common import get_latest_hyper_concept_map
-from ..utils import get_apidoc_wiki_embedding_model, get_node2vec_model
+from ..utils import get_api_extreme_short_name_from_entity_id, get_apidoc_wiki_embedding_model, get_node2vec_model, tokenize
 
 
 class ApiSearchService:
@@ -56,6 +58,34 @@ class ApiSearchService:
         sorted_apis = [item for item in sorted(zipped_apis_sims, key=lambda i : i[1], reverse=True)]
         return sorted_apis
 
+    def too_short_matched_apis(self, api: str, query_tokens: list):
+        '''
+        判断API是不是因为本身名字过短而误被分类到正确匹配里去了
+        '''
+        if len(api) > 4:
+            return False
+        return api not in query_tokens
+
+    def search_literally_strict(self, query: str):
+        '''
+        只对API的extremely short名字进行字面量搜索得到的结果
+        比search_literally方法要严格得多，可能完全得不到结果
+        不过正因如此，可以将其与search_concept方法结合
+        将严格匹配得到的API放置在通过concept搜索的结果前面
+        '''
+        query_tokens = [token.lower() for token in tokenize(query)]
+        processed_query = ' '.join(query_tokens)
+        name_search_result = list(es_search(processed_query, 'name'))
+        extrem_short_search_result_names = [get_api_extreme_short_name_from_entity_id(
+            api).lower() for api in name_search_result]
+        match_thresholds = [len(name) if len(name) <= 8 else len(name) - 2 for name in extrem_short_search_result_names]
+        #给完全匹配上的API以一个极大的相似度分数确保其排在最前面
+        scores = [100 if longest_common_subsequence(processed_query, name) >= threshold and not self.too_short_matched_apis(name, query_tokens) else -100 for name, threshold in zip(extrem_short_search_result_names, match_thresholds)]
+        zipped_apis_sims = zip(name_search_result, scores)
+        sorted_apis = [item for item in sorted(
+            zipped_apis_sims, key=lambda i: i[1], reverse=True)]
+        return sorted_apis
+
     def search_term(self, query: str):
         query_body = {
             'query': {
@@ -75,6 +105,7 @@ class ApiSearchService:
         return ret
 
     def search_by_concept(self, query: str):
+        query = pre_tokenize(query)
         processed_query = preprocess(query).lower()
         query_word_embedding = self.vector_tool.get_sentence_avg_vector(processed_query)
         query_noun_chunks = extract_noun_chunks(query)
@@ -131,3 +162,12 @@ class ApiSearchService:
                     begin_add = True
                     ret.append(item)
         return ret[:50]
+
+    def search_synthesis(self, query: str):
+        literal_api_with_scores = self.search_literally_strict(query)
+        concept_api_with_scores = self.search_by_concept(query)
+        ret = concept_api_with_scores
+        ret.extend(literal_api_with_scores)
+        ret = [item for item in ret if self.hyper_concept_map.nodes[item[0]].get(
+            NodeAttributes.Ntype, '') != NodeType.CONSTRUCTOR and not math.isnan(item[1])]
+        return sorted(ret, key=lambda x : x[1], reverse=True)
