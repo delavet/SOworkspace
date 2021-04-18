@@ -15,7 +15,7 @@
               </template>
             </n-button>
           </template>
-          Learn about all SO threads talking about this API
+          {{en?"Learn about all SO threads talking about this API":"学习Stack Overflow上有关此API的讨论纪录"}}
         </n-tooltip>
         <n-tooltip placement="top-start" trigger="hover">
           <template #trigger>
@@ -25,7 +25,7 @@
               </template>
             </n-button>
           </template>
-          Show relationships and related APIs around this API
+          {{en?"Show relationships and related APIs around this API":"将此API重新设为中心，查看与它关系密切的API以及它们之间的关系"}}
         </n-tooltip>
       </n-space>
     </template>
@@ -100,7 +100,8 @@ export default defineComponent({
     },
     ...mapState({
       current_show_detail_node: 'current_show_detail_node',
-      docName: 'doc_name'
+      docName: 'doc_name',
+      en: 'en'
     })
   }
 })

@@ -22,9 +22,11 @@
     <n-layout class="app-content">
         <n-message-provider>
           <n-notification-provider>
-            <keep-alive>
-              <router-view />
-            </keep-alive>
+            <router-view v-slot="{Component}">
+              <keep-alive>
+                <component :is="Component"/>
+              </keep-alive>
+            </router-view>
           </n-notification-provider>
         </n-message-provider>
     </n-layout>
@@ -47,39 +49,37 @@ function renderIcon (icon) {
   return () => h(NIcon, null, { default: () => h(icon) })
 }
 
-const menuItems = [
-  {
-    label: 'Home Page',
-    key: 'home',
-    icon: renderIcon(HomeIcon)
-  },
-  {
-    label: 'Search Page',
-    key: 'search',
-    icon: renderIcon(SearchIcon)
-  },
-  {
-    label: 'Learning Entries',
-    key: 'section',
-    icon: renderIcon(BulbIcon)
-  },
-  {
-    label: 'Learning Roadmap',
-    key: 'roadmap',
-    icon: renderIcon(MapIcon)
-  },
-  {
-    label: 'view SO threads about API',
-    key: 'detail',
-    icon: renderIcon(BookIcon)
-  }
-]
-
 export default defineComponent({
   data () {
     return {
       collapsed: true,
-      menuItems
+      menuItems: [
+        {
+          label: this.en ? 'Home Page' : '主页',
+          key: 'home',
+          icon: renderIcon(HomeIcon)
+        },
+        {
+          label: this.en ? 'Search Page' : '搜索',
+          key: 'search',
+          icon: renderIcon(SearchIcon)
+        },
+        {
+          label: this.en ? 'Learning Entries' : '学习入口推荐',
+          key: 'section',
+          icon: renderIcon(BulbIcon)
+        },
+        {
+          label: this.en ? 'Learning Roadmap' : 'API路线图',
+          key: 'roadmap',
+          icon: renderIcon(MapIcon)
+        },
+        {
+          label: this.en ? 'view SO threads about API' : 'API讨论详情',
+          key: 'detail',
+          icon: renderIcon(BookIcon)
+        }
+      ]
     }
   },
   methods: {
@@ -109,7 +109,8 @@ export default defineComponent({
   },
   computed: {
     ...mapState({
-      coolButtonText: 'hello'
+      coolButtonText: 'hello',
+      en: 'en'
     })
   }
 })

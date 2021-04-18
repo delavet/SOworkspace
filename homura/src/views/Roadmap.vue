@@ -15,41 +15,51 @@
       <n-space align="baseline" style="display:flex;">
         <n-button-group>
           <n-button ghost :disabled="!community" @click="onConceptBtnClick">
-            Show Concept Map
+            {{en?"Show Concept Map":"展示概念图"}}
           </n-button>
           <n-button ghost :disabled="community" @click="onCommunityBtnClick">
-            Show Community Map
+            {{en?"Show Community Map":"展示社区图"}}
           </n-button>
         </n-button-group>
         <n-tooltip trigger="hover">
           <template #trigger>
             <n-button ghost circle size="small" @click="showModal = true"><n-icon size="15"><help-icon/></n-icon></n-button>
           </template>
-          What are these maps?
+          {{en?"What are these maps?":"这些图是什么玩意？"}}
         </n-tooltip>
       </n-space>
     </template>
   </n-card>
   <n-modal v-model:show="showModal">
-    <n-card style="width: 600px;" title="What are these fxxking maps?" :bordered="false" size="huge">
-      <p>It is always necessary to use multiple APIs to complete a programming task. Therefore, learning the relationships between APIs is nessasary. The Roadmap is a <n-gradient-text type="danger"> Visualized Knowledge Graph </n-gradient-text> which shows a set of close APIs and their relationships.</p>
-      <p>The node in the graph represents various of API elements. The relationships is visualized through edges on the graph with the type of the relationship writen on the edge.</p>
-      <p>The Roadmap has a <n-gradient-text type="danger"> Center API </n-gradient-text>, which is the API you choose to learn from the learning entries recommended or you search it. This Center API is showed bigger than others. The Roadmap will show all related APIs around this API.</p>
+    <n-card style="width: 600px;" :title="en?'What are these fxxking maps?':'这些该死的图是什么玩意？？'" :bordered="false" size="huge">
+      <p v-if="en">It is always necessary to use multiple APIs to complete a programming task. Therefore, learning the relationships between APIs is nessasary. The Roadmap is a <n-gradient-text type="danger"> Visualized Knowledge Graph </n-gradient-text> which shows a set of close APIs and their relationships.</p>
+      <p v-else>在实际使用API进行编程时，几乎避免不了同时使用多个API来完成一项开发任务。了解关系紧密的API以及这些API之间究竟存在哪些关系也是很重要的。路线图（也就是您现在看到的这个图）是一张<n-gradient-text type="danger">可视化的图</n-gradient-text>，它将互相关系紧密的API直接以图的形式给您展示出来，图中的边就是形形色色的API之间的关系，非常直观，加速您对API关系的理解。</p>
+      <p v-if="en">The node in the graph represents various of API elements. The relationships is visualized through edges on the graph with the type of the relationship writen on the edge.</p>
+      <p v-else>路线图中的节点就是各种各样的API（包括类、方法、属性、接口等），路线图中的边代表着相连的两个API之间存在某种关系，关系的类型也被标注在了边上</p>
+      <p v-if="en">The Roadmap has a <n-gradient-text type="danger"> Center API </n-gradient-text>, which is the API you choose to learn from the learning entries recommended or you search it. This Center API is showed bigger than others. The Roadmap will show all related APIs around this API.</p>
+      <p v-else>一张路线图拥有一个<n-gradient-text type="danger">“中心节点”API</n-gradient-text>，实际上，这个中心节点就是您先前选择要学习的学习入口中的API或是您搜索到的API，路线图将展示与这个API关系密切的一系列API以及它们之间的关系，下面是中心节点的图例，它比其它API都要大上两圈</p>
       <img src="/center_node.png"/>
-      <p>You can click <n-gradient-text type="danger">click</n-gradient-text> on the API to select it. Once you select the API, the detail panel on the right will show you the detail description of it. Through the <n-gradient-text type="success">book</n-gradient-text> button, you can view all Stack Overflow posts related to this API to learn how it is used in the real situation. Through the <n-gradient-text type="info">navigate</n-gradient-text> button, you can change the Center API of the current Roadmap, which means you choose this new API to learn. The Roadmap will be automatically refreshed.</p>
+      <p v-if="en">You can <n-gradient-text type="danger">click</n-gradient-text> on the API to select it. Once you select the API, the detail panel on the right will show you the detail description of it. Through the <n-gradient-text type="success">book</n-gradient-text> button, you can view all Stack Overflow posts related to this API to learn how it is used in the real situation. Through the <n-gradient-text type="info">navigate</n-gradient-text> button, you can change the Center API of the current Roadmap, which means you choose this new API to learn. The Roadmap will be automatically refreshed.</p>
+      <p v-else>在路线图中，你可以<n-gradient-text type="danger">点击</n-gradient-text>一个API 来选中它。被选中的API的详细说明信息被详细展示在右侧的面板，以随时供您查阅学习。您可能注意到面板中有两个按钮。通过点击绿色的<n-gradient-text type="success">图书</n-gradient-text>的按钮，您将被导航至API导航详情页，并查看所有有关于该API的Stack Overflow的讨论，以随时供您查阅学习这些讨论纪录。通过点击蓝色的<n-gradient-text type="info">导航</n-gradient-text>按钮，您可以将当前选中的API节点作为新的“中心节点”，并查看与其相关的API。这样您就能在路线图中持续学习新的API了，路线图将在点击时被自动刷新。</p>
       <img src="/nav.png" width="500"/>
-      <p>We prepare two kinds of Roadmap to reveal different kinds of relationships between APIs. You can switch these two maps through the left-top side two buttons.</p>
+      <p v-if="en">We prepare two kinds of Roadmap to reveal different kinds of relationships between APIs. You can switch these two maps through the left-top side two buttons.</p>
+      <p v-else>您可能注意到了，路线图不止一张，我们提供了一张<n-gradient-text type="danger">社区图</n-gradient-text>和一张<n-gradient-text type="danger">概念图</n-gradient-text>，您可以通过左侧的两个按钮在这两张图中进行切换。这两张图有啥区别呢？</p>
       <img src="/switch_btn.png"/>
-      <h2>1. Concept Map</h2>
-      <p>The Concept Map shows the relationships that the designer of the java SDK give these APIs, such as inheritation, implement, etc.</p>
-      <h2>2. Community Map</h2>
-      <p>The Community Map shows the relationship that APIs are frequently discussed together in the Stack Overflow Community.</p>
-      <n-h2>The Legend of the RoadMap</n-h2>
+      <h2 v-if="en">1. Concept Map</h2>
+      <h2 v-else>1. 概念图</h2>
+      <p v-if="en">The Concept Map shows the relationships that the designer of the java SDK give these APIs, such as inheritation, implement, etc.</p>
+      <p v-else>概念图是一张从javadoc设计者的意图出发形成的路线图。在这里您可以发现java中的API在JDK设计时被设计者赋予的关系，比如继承、实现、包含关系等。</p>
+      <h2 v-if="en">2. Community Map</h2>
+      <h2 v-else>2. 社区图</h2>
+      <p v-if="en">The Community Map shows the relationship that APIs are frequently discussed together in the Stack Overflow Community.</p>
+      <p v-else>社区图的展示重点则完全不同，这张路线图更关注API在实际使用中的关系。如果两个API在社区图中有一条边相连，则说明这两个API在Stack Overflow中被频繁地在一起提及，也说明了这两个API在实际开发中很可能经常被拿来在一起使用来完成某些常见的开发任务。</p>
+      <n-h2 v-if="en">The Legend of the RoadMap</n-h2>
+      <n-h2 v-else>路线图图例</n-h2>
       <n-table :single-line="false">
         <n-thead>
           <n-tr>
-            <n-th>Icon</n-th>
-            <n-th>API Element Type</n-th>
+            <n-th>{{en?"Icon":"图标"}}</n-th>
+            <n-th>{{en?"API Element Type":"API类型"}}</n-th>
           </n-tr>
         </n-thead>
         <n-tbody>
@@ -58,7 +68,7 @@
               <img src="/function.svg" height="24" width="24"/>
             </n-td>
             <n-td>
-              Method / Function
+              {{en?"Method / Function":"方法/函数"}}
             </n-td>
           </n-tr>
           <n-tr>
@@ -66,7 +76,7 @@
               <img src="/class.svg" height="24" width="24"/>
             </n-td>
             <n-td>
-              Class
+              {{en?"Class":"一般类"}}
             </n-td>
           </n-tr>
           <n-tr>
@@ -74,7 +84,7 @@
               <img src="/error.svg" height="24" width="24"/>
             </n-td>
             <n-td>
-              Error
+              {{en?"Error":"运行时错误类"}}
             </n-td>
           </n-tr>
           <n-tr>
@@ -82,7 +92,7 @@
               <img src="/exception.svg" height="24" width="24"/>
             </n-td>
             <n-td>
-              Exception
+              {{en?"Exception":"异常类"}}
             </n-td>
           </n-tr>
           <n-tr>
@@ -90,7 +100,7 @@
               <img src="/field.svg" height="24" width="24"/>
             </n-td>
             <n-td>
-              A Field / Attribute in the Class
+              {{en?"A Field / Attribute in the Class":"类中的属性"}}
             </n-td>
           </n-tr>
           <n-tr>
@@ -98,7 +108,7 @@
               <img src="/interface.svg" height="24" width="24"/>
             </n-td>
             <n-td>
-              Interface
+              {{en?"Interface":"接口"}}
             </n-td>
           </n-tr>
           <n-tr>
@@ -106,7 +116,7 @@
               <img src="/package.svg" height="24" width="24"/>
             </n-td>
             <n-td>
-              Package
+              {{en?"Package":"包"}}
             </n-td>
           </n-tr>
           <n-tr>
@@ -114,7 +124,7 @@
               <img src="/module.svg" height="24" width="24"/>
             </n-td>
             <n-td>
-              Module
+              {{en?"Module":"模块"}}
             </n-td>
           </n-tr>
           <n-tr>
@@ -122,7 +132,7 @@
               <img src="/object.svg" height="24" width="24"/>
             </n-td>
             <n-td>
-              Other elements, such as an URL to an external resource
+              {{en?"Other elements, such as an URL to an external resource":"其它无名元素，比如一个指向web的URL"}}
             </n-td>
           </n-tr>
         </n-tbody>
@@ -167,13 +177,19 @@ export default defineComponent({
     if (!showed) {
       showed = true
       notification.create({
-        title: 'Hint',
-        description: 'How to use the roadmap',
-        content: `The API Roadmap is a graph which shows different relationships between APIs in the SDK.
+        title: this.en ? 'Hint' : '提示',
+        description: this.en ? 'How to use the roadmap' : '有关API路线图的说明',
+        content: this.en
+          ? `The API Roadmap is a graph which shows different relationships between APIs in the SDK.
 We provide two kinds of map for you to observe APIs and their relationships.
 The Community Map shows the relationship that APIs are frequently discussed together in the Stack Overflow Community.
 The Concept Map shows the relationships that the designer of the java SDK give these APIs, such as inheritation, implement, etc.
-Use the Help Icon Button on the left side to get more information:)`,
+Use the Help Icon Button on the left side to get more information:)`
+          : `API路线图是一张展示API之间各种各样关联的可视化图。我们提供了两张不同的路线图：概念图和社区图，分别为您展现API之间在设计角度和实际使用角度的关系。
+概念图是一张从javadoc设计者的意图出发形成的路线图。在这里您可以发现java中的API在JDK设计时被设计者赋予的关系，比如继承、实现、包含关系等。
+社区图则不同，这张路线图更关注API在实际使用中的关系。如果两个API在社区图中有一条边相连，则说明这两个API在Stack Overflow中被频繁地在一起提及，也说明了这两个API在实际开发中很可能经常被拿来在一起使用来完成某些常见的开发任务。
+要查看详细说明，请点击本页左上角、在两个切换图展示按钮旁边的"?"按钮
+          `,
         avatar: () =>
           h(NAvatar, {
             size: 'small',
@@ -185,7 +201,16 @@ Use the Help Icon Button on the left side to get more information:)`,
         }
       })
     }
+    this.update_map(false)
     this.initGraph()
+  },
+  activated () {
+    if (this.refresh) {
+      this.community = this.show_community_map
+      console.log('refresh')
+      this.update_map(false)
+      this.updateSubmap()
+    }
   },
   methods: {
     async getGraphData () {
@@ -487,7 +512,8 @@ Use the Help Icon Button on the left side to get more information:)`,
       switch_map_show_mode: 'switch_map_show_mode',
       set_map_show_mode: 'set_map_show_mode',
       set_show_detail_mode: 'set_show_current_detail_mode',
-      set_current_show_detail_threads: 'set_current_show_detail_threads'
+      set_current_show_detail_threads: 'set_current_show_detail_threads',
+      update_map: 'set_refresh_map'
     })
   },
   computed: {
@@ -500,7 +526,9 @@ Use the Help Icon Button on the left side to get more information:)`,
       current_section_id: 'current_section_id',
       current_map_center_node: 'current_map_center_node',
       show_community_map: 'show_community_map',
-      docName: 'doc_name'
+      docName: 'doc_name',
+      refresh: 'refresh_map',
+      en: 'en'
     })
   }
 })

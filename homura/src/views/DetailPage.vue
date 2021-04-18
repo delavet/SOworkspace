@@ -3,12 +3,13 @@
       <n-layout>
         <n-layout-header bordered id="detail-page-header">
           <n-space size="large" align="baseline">
-            <n-h1>Discussions about <n-gradient-text type="info"> {{apiName}} </n-gradient-text></n-h1>
+            <n-h1 v-if="en">Discussions about <n-gradient-text type="info"> {{apiName}} </n-gradient-text></n-h1>
+            <n-h1 v-else>有关<n-gradient-text type="info">{{apiName}}</n-gradient-text>，Stack Overflow上所有的讨论纪录</n-h1>
             <n-tooltip trigger="hover">
               <template #trigger>
                 <n-button ghost circle size="small" @click="showModal = true"><n-icon size="20"><help-icon/></n-icon></n-button>
               </template>
-              How to learn these threads?
+              {{en?"How to learn these threads?":"这些讨论是什么"}}
             </n-tooltip>
           </n-space>
         </n-layout-header>
@@ -50,8 +51,9 @@
         </n-layout>
       </n-layout>
       <n-modal v-model:show="showModal">
-        <n-card style="width: 600px;" title="How to learn these threads?" :bordered="false" size="huge">
-          <p>Once you select an API to learn its related Stack Overflow threads in the <n-gradient-text type="danger">Roadmap</n-gradient-text>, you will be navigated to this page. This page lists every SO thread which is related to the current API being learned. Feel free to learn these knowleges and paste something to your note! :-)</p>
+        <n-card style="width: 600px;" :title="en ? 'How to learn these threads?' : '这些讨论是干什么的？'" :bordered="false" size="huge">
+          <p v-if="en">Once you select an API to learn its related Stack Overflow threads in the <n-gradient-text type="danger">Roadmap</n-gradient-text>, you will be navigated to this page. This page lists every SO thread which is related to the current API being learned. Feel free to learn these knowleges and paste something to your note! :-)</p>
+          <p v-else>当您在<n-gradient-text type="danger">路线图</n-gradient-text>页面选择学习某个API时，您就会被导航到本页面。本页面包含了所有有关当前学习API的讨论纪录。这些都是开发者们在真实开发过程中积累的API使用经验。希望能够在学习上帮到您，复制点什么到你的note吧！:-)</p>
         </n-card>
       </n-modal>
     </div>
@@ -83,13 +85,12 @@ export default defineComponent({
     const message = useMessage()
     this.messageBox = message
   },
-  mounted () {
+  activated () {
     this.loadThread()
   },
   methods: {
     async loadThread () {
       loadingMessage = this.messageBox.loading('loading thread info', { duration: 5000 })
-      debugger
       let res = {}
       console.log(this.show_detail_mode)
       if (this.show_detail_mode) {
@@ -105,10 +106,11 @@ export default defineComponent({
         const paramObj = {
           threads: this.current_threads,
           page: this.page - 1,
-          limit: 20
+          limit: 10
         }
         res = await this.$http.post(this.acquireUril, paramObj)
       }
+      debugger
       const datas = res.data.data
       this.items = datas
       if (loadingMessage) {
@@ -134,7 +136,6 @@ export default defineComponent({
       this.messageBox.success('thread loaded', { duration: 500 })
     },
     onViewClick (item) {
-      debugger
       this.loadThreadDetailHtml(item.Id)
     },
     updatePage (page) {
@@ -156,7 +157,8 @@ export default defineComponent({
       docName: 'doc_name',
       apiName: 'current_show_detail_api_name',
       show_detail_mode: 'show_current_detail_node',
-      current_threads: 'current_show_detail_threads'
+      current_threads: 'current_show_detail_threads',
+      en: 'en'
     })
   }
 })

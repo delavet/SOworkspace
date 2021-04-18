@@ -7,7 +7,7 @@
             id="search-input"
             v-model:value="searchValue"
             size="large"
-            placeholder="input any word you think out, we will complete the rest :-)"
+            :placeholder="en?'input any word you think out, we will complete the rest :-)':'输入你能想到的任何词，我们总能找到点什么（大概'"
           />
           <n-button circle @click="onSearchClick">
             <template #icon>
@@ -19,13 +19,13 @@
       <n-layout id = "result-layout">
         <n-card
           id="result-card"
-          title="Search Result"
+          :title="en?'Search Result':'搜索结果'"
           size = "huge"
           :bordered="false">
           <n-list>
             <n-list-item v-for="item in literal_items" :key="item.id">
               <template #suffix>
-                <n-button @click="onViewClick(item)">browse in Roadmap</n-button>
+                <n-button @click="onViewClick(item)">{{en?"browse in Roadmap":"在路线图中查看"}}</n-button>
               </template>
               <n-thing :title="item.name" :description="item.description">
               </n-thing>
@@ -39,7 +39,7 @@
 
 <script>
 import { defineComponent } from 'vue'
-import { Search } from '@vicons/ionicons5'
+import { Search, TrashOutline } from '@vicons/ionicons5'
 import { mapState, mapMutations } from 'vuex'
 import { useMessage } from 'naive-ui'
 
@@ -81,13 +81,15 @@ export default defineComponent({
     onViewClick (item) {
       this.set_id(item.id)
       this.set_section_id('')
+      this.update_map(TrashOutline)
       this.set_show_map(false)
       this.$router.push('/roadmap')
     },
     ...mapMutations({
       set_id: 'set_current_center_node',
       set_section_id: 'set_current_section_id',
-      set_show_map: 'set_map_show_mode'
+      set_show_map: 'set_map_show_mode',
+      update_map: 'set_refresh_map'
     })
   },
   computed: {
@@ -107,7 +109,8 @@ export default defineComponent({
       return '/searchByConcept/' + this.docName
     },
     ...mapState({
-      docName: 'doc_name'
+      docName: 'doc_name',
+      en: 'en'
     })
   }
 })
