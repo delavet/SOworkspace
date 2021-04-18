@@ -6,7 +6,7 @@ import networkx as nx
 from util.constant import *
 
 from .utils import get_api_name_from_entity_id
-from .config import HOMURA_COMMUNITY_API_RECOMMEND_STORE_PATH, COMMUNITY_RECOMMEND_ENTRY_THREADS_STORE_PATH, API_THREAD_ID_MAP_STORE_PATH, APIDOC_DESCRIPTION_STORE_PATH, HOMURA_COMMUNITY_TAGS_RECOMMEND_STORE_PATH
+from .config import HOMURA_COMMUNITY_API_RECOMMEND_STORE_PATH, COMMUNITY_RECOMMEND_ENTRY_THREADS_STORE_PATH, API_THREAD_ID_MAP_STORE_PATH, API_THREAD_ID_RESORT_MAP_STORE_PATH,APIDOC_DESCRIPTION_STORE_PATH, HOMURA_COMMUNITY_TAGS_RECOMMEND_STORE_PATH
 from .concept_map.common import get_latest_concept_map, get_latest_community_map
 # from .mysql_access.posts import DBPosts
 from .community_info.so_thread_info_center import ThreadInfoCenter
@@ -24,7 +24,7 @@ class HOMURAservice:
             self.community_tags_recommend = json.load(rf1)
         with open(COMMUNITY_RECOMMEND_ENTRY_THREADS_STORE_PATH[doc_name], 'r', encoding='utf-8') as rf2:
             self.community_thread_id_recommend = json.load(rf2)
-        with open(API_THREAD_ID_MAP_STORE_PATH[doc_name], 'r', encoding='utf-8') as rf3:
+        with open(API_THREAD_ID_RESORT_MAP_STORE_PATH[doc_name], 'r', encoding='utf-8') as rf3:
             self.API_thread_id_map = json.load(rf3)
         with open(APIDOC_DESCRIPTION_STORE_PATH[doc_name], 'r', encoding='utf-8') as rf4:
             self.api_doc_descriptions = json.load(rf4)
@@ -45,7 +45,8 @@ class HOMURAservice:
         '''
         community_id = str(community_id)
         recommended_apis = self.community_api_recommend.get(community_id, [])
-        recommended_tags = self.community_tags_recommend.get(community_id, [])
+        recommended_tags = [tag for tag in self.community_tags_recommend.get(
+            community_id, []) if 'ndroid' not in tag and tag != 'concurrency']
         if len(recommended_apis) > self.api_recommend_constraint:
             recommended_apis = recommended_apis[:self.api_recommend_constraint]
         recommended_thread = self.community_thread_id_recommend.get(
@@ -54,7 +55,7 @@ class HOMURAservice:
             "section_id": community_id,
             "apis": [get_api_name_from_entity_id(api) for api in recommended_apis],
             "thread_info": recommended_thread,
-            "tags": recommended_tags
+            "tags": recommended_tags[:6]
         }
         return ret
 
@@ -70,10 +71,12 @@ class HOMURAservice:
             }
         submap_nodes = list(nx.dfs_postorder_nodes(
             self.community_map, api_name, depth_limit=4))
+        '''
         if section_id is not None:
             section_apis = self.community_api_recommend.get(section_id, [])
             submap_nodes = [
                 node for node in submap_nodes if node in section_apis]
+        '''
         subgraph = nx.subgraph(self.community_map, submap_nodes)
         nodes = []
         edges = []

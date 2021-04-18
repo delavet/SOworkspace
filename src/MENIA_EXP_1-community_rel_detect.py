@@ -41,7 +41,7 @@ def add_community_rel_heuristic_1(doc_name: str, COMMUNITY_THRESHOLD, log):
     '''
     # global COMMUNITY_THRESHOLD
     log.write(f"===community cooccur threshold {COMMUNITY_THRESHOLD}===\n")
-    with open(MENIA_WHOLE_PREDICTION_STORE_PATH[doc_name], 'r', encoding='utf-8') as rf:
+    with open(USE_MENIA_PREDICTION_PATH[doc_name], 'r', encoding='utf-8') as rf:
         EZA_predictions = dict(json.load(rf))
     concept_map = nx.MultiDiGraph(
         nx.read_gexf(LATEST_CONCEPT_MAP_PATH[doc_name]))

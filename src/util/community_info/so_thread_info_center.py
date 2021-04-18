@@ -18,6 +18,12 @@ class ThreadInfoCenter:
         self.strategy = strategy
         with open(SO_POSTS_SEGMENT_INFO_STORE_PATH[doc_name], 'r', encoding='utf-8') as rf:
             self.thread_segment_info = dict(json.load(rf))
+        self.threads = {}
+        for filename in os.listdir(SO_POSTS_STORE_PATH[DOC_NAME_TO_SO_TAG[doc_name]]):
+            path = os.path.join(
+                SO_POSTS_STORE_PATH[DOC_NAME_TO_SO_TAG[doc_name]], filename)
+            with open(path, 'rb') as rbf:
+                self.threads[filename] = pickle.load(rbf)
 
     def batch_get_thread_detail_info(self, thread_id_batch: list):
         '''
@@ -40,7 +46,7 @@ class ThreadInfoCenter:
             ret.append(detail_thread)
         return ret
 
-    def batch_get_thread_concise_info(self, thread_id_batch: list):
+    def batch_get_thread_concise_infoV1(self, thread_id_batch: list):
         '''
         成批的从文件中读取thread信息，最大化IO效率，只获取id、title和tags
         '''
@@ -58,6 +64,23 @@ class ThreadInfoCenter:
                 with open(os.path.join(SO_POSTS_STORE_PATH[DOC_NAME_TO_SO_TAG[self.doc_name]], cur_filename), 'rb') as rbf:
                     cur_partial_threads = list(pickle.load(rbf))
             detail_thread = cur_partial_threads[segment_info[2]]
+            ret.append({
+                'Id': detail_thread['Id'],
+                'Title': detail_thread["Title"],
+                'Tags': detail_thread['Tags']
+            })
+        return ret
+
+    def batch_get_thread_concise_info(self, thread_id_batch: list):
+        '''
+        成批的从文件中读取thread信息，最大化IO效率，只获取id、title和tags
+        '''
+        if len(thread_id_batch) == 0:
+            return []
+        ret = []
+        segment_info_list = [[str(thread_id), self.thread_segment_info[str(thread_id)][0], self.thread_segment_info[str(thread_id)][1]] for thread_id in thread_id_batch]
+        for segment_info in segment_info_list:
+            detail_thread = self.threads[segment_info[1]][int(segment_info[2])]
             ret.append({
                 'Id': detail_thread['Id'],
                 'Title': detail_thread["Title"],
