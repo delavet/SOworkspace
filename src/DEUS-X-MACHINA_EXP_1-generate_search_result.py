@@ -89,9 +89,9 @@ def DXM_exp(doc_name: str):
     with open(f'{base_dir}/data/exp/DEUS-X-MACHINA-EXP/log_literal.log', 'w', encoding='utf-8') as rf_log:
         search_exp(service, 'literal',
                    EXP_DEUX_X_MACHINA_LITERAL_SEARCH_RESULT_STORE_PATH[doc_name], threads, rf_log)
-    with open(f'{base_dir}/data/exp/DEUX-X-MACHINA-EXP/log_literal_strict.log', 'w', encoding='utf-8') as rf_log:
+    with open(f'{base_dir}/data/exp/DEUS-X-MACHINA-EXP/log_literal_strict.log', 'w', encoding='utf-8') as rf_log:
         search_exp(service, 'literal_strict',
-                   EXP_DEUS_X_MACHINA_LITERAL_STRICT_SEARCH_RESULT_STORE_PATH, rf_log)
+                   EXP_DEUS_X_MACHINA_LITERAL_STRICT_SEARCH_RESULT_STORE_PATH[doc_name], threads, rf_log)
 
 
 if __name__ == "__main__":
