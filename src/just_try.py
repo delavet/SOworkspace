@@ -99,9 +99,12 @@ if __name__ == "__main__":
     print(vector_util.get_word_similarity('array', 'awt'))
     print(vector_util.get_word_similarity('matrix', 'image'))
     '''
-    '''
+    
     service = ApiSearchService(JAVADOC_GLOBAL_NAME)
     print('initilalized!')
+    query = 'How to write update query for long string in Oracle using jdbc?'
+    service.search_by_concept(query)
+    '''
     pprint(service.search_by_concept('network security'))
     pprint(service.search_literally('FIFO collection'))
     pprint(service.search_by_concept('network security'))

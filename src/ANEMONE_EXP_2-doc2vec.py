@@ -3,15 +3,23 @@ import json
 import textdistance
 
 from tqdm import tqdm
-from util.config import ANEMONE_DATASET_STORE_PATH, JAVADOC_GLOBAL_NAME, ANEMONE_BERT_TEST_SET_FILE_NAME
+from util.config import ANEMONE_DATASET_STORE_PATH, JAVADOC_GLOBAL_NAME, ANEMONE_BERT_TEST_SET_FILE_NAME, APIDOC_DESCRIPTION_STORE_PATH, SO_DOC2VEC_MODEL_STORE_PATH
 from sklearn.metrics import f1_score, precision_score, recall_score
-from util.nel.common import longest_common_subsequence
+from util.apidoc_search.vector_util import VectorUtil
+from gensim.models.doc2vec import Doc2Vec
+
 
 with open(os.path.join(ANEMONE_DATASET_STORE_PATH[JAVADOC_GLOBAL_NAME], 'entity_gt_map.json'), 'r', encoding="utf-8") as wf_gt:
     entity_gt_map = json.load(wf_gt)
 
+with open(os.path.join(APIDOC_DESCRIPTION_STORE_PATH[JAVADOC_GLOBAL_NAME]), 'r', encoding='utf-8') as wf_desc:
+    api_descriptions = json.load(wf_desc)
+
+doc2vec_model = Doc2Vec.load(SO_DOC2VEC_MODEL_STORE_PATH[JAVADOC_GLOBAL_NAME])
+vector_tool = VectorUtil(doc2vec_model)
+
 # DL = textdistance.DamerauLevenshtein()
-threshold = 0.95
+threshold = 0.1
 
 
 def dataloader(data_path):
@@ -23,10 +31,11 @@ def dataloader(data_path):
 
 def model(data):
     global DL
-    mention = data.get('mention', '').lower()
-    entity = data.get('entity', '').lower()
-    dis = longest_common_subsequence(mention, entity)
-    sim = dis / float(len(mention))
+    context = data['prefix'] + ' ' + data['sentence']
+    entity_desc = data['entity_desc']
+    context_vec = vector_tool.get_doc2vec_vector(context)
+    entity_vec = vector_tool.get_html_doc2vec_vector(entity_desc)
+    sim = VectorUtil.similarity(context_vec, entity_vec)
     return sim
 
 
@@ -39,7 +48,7 @@ def validate(val_dataloader, is_test = True):
     thread_ids = []
     for case in tqdm(val_dataloader):
         try:
-            prediction = model(case)
+            prediction = float(model(case))
         except:
             print('batch infer failed')
             continue
@@ -51,7 +60,7 @@ def validate(val_dataloader, is_test = True):
         thread_ids.append(case['thread_id'])
     
     if is_test:
-        with open('../data/cache/anemone_textdist_pred.json', 'w', encoding='utf-8') as pred_f:
+        with open('../data/cache/anemone_doc2vec_pred.json', 'w', encoding='utf-8') as pred_f:
             json.dump(raw_pred, pred_f, ensure_ascii=False, indent=2)
     
     print("first to go real validate: ", get_f1_score_first_to_go(

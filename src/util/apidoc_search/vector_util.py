@@ -4,6 +4,7 @@ from numpy import dot, array
 from ..config import APIDOC_WIKI_FASTTEXT_MODEL_STORE_PATH, JAVADOC_GLOBAL_NAME
 from gensim.utils import simple_preprocess
 from ..utils import get_html_text_except_code
+from sklearn.metrics.pairwise import cosine_similarity
 
 
 """
@@ -33,8 +34,8 @@ class VectorUtil:
             Contains cosine distance between `vector_1` and `vector_2`
 
         """
-
-        return dot(matutils.unitvec(vector_1), matutils.unitvec(vector_2))
+        return cosine_similarity([vector_1], [vector_2])[0][0]
+        # return dot(matutils.unitvec(vector_1), matutils.unitvec(vector_2))
 
     @staticmethod
     def cosine_similarities(vector_1, vectors_all):
@@ -56,7 +57,7 @@ class VectorUtil:
         norm = np.linalg.norm(vector_1)
         all_norms = np.linalg.norm(vectors_all, axis=1)
         dot_products = dot(vectors_all, vector_1)
-        similarities = dot_products / (norm * all_norms)
+        similarities = dot_products / (norm * all_norms + 1e-6)
         return similarities
 
     @staticmethod

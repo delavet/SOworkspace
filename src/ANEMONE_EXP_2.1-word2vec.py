@@ -7,6 +7,7 @@ from util.config import ANEMONE_DATASET_STORE_PATH, JAVADOC_GLOBAL_NAME, ANEMONE
 from sklearn.metrics import f1_score, precision_score, recall_score
 from util.apidoc_search.vector_util import VectorUtil
 from gensim.models.doc2vec import Doc2Vec
+from util.utils import get_apidoc_wiki_embedding_model
 
 
 with open(os.path.join(ANEMONE_DATASET_STORE_PATH[JAVADOC_GLOBAL_NAME], 'entity_gt_map.json'), 'r', encoding="utf-8") as wf_gt:
@@ -15,11 +16,11 @@ with open(os.path.join(ANEMONE_DATASET_STORE_PATH[JAVADOC_GLOBAL_NAME], 'entity_
 with open(os.path.join(APIDOC_DESCRIPTION_STORE_PATH[JAVADOC_GLOBAL_NAME]), 'r', encoding='utf-8') as wf_desc:
     api_descriptions = json.load(wf_desc)
 
-doc2vec_model = Doc2Vec.load(SO_DOC2VEC_MODEL_STORE_PATH[JAVADOC_GLOBAL_NAME])
-vector_tool = VectorUtil(doc2vec_model)
+word2vec_model = get_apidoc_wiki_embedding_model()
+vector_tool = VectorUtil(word2vec_model)
 
 # DL = textdistance.DamerauLevenshtein()
-threshold = 0.1
+threshold = 0.6
 
 
 def dataloader(data_path):
@@ -31,10 +32,10 @@ def dataloader(data_path):
 
 def model(data):
     global DL
-    context = data['sentence']
-    entity_desc = api_descriptions.get(data['entity'], '')
-    context_vec = vector_tool.get_doc2vec_vector(context)
-    entity_vec = vector_tool.get_html_doc2vec_vector(entity_desc)
+    context = data['mention']
+    entity_desc = data['entity']
+    context_vec = vector_tool.get_sentence_avg_vector(context)
+    entity_vec = vector_tool.get_sentence_avg_vector(entity_desc)
     sim = VectorUtil.similarity(context_vec, entity_vec)
     return sim
 

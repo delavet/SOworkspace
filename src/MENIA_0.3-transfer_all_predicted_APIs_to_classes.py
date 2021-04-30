@@ -3,6 +3,7 @@ import json
 from util.concept_map.common import get_latest_concept_map
 from util.config import MENIA_WHOLE_PREDICTION_STORE_PATH, MENIA_CLASS_LEVEL_PREDICTION_STORE_PATH, JAVADOC_GLOBAL_NAME
 from util.constant import *
+from util.utils import turn_to_class_level_api
 
 
 '''
@@ -14,7 +15,10 @@ from util.constant import *
 concept_map = get_latest_concept_map()
 
 
-def turn_to_class_level_api(api: str):
+def turn_to_class_level_api_old(api: str):
+    '''
+    因为concept map中难以检测的bug，废弃
+    '''
     global concept_map
     Ntype = concept_map.nodes[api].get(NodeAttributes.Ntype, '')
     if Ntype not in field_level_node_types:

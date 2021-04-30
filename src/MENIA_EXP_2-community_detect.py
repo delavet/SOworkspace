@@ -15,7 +15,7 @@ community_count_map = {}
 def log_statitic(freq, res, counts, log):
     global community_count_map
     log.write("社群统计概况：\n")
-    real_counts = [_ for _ in counts if _ > 3]
+    real_counts = [_ for _ in counts if _ > 1]
     a_mean = np.mean(real_counts)
     a_var = np.var(real_counts)
     a_std = np.std(real_counts)

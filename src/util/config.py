@@ -280,6 +280,26 @@ EXP_DEUS_X_MACHINA_EXP_CANDIDATE_THREADS_STORE_PATH = {
     JAVADOC_GLOBAL_NAME: f'{base_dir}/data/exp/DXM_EXP_CANDIDATES.json'
 }
 
+EXP_DEUX_X_MACHINA_ANS_STORE_PATH = {
+    JAVADOC_GLOBAL_NAME: f'{base_dir}/data/exp/DEUS-X-MACHINA-EXP/ans.json'
+}
+
+EXP_DEUX_X_MACHINA_ANS2_STORE_PATH = {
+    JAVADOC_GLOBAL_NAME: f'{base_dir}/data/exp/DEUS-X-MACHINA-EXP/ans2.json'
+}
+
+EXP_DEUS_X_MACHINA_CONCEPT_SEARCH_RESULT_STORE_PATH = {
+    JAVADOC_GLOBAL_NAME: f'{base_dir}/data/exp/DEUS-X-MACHINA-EXP/concept_search_result.json'
+}
+
+EXP_DEUS_X_MACHINA_LITERAL_STRICT_SEARCH_RESULT_STORE_PATH = {
+    JAVADOC_GLOBAL_NAME: f'{base_dir}/data/exp/DEUS-X-MACHINA-EXP/literal_strict_search_result.json'
+}
+
+EXP_DEUX_X_MACHINA_LITERAL_SEARCH_RESULT_STORE_PATH = {
+    JAVADOC_GLOBAL_NAME: f'{base_dir}/data/exp/DEUS-X-MACHINA-EXP/literal_search_result.json'
+}
+
 # MYSQL属性
 Mysql_addr = "162.105.16.191"
 Mysql_user = "root"

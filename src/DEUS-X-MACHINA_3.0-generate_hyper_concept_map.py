@@ -212,6 +212,7 @@ def generate_hyper_concept_mapV2(doc_name=JAVADOC_GLOBAL_NAME):
                 cur_wiki_node_id, succ)
             cnt2 += 1
             hyper_concept_map[cur_wiki_node_id][succ][EdgeAttrbutes.WIKI_LABEL] = wiki_labels
+            hyper_concept_map[cur_wiki_node_id][succ][EdgeAttrbutes.Etype] = EdgeType.WIKI_RELATED
 
         for pred in preds:
             if 'domain term' not in fudan_concept_map.nodes[pred]['labels']:

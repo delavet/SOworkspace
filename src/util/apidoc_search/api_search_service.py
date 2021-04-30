@@ -5,6 +5,7 @@ from nltk.jsontags import register_tag
 import numpy as np
 
 from elasticsearch import Elasticsearch
+from numpy.core.fromnumeric import repeat
 
 from util.nel.common import longest_common_subsequence
 
@@ -19,6 +20,7 @@ from ..utils import get_api_extreme_short_name_from_entity_id, get_apidoc_wiki_e
 
 class ApiSearchService:
     def __init__(self, doc_name=JAVADOC_GLOBAL_NAME):
+        self.concept_search_thres = 0.8
         self.hyper_concept_map = get_latest_hyper_concept_map(doc_name)
         with open(API_SHORT_DESCRIPTION_FASTTEXT_VECTOR_STORE_PATH[doc_name], 'rb') as rbf:
             self.api_short_desc_vectors = pickle.load(rbf)
@@ -29,6 +31,26 @@ class ApiSearchService:
         self.es = Elasticsearch(hosts=Elasticsearch_host,
                                 port=Elasticsearch_port)
 
+    def set_concept_search_threshold(self, thres):
+        self.concept_search_thres = thres
+
+    def turn_to_class_level_api(self, api: str):
+        '''
+        Ntype = self.hyper_concept_map.nodes[api].get(NodeAttributes.Ntype, '')
+        if Ntype not in field_level_node_types:
+            return api
+        else:
+            preds = list(self.hyper_concept_map.pred[api])
+            for pred in preds:
+                if self.hyper_concept_map[pred][api][EdgeAttrbutes.Etype] == EdgeType.INCLUDE and self.hyper_concept_map.nodes[pred].get(NodeAttributes.Ntype, '') in class_level_node_types:
+                    return pred
+        '''
+        ret = api
+        sharp_index = api.find('#')
+        if sharp_index != -1:
+            ret = ret[:sharp_index]
+        return ret
+
     def search_literally(self, query: str):
         processed_query = preprocess(query).lower()
         result_apis = set()
@@ -36,18 +58,16 @@ class ApiSearchService:
         result_apis.update(name_search_result)
         desc_search_result = es_search(query, 'description')
         result_apis.update(desc_search_result)
-        if len(result_apis) == 0:
-            name_search_result = es_search(query, 'name', 'auto')
-            result_apis.update(name_search_result)
-            desc_search_result = es_search(
-                query, 'description', 'auto')
-            result_apis.update(desc_search_result)
-        if len(result_apis) == 0:
-            name_search_result = es_wildcard_search(query, 'name')
-            result_apis.update(name_search_result)
-            desc_search_result = es_wildcard_search(
-                query, 'description')
-            result_apis.update(desc_search_result)
+        name_search_result = es_search(query, 'name', 'auto')
+        result_apis.update(name_search_result)
+        desc_search_result = es_search(
+            query, 'description', 'auto')
+        result_apis.update(desc_search_result)
+        name_search_result = es_wildcard_search(query, 'name')
+        result_apis.update(name_search_result)
+        desc_search_result = es_wildcard_search(
+            query, 'description')
+        result_apis.update(desc_search_result)
         result_apis = list(result_apis)
         api_desc_vectors = [np.array(
             self.api_short_desc_vectors.get(api, np.zeros(100))) for api in result_apis]
@@ -56,6 +76,8 @@ class ApiSearchService:
         sims = VectorUtil.cosine_similarities(query_vec, api_desc_vectors).tolist()
         zipped_apis_sims = zip(result_apis, sims)
         sorted_apis = [item for item in sorted(zipped_apis_sims, key=lambda i : i[1], reverse=True)]
+        if len(sorted_apis) > 50:
+            sorted_apis = sorted_apis[:50]
         return sorted_apis
 
     def too_short_matched_apis(self, api: str, query_tokens: list):
@@ -126,7 +148,7 @@ class ApiSearchService:
                 #获取候选API结点
                 bfs_tree = nx.bfs_tree(
                     self.hyper_concept_map, term_id, reverse=True, depth_limit=2)
-                candidate_apis.update([node for node in bfs_tree.nodes if self.hyper_concept_map.nodes[node].get(NodeAttributes.Ntype) not in term_level_node_types])
+                candidate_apis.update([self.turn_to_class_level_api(node) for node in bfs_tree.nodes if self.hyper_concept_map.nodes[node].get(NodeAttributes.Ntype) not in term_level_node_types])
 
                 # 计算query的node2vec
                 term_node2vec_embedding = self.node2vec_model.wv[str(term_id)]
@@ -148,7 +170,8 @@ class ApiSearchService:
             query_word_embedding, api_desc_vectors).tolist()
         node_sims = VectorUtil.cosine_similarities(
             query_node_embedding, api_node_vectors).tolist()
-        sims = [0.7 * word_sim + 0.3 * node_sim for word_sim, node_sim in zip(word_sims, node_sims)]
+        sims = [self.concept_search_thres * word_sim + (1 - self.concept_search_thres) *
+                node_sim for word_sim, node_sim in zip(word_sims, node_sims)]
         zipped_apis_sims = zip(candidate_apis, sims)
         sorted_apis = [item for item in sorted(
             zipped_apis_sims, key=lambda i: i[1], reverse=True)]
@@ -161,7 +184,9 @@ class ApiSearchService:
                 if not math.isnan(item[1]):
                     begin_add = True
                     ret.append(item)
-        return ret[:50]
+        if len(ret) > 50:
+            ret = ret[:50]
+        return ret
 
     def search_synthesis(self, query: str):
         literal_api_with_scores = self.search_literally_strict(query)
@@ -171,3 +196,11 @@ class ApiSearchService:
         ret = [item for item in ret if self.hyper_concept_map.nodes[item[0]].get(
             NodeAttributes.Ntype, '') != NodeType.CONSTRUCTOR and not math.isnan(item[1])]
         return sorted(ret, key=lambda x : x[1], reverse=True)
+
+    def search(self, mode_str: str, query: str):
+        if mode_str == 'concept':
+            return self.search_by_concept(query)
+        elif mode_str == 'literal_strict':
+            return self.search_literally_strict(query)            
+        else:
+            return self.search_literally(query)

@@ -256,6 +256,21 @@ def pre_tokenize(text: str) -> str:
     return ret.strip()
 
 
+def turn_to_class_level_api(api: str):
+    ret = api
+    sharp_index = api.find('#')
+    if sharp_index != -1:
+        ret = ret[:sharp_index]
+    return ret
+
+
+def MRR(hit_index_list: list):
+    if len(hit_index_list) ==0:
+        return 0.0 
+    mrr_list = [0.0 if index == -1 else 1.0 / float(index) for index in hit_index_list]
+    return np.mean(mrr_list)
+
+
 def get_apidoc_wiki_embedding_model(doc_name=JAVADOC_GLOBAL_NAME):
     '''
     获取从api文档与wiki联合训练的embedding model
