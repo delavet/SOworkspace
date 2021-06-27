@@ -1,11 +1,13 @@
 import json
 import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib
 
 from util.config import base_dir
 
 
 def statistic_textbook_apperance():
+    matplotlib.rc("font", family='YouYuan')
     text_static_store_path = f'{base_dir}/data/exp/textbook_record.json'
     community_record_path = f'{base_dir}/data/exp_whole/community_record_thres_90_res_0.1.json'
     exist_in_book = 0
@@ -46,8 +48,8 @@ def statistic_textbook_apperance():
     for i in range(47):
         plt.axhline(i, ls="--", lw=0.5, c='black')
     plt.scatter(x, y, c=colors, s=sizes, marker='o', cmap='tab20')
-    plt.xlabel("page number")
-    plt.ylabel("learning entry index")
+    plt.xlabel("教科书页数")
+    plt.ylabel("学习入口编号")
     
     # plt.legend()
     plt.savefig(

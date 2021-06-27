@@ -30,7 +30,7 @@ def louvain_community_map(doc_name):
     # draw the graph
     pos = nx.multipartite_layout(community_map)
     # color the nodes according to their partition
-    cmap = cm.get_cmap('viridis', max(partition.values()) + 1)
+    cmap = cm.get_cmap('tab20', max(partition.values()) + 1)
     nx.draw_networkx_nodes(community_map, pos, partition.keys(), node_size=2,
                            cmap=cmap, node_color=list(partition.values()))
     nx.draw_networkx_edges(community_map, pos, alpha=0.4)

@@ -1,14 +1,17 @@
 import json
+import os
 import numpy as np
 
 from tqdm import tqdm
 from collections import OrderedDict
 from util.apidoc_search.vector_util import VectorUtil
 from gensim.models.doc2vec import Doc2Vec
-from util.config import JAVADOC_GLOBAL_NAME, API_THREAD_ID_MAP_STORE_PATH, API_THREAD_ID_RESORT_MAP_STORE_PATH, SO_DOC2VEC_MODEL_STORE_PATH, APIDOC_DESCRIPTION_STORE_PATH
+from util.config import JAVADOC_GLOBAL_NAME, API_THREAD_ID_MAP_STORE_PATH, API_THREAD_ID_RESORT_MAP_STORE_PATH, SO_DOC2VEC_MODEL_STORE_PATH, APIDOC_DESCRIPTION_STORE_PATH, base_dir
 from util.community_info.so_thread_info_center import ThreadInfoCenter
 from util.utils import get_html_text_except_code
 
+with open(os.path.join(base_dir, '/data/howto_kw.txt'), 'r', encoding='utf-8') as rf:
+    howto_kws = set([kw.strip() for kw in rf.readlines()]) #howto型帖子关键词表
 
 def resort_api_thread_id_map(doc_name=JAVADOC_GLOBAL_NAME):
     thread_info_center = ThreadInfoCenter(doc_name)
@@ -34,6 +37,7 @@ def resort_api_thread_id_map(doc_name=JAVADOC_GLOBAL_NAME):
         desc_vec = vector_tool.get_html_doc2vec_vector(description_html)
         thread_details = [id2thread_detail[id] for id in thread_ids]
         thread_vecs = []
+        howto_scores = [] # 计算帖子中是否包含howto型帖子的关键词，如果包含直接一个词加100分，保证其排在最前面
         new_thread_ids = []
         for thread in thread_details:
             new_thread_ids.append(thread['Id'])
@@ -50,7 +54,13 @@ def resort_api_thread_id_map(doc_name=JAVADOC_GLOBAL_NAME):
             '''
             thread_vec = vector_tool.get_doc2vec_vector(thread_doc)
             thread_vecs.append(thread_vec)
+            howto_score = 0
+            for kw in howto_kws:
+                if kw in title or kw in question:
+                    howto_score += 100
+            howto_scores.append(howto_score)
         similarities = VectorUtil.cosine_similarities(np.array(desc_vec), np.array(thread_vecs))
+        similarities = [i + j for i, j in zip(similarities, howto_scores)]
         sorted_ids_with_similarities = sorted(zip(new_thread_ids, similarities), key=lambda x: x[1], reverse=True)
         sorted_ids = [item[0] for item in sorted_ids_with_similarities]
         api_thread_resort_map[api] = sorted_ids

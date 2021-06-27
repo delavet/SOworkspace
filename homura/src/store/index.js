@@ -3,7 +3,7 @@ import {
 } from 'vuex'
 import axios from 'axios'
 
-axios.defaults.baseURL = 'http://8.136.235.136:3001/api'
+axios.defaults.baseURL = 'http://localhost:3001/api'
 
 export default createStore({
   state: {

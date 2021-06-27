@@ -30,6 +30,10 @@ var parseData = (data) => {
     return ret
 }
 
+var soy = (data) => {
+    return data + 'soy';
+}
+
 var generateDataBack = (tokens) => {
     let text = ""
     let cur_start = -1
@@ -85,5 +89,5 @@ var saveObject = (obj, filename) => {
 
 
 export {
-    O, I, tag_types, parseData, generateDataBack, saveObject
+    O, I, tag_types, parseData, generateDataBack, saveObject, soy
 }
